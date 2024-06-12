@@ -1,3 +1,3 @@
 # FarlandsCoreMod
 
-Proyecto y documentación en desarrollo
+*Proyecto y documentación en desarrollo*
