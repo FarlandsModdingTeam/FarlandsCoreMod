@@ -50,7 +50,7 @@ namespace FarlandsCoreMod
         {
             
             Logger.LogMessage("************************");
-            Logger.LogMessage("Farlands Core Mod loaded:");
+            Logger.LogMessage($"FCM v{PluginInfo.PLUGIN_VERSION}:");
             var target = "top.magincian.fcm";
 
             UnityChainloader.Instance.Plugins.Values
