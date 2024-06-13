@@ -24,5 +24,15 @@ namespace FarlandsCoreMod.Attributes
                 this.defaultValue = defaultValue;
             }
         }
+
+        [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
+        public class Int : Configuration
+        {
+            public int defaultValue;
+            public Int(string section, string key, string description, int defaultValue) : base(section, key, description)
+            {
+                this.defaultValue = defaultValue;
+            }
+        }
     }
 }

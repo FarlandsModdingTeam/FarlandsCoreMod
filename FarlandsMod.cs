@@ -57,6 +57,17 @@ namespace FarlandsCoreMod
                                 c.description
                                 ));
                         }
+                        else if (at is Configuration.Int)
+                        {
+                            var c = f.GetCustomAttribute<Configuration.Int>();
+
+                            f.SetValue(this, Config.Bind(
+                                c.section,
+                                c.key,
+                                c.defaultValue,
+                                c.description
+                                ));
+                        }
                     }
                 });
         }
