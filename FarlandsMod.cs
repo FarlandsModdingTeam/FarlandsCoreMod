@@ -5,6 +5,7 @@ using FarlandsCoreMod.Attributes;
 using HarmonyLib;
 using System;
 using System.Collections;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
@@ -14,7 +15,7 @@ namespace FarlandsCoreMod
     public abstract class FarlandsMod : BaseUnityPlugin
     {
         public Assembly ASM => Assembly.GetAssembly(this.GetType());
-
+        
         private void Awake()
         {
             ConfigureAll();
@@ -95,5 +96,21 @@ namespace FarlandsCoreMod
             }
             throw new ArgumentException("Field not found for the provided configEntry");
         }
+
+        public void Write(string path, string text) => File.WriteAllText(
+            Path.Combine(Paths.PluginPath, this.Info.Metadata.Name, path), text);
+
+        public string Read(string path) => File.ReadAllText(
+            Path.Combine(Paths.PluginPath, this.Info.Metadata.Name, path));
+
+        public string[] GetFiles(string path) => 
+            Directory.GetFiles(Path.Combine(Paths.PluginPath, this.Info.Metadata.Name, path))
+                .Select(x=> x.Replace(Path.Combine(Paths.PluginPath, this.Info.Metadata.Name) + "/", "")).ToArray();
+        public string[] GetFiles(string path, string pattern) => 
+            Directory.GetFiles(Path.Combine(Paths.PluginPath, this.Info.Metadata.Name, path),pattern)
+                .Select(x => x.Replace(Path.Combine(Paths.PluginPath, this.Info.Metadata.Name)+"/", "")).ToArray();
+        public string[] GetFiles(string path, string pattern, SearchOption searchOption) =>
+            Directory.GetFiles(Path.Combine(Paths.PluginPath, this.Info.Metadata.Name, path), pattern, searchOption)
+                .Select(x => x.Replace(Path.Combine(Paths.PluginPath, this.Info.Metadata.Name) + "/", "")).ToArray();
     }
 }
