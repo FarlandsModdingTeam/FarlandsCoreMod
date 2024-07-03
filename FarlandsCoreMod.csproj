@@ -22,13 +22,13 @@
   
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\Program Files (x86)\Steam\steamapps\common\Farlands Demo\Farlands Demo_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\..\..\..\Desktop\Farlands Demo\Farlands Demo_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>bin\Debug\netstandard2.1\Assembly-CSharp-firstpass.dll</HintPath>
+      <HintPath>..\..\..\..\Desktop\Farlands Demo\Farlands Demo_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>..\..\Program Files (x86)\Steam\steamapps\common\Farlands Demo\Farlands Demo_Data\Managed\UnityEngine.UI.dll</HintPath>
+      <HintPath>..\..\..\..\Desktop\Farlands Demo\Farlands Demo_Data\Managed\UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UIElementsModule">
       <HintPath>..\..\Program Files (x86)\Steam\steamapps\common\Farlands Demo\Farlands Demo_Data\Managed\UnityEngine.UIElementsModule.dll</HintPath>

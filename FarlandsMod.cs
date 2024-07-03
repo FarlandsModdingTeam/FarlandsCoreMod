@@ -15,7 +15,9 @@ namespace FarlandsCoreMod
     public abstract class FarlandsMod : BaseUnityPlugin
     {
         public Assembly ASM => Assembly.GetAssembly(this.GetType());
-        
+        public string PLUGIN_PATH=> Path.Combine(Paths.PluginPath, this.Info.Metadata.Name);
+        public string GetPath(string path) => Path.Combine(PLUGIN_PATH, path);
+
         private void Awake()
         {
             ConfigureAll();
@@ -37,6 +39,8 @@ namespace FarlandsCoreMod
         public virtual void OnFirstFrame() { }
         public void ConfigureAll()
         {
+            SetPluginDirectory();
+
             GetType().GetFields().ToList()
                 .ForEach(f => 
                 {
@@ -97,20 +101,26 @@ namespace FarlandsCoreMod
             throw new ArgumentException("Field not found for the provided configEntry");
         }
 
+        public void SetPluginDirectory() 
+        {
+            if (!Directory.Exists(PLUGIN_PATH))
+                Directory.CreateDirectory(PLUGIN_PATH);
+        }
+
         public void Write(string path, string text) => File.WriteAllText(
-            Path.Combine(Paths.PluginPath, this.Info.Metadata.Name, path), text);
+            GetPath(path), text);
 
         public string Read(string path) => File.ReadAllText(
-            Path.Combine(Paths.PluginPath, this.Info.Metadata.Name, path));
+            GetPath(path));
 
         public string[] GetFiles(string path) => 
-            Directory.GetFiles(Path.Combine(Paths.PluginPath, this.Info.Metadata.Name, path))
+            Directory.GetFiles(GetPath(path))
                 .Select(x=> x.Replace(Path.Combine(Paths.PluginPath, this.Info.Metadata.Name) + "/", "")).ToArray();
         public string[] GetFiles(string path, string pattern) => 
-            Directory.GetFiles(Path.Combine(Paths.PluginPath, this.Info.Metadata.Name, path),pattern)
+            Directory.GetFiles(GetPath(path),pattern)
                 .Select(x => x.Replace(Path.Combine(Paths.PluginPath, this.Info.Metadata.Name)+"/", "")).ToArray();
         public string[] GetFiles(string path, string pattern, SearchOption searchOption) =>
-            Directory.GetFiles(Path.Combine(Paths.PluginPath, this.Info.Metadata.Name, path), pattern, searchOption)
+            Directory.GetFiles(GetPath(path), pattern, searchOption)
                 .Select(x => x.Replace(Path.Combine(Paths.PluginPath, this.Info.Metadata.Name) + "/", "")).ToArray();
     }
 }
