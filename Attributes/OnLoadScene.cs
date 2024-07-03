@@ -31,6 +31,8 @@ namespace FarlandsCoreMod.Attributes
 
                     if (type.GetCustomAttributes<SceneOverride>().Count() >= 1)
                     {
+                        Debug.Log($"SceneOverrided: {type.GetCustomAttribute<SceneOverride>().SceneName}");
+                        SceneManager.sceneLoaded += type.GetCustomAttribute<SceneOverride>().GetRequestedGameObjects;
                         SceneManager.sceneLoaded += type.GetCustomAttribute<SceneOverride>().InstantiateAllGameObjects;
                     }
 

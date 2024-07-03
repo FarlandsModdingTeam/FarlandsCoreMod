@@ -15,7 +15,7 @@ namespace FarlandsCoreMod
     public abstract class FarlandsMod : BaseUnityPlugin
     {
         public Assembly ASM => Assembly.GetAssembly(this.GetType());
-        public string PLUGIN_PATH=> Path.Combine(Paths.PluginPath, this.Info.Metadata.Name);
+        public string PLUGIN_PATH => Path.Combine(Paths.PluginPath, this.Info.Metadata.Name);
         public string GetPath(string path) => Path.Combine(PLUGIN_PATH, path);
 
         private void Awake()
@@ -103,6 +103,7 @@ namespace FarlandsCoreMod
 
         public void SetPluginDirectory() 
         {
+            Debug.Log($"getting {PLUGIN_PATH}");
             if (!Directory.Exists(PLUGIN_PATH))
                 Directory.CreateDirectory(PLUGIN_PATH);
         }
