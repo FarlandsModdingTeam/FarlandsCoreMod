@@ -15,11 +15,9 @@ namespace FarlandsCoreMod
     {
         public Assembly ASM => Assembly.GetAssembly(this.GetType());
 
-        public static FarlandsMod Instance;
         private void Awake()
         {
             ConfigureAll();
-            Instance = this;
 
             Debug.Log("asm: " + ASM);
             Patcher.LoadAll(ASM);

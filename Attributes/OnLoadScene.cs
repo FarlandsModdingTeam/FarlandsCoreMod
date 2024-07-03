@@ -19,6 +19,9 @@ namespace FarlandsCoreMod.Attributes
         public static void onLoadScene() => onLoadScene(Assembly.GetCallingAssembly());
         public static void onLoadScene(Assembly assembly)
         {
+            SceneManager.sceneLoaded += (Scene scene, LoadSceneMode mode) => 
+                Debug.Log($"scene {scene.name} loaded!");
+
             Debug.Log("Scenes");
             assembly
                 .GetTypes()

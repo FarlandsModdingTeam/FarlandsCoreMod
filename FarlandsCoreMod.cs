@@ -18,8 +18,10 @@ namespace FarlandsCoreMod
     {
         private static ConfigEntry<bool> debug_skipIntro;
         private static ConfigEntry<bool> debug_wishQuit;
+        private static ConfigEntry<bool> debug_fakeDebugBuild;
         public static bool Debug_skipIntro => debug_skipIntro.Value;
         public static bool Debug_wishQuit => debug_wishQuit.Value;
+        public static bool Debug_fakeDebugBuild => debug_fakeDebugBuild.Value;
 
         public static FarlandsCoreMod instance;
 
@@ -29,7 +31,7 @@ namespace FarlandsCoreMod
             
             debug_skipIntro = Config.Bind("Debug", "SkipIntro", false, "If true the intro will be skipped");
             debug_wishQuit = Config.Bind("Debug", "WishQuit", true, "If true, you will be redirected to steam page");
-            
+            debug_fakeDebugBuild = Config.Bind("Debug", "FakeDebugBuild", false, "If true, the debug build is active");
             // Plugin startup logic
             Logger.LogInfo($"Plugin {this.Info.Metadata.GUID} is loaded!");
             instance = this;
