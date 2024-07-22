@@ -10,11 +10,18 @@ using UnityEngine.SceneManagement;
 namespace FarlandsCoreMod.Attributes
 {
     [AttributeUsage(AttributeTargets.Class)]
-    public class SceneOverride: Attribute
+    
+    public class SO: Attribute
     {
         public string SceneName;
         public Type type;
-        public SceneOverride(string sceneName, Type type)
+
+        /// <summary>
+        /// Modifica la escena utilizando una clase
+        /// </summary>
+        /// <param name="sceneName">nombre de la escena</param>
+        /// <param name="type">clase a utilizar</param>
+        public SO(string sceneName, Type type)
         {
             SceneName = sceneName;
             this.type = type;

@@ -29,26 +29,26 @@ namespace FarlandsCoreMod.Attributes
                 .ToList()
                 .ForEach(type => {
 
-                    if (type.GetCustomAttributes<SceneOverride>().Count() >= 1)
+                    if (type.GetCustomAttributes<SO>().Count() >= 1)
                     {
-                        Debug.Log($"SceneOverrided: {type.GetCustomAttribute<SceneOverride>().SceneName}");
-                        SceneManager.sceneLoaded += type.GetCustomAttribute<SceneOverride>().GetRequestedGameObjects;
-                        SceneManager.sceneLoaded += type.GetCustomAttribute<SceneOverride>().InstantiateAllGameObjects;
+                        Debug.Log($"SceneOverrided: {type.GetCustomAttribute<SO>().SceneName}");
+                        SceneManager.sceneLoaded += type.GetCustomAttribute<SO>().GetRequestedGameObjects;
+                        SceneManager.sceneLoaded += type.GetCustomAttribute<SO>().InstantiateAllGameObjects;
                     }
 
                     type.GetMethods(BindingFlags.Public | BindingFlags.Static)
                     .ToList().ForEach(x =>
                     {
-                        if (type.GetCustomAttributes<SceneOverride>().Count() >= 1)
+                        if (type.GetCustomAttributes<SO>().Count() >= 1)
                         {
-                            if (x.GetCustomAttributes<SceneOverride.OnLoad>().Count() >= 1)
+                            if (x.GetCustomAttributes<SO.OnLoad>().Count() >= 1)
                             {
                                 Debug.Log("scn");
                                 Debug.Log(x.Name);
 
                                 SceneManager.sceneLoaded += (Scene scene, LoadSceneMode mode) =>
                                 {
-                                    if (scene.name == type.GetCustomAttribute<SceneOverride>().SceneName)
+                                    if (scene.name == type.GetCustomAttribute<SO>().SceneName)
                                     {
                                         x.Invoke(null, [scene]);
                                     }
