@@ -30,17 +30,9 @@ namespace FarlandsCoreMod.Attributes
         [AttributeUsage(AttributeTargets.Method)]
         public class OnLoad : Attribute{}
 
-        [AttributeUsage(AttributeTargets.Method)]
-        public class NewGameObject : Attribute
-        {
-            public string name;
-            public NewGameObject(string name) 
-            {
-                this.name = name;
-            }
-        }
+        
 
-        [AttributeUsage(AttributeTargets.Field)]
+        [AttributeUsage(AttributeTargets.Field | AttributeTargets.Class)]
         public class GameObject : Attribute
         {
             public string name;
@@ -48,22 +40,121 @@ namespace FarlandsCoreMod.Attributes
             {
                 this.name = name;
             }
+
+            [AttributeUsage(AttributeTargets.Field | AttributeTargets.Class)]
+            public class New : Attribute
+            {
+                public string name;
+                public New(string name)
+                {
+                    this.name = name;
+                }
+            }
         }
-        
+
+        [AttributeUsage(AttributeTargets.Field)]
+        public class Component : Attribute
+        {
+            public Type Type;
+
+            public Component(Type type)
+            { 
+                Type = type;
+            }
+
+            [AttributeUsage(AttributeTargets.Field)]
+            public class Image : Attribute
+            {
+                public Sprite sprite;
+                public Vector2 size;
+                public Image(string spriteName, float x, float y)
+                {
+                    this.size = new(x, y);
+                    this.sprite = FarlandsCoreMod.Sprites[spriteName];
+                }
+            }
+        }
+
+        [AttributeUsage(AttributeTargets.Field)]
+        public class Awake : Attribute
+        {
+            public string action;
+
+            public Awake(string action)
+            { 
+                this.action = action;
+            }
+        }
+
         public void InstantiateAllGameObjects(Scene scene, LoadSceneMode mode)
         {
             Debug.Log($"InstantiateAll: {scene.name} :: {SceneName}");
             if(scene.name != SceneName) return;
-
-            type.GetMethods(BindingFlags.Public | BindingFlags.Static).ToList()
-                .Where(x => x.GetCustomAttributes<NewGameObject>().Count() >= 1).ToList()
-                .ForEach(x =>
-                {
-                    var str = x.GetCustomAttribute<NewGameObject>().name;
-                    x.Invoke(null, [new UnityEngine.GameObject(str)]); 
-                });
+            InstantiateAllGameObjects();
         }
 
+        private void InstantiateAllGameObjects(Transform parent = null)
+        {
+            type.GetFields(BindingFlags.Public | BindingFlags.Static).ToList()
+                .Where(x => x.GetCustomAttributes<GameObject.New>().Count() >= 1).ToList()
+                .ForEach(x =>
+                {
+                    var str = x.GetCustomAttribute<GameObject.New>().name;
+                    var gameObject = new UnityEngine.GameObject(str);
+
+                    gameObject.transform.SetParent(parent);
+
+                    x.SetValue(null, gameObject);
+
+                    x.GetCustomAttributes().ToList()
+                    .ForEach(a =>
+                    {
+                        if (a is Component) gameObject.AddComponent((a as Component).Type);
+                        else if (a is Component.Image)
+                        {
+                            var att = a as Component.Image;
+                            var img = gameObject.AddComponent<UnityEngine.UI.Image>();
+                            img.sprite = att.sprite;
+                            img.rectTransform.sizeDelta = att.size;
+
+                            Canvas.ForceUpdateCanvases();
+                        }
+                        else if (a is Awake) type.GetMethod((a as Awake).action).Invoke(null, []);
+                    });
+                    // x.Invoke(null, []);
+                });
+
+            type.GetNestedTypes(BindingFlags.Public | BindingFlags.Static).ToList()
+                .Where(x => x.GetCustomAttributes<GameObject.New>().Count() >= 1).ToList()
+                .ForEach(x =>
+                {
+                    var str = x.GetCustomAttribute<GameObject.New>().name;
+                    var gameObject = new UnityEngine.GameObject(str);
+
+                    gameObject.transform.SetParent(parent);
+
+                    x.GetField("gameObject").SetValue(null, gameObject);
+
+                    x.GetCustomAttributes().ToList()
+                    .ForEach(a =>
+                    {
+                        if (a is Component) gameObject.AddComponent((a as Component).Type);
+                        else if (a is Component.Image)
+                        {
+                            var att = a as Component.Image;
+                            var img = gameObject.AddComponent<UnityEngine.UI.Image>();
+                            img.sprite = att.sprite;
+                            img.rectTransform.sizeDelta = att.size;
+
+                            Canvas.ForceUpdateCanvases();
+                        }
+                        else if (a is Awake) type.GetMethod((a as Awake).action).Invoke(null, []);
+                    });
+
+                    var s = new SO(SceneName, x);
+                    s.InstantiateAllGameObjects(gameObject.transform);
+                });
+        }
         public void GetRequestedGameObjects(Scene scene, LoadSceneMode mode)
         {
             Debug.Log($"RequestedGO: {scene.name} :: {SceneName}");
@@ -89,6 +180,31 @@ namespace FarlandsCoreMod.Attributes
 
                     x.SetValue(null, gameObject);
                 });
+
+            type.GetNestedTypes(BindingFlags.Public | BindingFlags.Static).ToList()
+                .Where(x => x.GetCustomAttributes<GameObject>().Count() >= 1).ToList()
+                .ForEach(x =>
+                {
+                    var str = x.GetCustomAttribute<GameObject>().name;
+                    Debug.Log($"str: {str}");
+
+                    UnityEngine.GameObject gameObject = null;
+
+                    foreach (var go in SceneManager.GetSceneByName(this.SceneName).GetRootGameObjects())
+                    {
+                        if (go.name == str)
+                        {
+                            gameObject = go;
+                            break;
+                        }
+                    }
+
+                    x.GetField("gameObject").SetValue(null, gameObject);
+                    var s = new SO(SceneName, x);
+                    s.InstantiateAllGameObjects(gameObject.transform);
+                });
         }
+
+        
     }
 }

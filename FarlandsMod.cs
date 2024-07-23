@@ -5,6 +5,7 @@ using FarlandsCoreMod.Attributes;
 using HarmonyLib;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -17,7 +18,7 @@ namespace FarlandsCoreMod
         public Assembly ASM => Assembly.GetAssembly(this.GetType());
         public string PLUGIN_PATH => Path.Combine(Paths.PluginPath, this.Info.Metadata.Name);
         public string GetPath(string path) => Path.Combine(PLUGIN_PATH, path);
-
+        
         private void Awake()
         {
             ConfigureAll();
@@ -34,6 +35,9 @@ namespace FarlandsCoreMod
             OnFirstFrame();
             OnLoadScene.onLoadScene(ASM);
         }
+
+        public void AddSprite(string name, Sprite sprite) => FarlandsCoreMod.Sprites.Add(name, sprite);
+        public Sprite GetSprite(string name) => FarlandsCoreMod.Sprites[name];
 
         public abstract void OnStart();
         public virtual void OnFirstFrame() { }
