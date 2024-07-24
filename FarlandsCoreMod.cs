@@ -4,12 +4,15 @@ using BepInEx.Unity.Bootstrap;
 using FarlandsCoreMod.Attributes;
 using FarlandsCoreMod.Patchers;
 using FarlandsCoreMod.Utiles;
+using FarlandsCoreMod.Utiles.Loaders;
 using HarmonyLib;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Bindings;
 using UnityEngine.SceneManagement;
 
 namespace FarlandsCoreMod
@@ -18,31 +21,39 @@ namespace FarlandsCoreMod
     public class FarlandsCoreMod : BaseUnityPlugin
     {
         private static ConfigEntry<bool> debug_skipIntro;
-        private static ConfigEntry<bool> debug_wishQuit;
-        private static ConfigEntry<bool> debug_fakeDebugBuild;
         public static bool Debug_skipIntro => debug_skipIntro.Value;
-        public static bool Debug_wishQuit => debug_wishQuit.Value;
-        public static bool Debug_fakeDebugBuild => debug_fakeDebugBuild.Value;
 
         public static FarlandsCoreMod instance;
 
-        public const string SHORT_NAME = "FCM";
+        public string SHORT_NAME => "FCM";
 
-        public static Dictionary<string, Sprite> Sprites;
+        public static class Resources
+        {
+            private static Dictionary<string, UnityEngine.Object> m_resources = new();
+
+            public static void Add(string name, UnityEngine.Object res) => m_resources.Add(name, res);
+            public static UnityEngine.Object Get(string name) => m_resources[name];
+
+            public static void Add(FarlandsMod mod, string name, UnityEngine.Object res) => Add($"{mod.SHORT_NAME}:{name}", res);
+            public static UnityEngine.Object Get(FarlandsMod mod, string name) => Get($"{mod.SHORT_NAME}:{name}");
+
+            public static void AddBase(string name, UnityEngine.Object res) => Add($"F:{name}", res);
+            public static UnityEngine.Object GetBase(string name) => Get($"F:{name}");
+
+            public static void AddCore(string name, UnityEngine.Object res) => Add($"{instance.SHORT_NAME}:{name}", res);
+            public static UnityEngine.Object GetCore(string name) => Get($"{instance.SHORT_NAME}:{name}");
+
+        }
 
         private void Awake()
         {
             
             debug_skipIntro = Config.Bind("Debug", "SkipIntro", false, "If true the intro will be skipped");
-            debug_wishQuit = Config.Bind("Debug", "WishQuit", true, "If true, you will be redirected to steam page");
-            debug_fakeDebugBuild = Config.Bind("Debug", "FakeDebugBuild", false, "If true, the debug build is active");
-            Sprites = new();
             
             // Plugin startup logic
             Logger.LogInfo($"Plugin {this.Info.Metadata.GUID} is loaded!");
             instance = this;
 
-            LoadFCMResources();
 
             Patcher.LoadAll();
             
@@ -53,13 +64,20 @@ namespace FarlandsCoreMod
 
         private void LoadFCMResources()
         {
-            Sprites.Add("fcm-bad", SpriteLoader.LoadMod("FarlandsCoreMod.Resources.fcm-bad.png"));
+            Resources.AddCore("bad", TextureLoader.LoadMod("FarlandsCoreMod.Resources.fcm-bad.png"));
+            
+            foreach (var item in UnityEngine.Resources.FindObjectsOfTypeAll(typeof(TMP_FontAsset)))
+            {
+                var font = item as TMP_FontAsset;
+                Resources.AddBase(font.name, font);
+            }
         }
 
         private IEnumerator allLoaded()
         { 
             yield return new WaitForEndOfFrame();
             OnAllModsLoaded();
+            LoadFCMResources();
         }
 
         private void OnAllModsLoaded()

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
@@ -17,6 +17,10 @@
     <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" />
     <PackageReference Include="BepInEx.Unity" Version="6.0.0-*" IncludeAssets="compile" />
     <PackageReference Include="BepInEx.PluginInfoProps" Version="1.*" />
+    <PackageReference Include="FarlandsAnalyzer" Version="1.0.10">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
 	<PackageReference Include="UnityEngine.Modules" Version="2021.3.16" IncludeAssets="compile" />
   </ItemGroup>
   
@@ -26,31 +30,30 @@
   
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\Program Files (x86)\Steam\steamapps\common\Farlands Demo\Farlands Demo_Data\Managed\Assembly-CSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>bin\Debug\netstandard2.1\Assembly-CSharp-firstpass.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.TextMeshPro">
-      <HintPath>..\..\Program Files (x86)\Steam\steamapps\common\Farlands Demo\Farlands Demo_Data\Managed\Unity.TextMeshPro.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>..\..\Program Files (x86)\Steam\steamapps\common\Farlands Demo\Farlands Demo_Data\Managed\UnityEngine.UI.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UIElementsModule">
-      <HintPath>..\..\Program Files (x86)\Steam\steamapps\common\Farlands Demo\Farlands Demo_Data\Managed\UnityEngine.UIElementsModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UIElementsNativeModule">
-      <HintPath>..\..\Program Files (x86)\Steam\steamapps\common\Farlands Demo\Farlands Demo_Data\Managed\UnityEngine.UIElementsNativeModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UIModule">
-      <HintPath>..\..\Program Files (x86)\Steam\steamapps\common\Farlands Demo\Farlands Demo_Data\Managed\UnityEngine.UIModule.dll</HintPath>
-    </Reference>
+    <HintPath>..\..\Program Files (x86)\Steam\steamapps\common\Farlands\Farlands_Data\Managed\Assembly-CSharp.dll</HintPath>
+  </Reference>
+  <Reference Include="Assembly-CSharp-firstpass">
+    <HintPath>..\..\Program Files (x86)\Steam\steamapps\common\Farlands\Farlands_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+  </Reference>
+  <Reference Include="Newtonsoft.Json">
+    <HintPath>..\..\Program Files (x86)\Steam\steamapps\common\Farlands\Farlands_Data\Managed\Newtonsoft.Json.dll</HintPath>
+  </Reference>
+  <Reference Include="Unity.TextMeshPro">
+    <HintPath>..\..\Program Files (x86)\Steam\steamapps\common\Farlands\Farlands_Data\Managed\Unity.TextMeshPro.dll</HintPath>
+  </Reference>
+  <Reference Include="UnityEngine.UI">
+    <HintPath>..\..\Program Files (x86)\Steam\steamapps\common\Farlands\Farlands_Data\Managed\UnityEngine.UI.dll</HintPath>
+  </Reference>
+  <Reference Include="UnityEngine.UIElementsModule">
+    <HintPath>..\..\Program Files (x86)\Steam\steamapps\common\Farlands\Farlands_Data\Managed\UnityEngine.UIElementsModule.dll</HintPath>
+  </Reference>
+  <Reference Include="UnityEngine.UIElementsNativeModule">
+    <HintPath>..\..\Program Files (x86)\Steam\steamapps\common\Farlands\Farlands_Data\Managed\UnityEngine.UIElementsNativeModule.dll</HintPath>
+  </Reference>
+  <Reference Include="UnityEngine.UIModule">
+    <HintPath>..\..\Program Files (x86)\Steam\steamapps\common\Farlands\Farlands_Data\Managed\UnityEngine.UIModule.dll</HintPath>
+  </Reference>
   </ItemGroup>
-  
   <ItemGroup>
     <EmbeddedResource Include="Resources\fcm-bad.png" />
   </ItemGroup>

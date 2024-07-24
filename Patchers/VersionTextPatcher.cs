@@ -26,11 +26,11 @@ namespace FarlandsCoreMod.Patchers
             var vText = __instance.GetComponent<Text>();
 
             vText.text = vText.text.Trim();
-            vText.text += $"\n{FarlandsCoreMod.SHORT_NAME}: {PluginInfo.PLUGIN_VERSION}";
+            vText.text += $"\n{FarlandsCoreMod.instance.SHORT_NAME}: {PluginInfo.PLUGIN_VERSION}";
 
             __instance.GetComponent<RectTransform>().sizeDelta += new Vector2(0, 10);
 
-            Debug.Log($"{FarlandsCoreMod.SHORT_NAME}: {PluginInfo.PLUGIN_VERSION}");
+            Debug.Log($"{FarlandsCoreMod.instance.SHORT_NAME}: {PluginInfo.PLUGIN_VERSION}");
         }
     }
 }

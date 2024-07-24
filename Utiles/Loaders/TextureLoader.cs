@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Text;
 using UnityEngine;
 
-namespace FarlandsCoreMod.Utiles
+namespace FarlandsCoreMod.Utiles.Loaders
 {
     public class TextureLoader
     {
