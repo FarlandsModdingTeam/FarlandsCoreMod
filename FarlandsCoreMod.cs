@@ -23,6 +23,9 @@ namespace FarlandsCoreMod
         private static ConfigEntry<bool> debug_skipIntro;
         public static bool Debug_skipIntro => debug_skipIntro.Value;
 
+        private static ConfigEntry<bool> debug_quitEarlyAccessScreen;
+        public static bool Debug_quitEarlyAccessScreen => debug_quitEarlyAccessScreen.Value;
+
         public static FarlandsCoreMod instance;
 
         public string SHORT_NAME => "FCM";
@@ -49,7 +52,7 @@ namespace FarlandsCoreMod
         {
             
             debug_skipIntro = Config.Bind("Debug", "SkipIntro", false, "If true the intro will be skipped");
-            
+            debug_quitEarlyAccessScreen = Config.Bind("Debug", "QuitEarlyAccessScreen", false, "If true the Early Access Screen will be removed");
             // Plugin startup logic
             Logger.LogInfo($"Plugin {this.Info.Metadata.GUID} is loaded!");
             instance = this;
