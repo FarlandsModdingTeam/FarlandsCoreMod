@@ -2,7 +2,7 @@
 
 namespace FarlandsEmptyMod
 {
-    [BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
+    [BepInPlugin("IDENTIFICADOR", "NOMBRE", "VERSION")]
     public class YourPlugin: FarlandsCoreMod.FarlandsMod
     {
         public override string SHORT_NAME => "YourShortName";
