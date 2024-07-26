@@ -20,8 +20,7 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="bin\Debug\netstandard2.1\FarlandsCoreMod.dll" target="lib"></file>
-    <file src="bin\Debug\netstandard2.1\Assembly-CSharp.dll" target="lib"></file>
+    <file src="lib/**/*.dll" target="lib" />
   </files>
 
 </package>
