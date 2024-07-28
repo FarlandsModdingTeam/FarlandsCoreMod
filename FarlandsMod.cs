@@ -33,7 +33,7 @@ namespace FarlandsCoreMod
         }
         private IEnumerator allLoaded()
         {
-            yield return new WaitForEndOfFrame();
+            yield return new WaitUntil(FarlandsCoreMod.IsAllLoaded);
             OnFirstFrame();
             OnLoadScene.onLoadScene(ASM);
         }

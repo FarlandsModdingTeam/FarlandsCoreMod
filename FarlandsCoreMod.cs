@@ -61,13 +61,17 @@ namespace FarlandsCoreMod
             //}
         }
 
+        private static bool isLoaded = false;
         private IEnumerator allLoaded()
         { 
             yield return new WaitForEndOfFrame();
-            OnAllModsLoaded();
             Source.Init();
+            OnAllModsLoaded();
             LoadFCMResources();
+            isLoaded = true;
         }
+
+        public static bool IsAllLoaded() => isLoaded;
 
         private void OnAllModsLoaded()
         {
