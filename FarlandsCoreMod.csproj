@@ -96,8 +96,33 @@
       <HintPath>lib\UnityEngine.UIModule.dll</HintPath>
     </Reference>
   </ItemGroup>
-  
-  
+
+
+  <ItemGroup>
+    <None Include="lib\Assembly-CSharp.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Assembly-CSharp-firstpass.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Cinemachine.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\FMODUnity.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\NavMeshPlus.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Newtonsoft.Json.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Rewired_Core.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Rewired_Windows.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Rewired_Windows_Functions.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\SuperTiled2Unity.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Unity.2D.Tilemap.Extras.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Unity.Burst.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Unity.Burst.Unsafe.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Unity.Mathematics.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Unity.RenderPipeline.Universal.ShaderLibrary.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Unity.RenderPipelines.Core.Runtime.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Unity.RenderPipelines.Universal.Runtime.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Unity.TextMeshPro.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Unity.Timeline.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.UI.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.UIElementsModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.UIElementsNativeModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.UIModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+  </ItemGroup>
   
   <ItemGroup>
     <Compile Update="Resources\Farlands\Prefabs.Designer.cs">
