@@ -59,14 +59,5 @@ namespace FarlandsCoreMod.Resources {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a 130.
-        /// </summary>
-        public static string Valla {
-            get {
-                return ResourceManager.GetString("Valla", resourceCulture);
-            }
-        }
     }
 }

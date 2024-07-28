@@ -10,6 +10,7 @@ using HarmonyLib;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -68,6 +69,7 @@ namespace FarlandsCoreMod
             Source.Init();
             OnAllModsLoaded();
             LoadFCMResources();
+            FarlandsTextureMod.FarlandsTextureMod.LoadAllTextures();
             isLoaded = true;
         }
 

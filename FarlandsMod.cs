@@ -16,7 +16,7 @@ namespace FarlandsCoreMod
     public abstract class FarlandsMod : BaseUnityPlugin
     {
         public Assembly ASM => Assembly.GetAssembly(this.GetType());
-        public string PLUGIN_PATH => Path.Combine(Paths.PluginPath, this.Info.Metadata.Name);
+        public string PLUGIN_PATH => Path.Combine(Paths.Plugin, this.Info.Metadata.Name);
         public string GetPath(string path) => Path.Combine(PLUGIN_PATH, path);
 
         public abstract string SHORT_NAME { get; }
@@ -119,12 +119,12 @@ namespace FarlandsCoreMod
 
         public string[] GetFiles(string path) => 
             Directory.GetFiles(GetPath(path))
-                .Select(x=> x.Replace(Path.Combine(Paths.PluginPath, this.Info.Metadata.Name) + "/", "")).ToArray();
+                .Select(x=> x.Replace(Path.Combine(Paths.Plugin, this.Info.Metadata.Name) + "/", "")).ToArray();
         public string[] GetFiles(string path, string pattern) => 
             Directory.GetFiles(GetPath(path),pattern)
-                .Select(x => x.Replace(Path.Combine(Paths.PluginPath, this.Info.Metadata.Name)+"/", "")).ToArray();
+                .Select(x => x.Replace(Path.Combine(Paths.Plugin, this.Info.Metadata.Name)+"/", "")).ToArray();
         public string[] GetFiles(string path, string pattern, SearchOption searchOption) =>
             Directory.GetFiles(GetPath(path), pattern, searchOption)
-                .Select(x => x.Replace(Path.Combine(Paths.PluginPath, this.Info.Metadata.Name) + "/", "")).ToArray();
+                .Select(x => x.Replace(Path.Combine(Paths.Plugin, this.Info.Metadata.Name) + "/", "")).ToArray();
     }
 }
