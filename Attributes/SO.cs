@@ -73,7 +73,7 @@ namespace FarlandsCoreMod.Attributes
                 public Image(string spriteName, float x, float y)
                 {
                     this.size = new(x, y);
-                    this.sprite = SpriteLoader.FromTexture(FarlandsCoreMod.Resources.Get(spriteName) as Texture2D);
+                    //this.sprite = SpriteLoader.FromTexture(FarlandsCoreMod.Resources.Get(spriteName) as Texture2D);
                 }
             }
 
@@ -101,7 +101,7 @@ namespace FarlandsCoreMod.Attributes
                 {
                     this.text = text;
                     this.size = size;
-                    this.font = FarlandsCoreMod.Resources.Get(font) as TMP_FontAsset;
+                    //this.font = FarlandsCoreMod.Resources.Get(font) as TMP_FontAsset;
                 }
             }
         }

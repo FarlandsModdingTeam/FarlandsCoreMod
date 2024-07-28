@@ -1,6 +1,7 @@
 ﻿using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Unity.Bootstrap;
+using Farlands.PlaceableObjectsSystem;
 using FarlandsCoreMod.Attributes;
 using FarlandsCoreMod.Patchers;
 using FarlandsCoreMod.Utiles;
@@ -30,23 +31,7 @@ namespace FarlandsCoreMod
 
         public string SHORT_NAME => "FCM";
 
-        public static class Resources
-        {
-            private static Dictionary<string, UnityEngine.Object> m_resources = new();
-
-            public static void Add(string name, UnityEngine.Object res) => m_resources.Add(name, res);
-            public static UnityEngine.Object Get(string name) => m_resources[name];
-
-            public static void Add(FarlandsMod mod, string name, UnityEngine.Object res) => Add($"{mod.SHORT_NAME}:{name}", res);
-            public static UnityEngine.Object Get(FarlandsMod mod, string name) => Get($"{mod.SHORT_NAME}:{name}");
-
-            public static void AddBase(string name, UnityEngine.Object res) => Add($"F:{name}", res);
-            public static UnityEngine.Object GetBase(string name) => Get($"F:{name}");
-
-            public static void AddCore(string name, UnityEngine.Object res) => Add($"{instance.SHORT_NAME}:{name}", res);
-            public static UnityEngine.Object GetCore(string name) => Get($"{instance.SHORT_NAME}:{name}");
-
-        }
+        
 
         private void Awake()
         {
@@ -67,13 +52,13 @@ namespace FarlandsCoreMod
 
         private void LoadFCMResources()
         {
-            Resources.AddCore("bad", TextureLoader.LoadMod("FarlandsCoreMod.Resources.fcm-bad.png"));
+            //Utiles.Resources.AddCore("bad", TextureLoader.LoadMod("FarlandsCoreMod.Resources.fcm-bad.png"));
             
-            foreach (var item in UnityEngine.Resources.FindObjectsOfTypeAll(typeof(TMP_FontAsset)))
-            {
-                var font = item as TMP_FontAsset;
-                Resources.AddBase(font.name, font);
-            }
+            //foreach (var item in UnityEngine.Resources.FindObjectsOfTypeAll(typeof(TMP_FontAsset)))
+            //{
+            //    var font = item as TMP_FontAsset;
+            //    Utiles.Resources.AddBase(font.name, font);
+            //}
         }
 
         private IEnumerator allLoaded()
