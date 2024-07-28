@@ -44,7 +44,6 @@ namespace FarlandsCoreMod
 
 
             Patcher.LoadAll();
-            Source.Init();
 
             OnLoadScene.onLoadScene();
 
@@ -66,6 +65,7 @@ namespace FarlandsCoreMod
         { 
             yield return new WaitForEndOfFrame();
             OnAllModsLoaded();
+            Source.Init();
             LoadFCMResources();
         }
 
