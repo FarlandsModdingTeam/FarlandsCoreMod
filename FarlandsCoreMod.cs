@@ -44,7 +44,8 @@ namespace FarlandsCoreMod
 
 
             Patcher.LoadAll();
-            
+            Source.Init();
+
             OnLoadScene.onLoadScene();
 
             StartCoroutine(allLoaded());
