@@ -18,7 +18,7 @@ using UnityEngine.SceneManagement;
 
 namespace FarlandsCoreMod
 {
-    [BepInPlugin("top.magincian.fcm", PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
+    [BepInPlugin("top.magincian.fcm", "FarlandsCoreMod", "0.0.4")]
     public class FarlandsCoreMod : BaseUnityPlugin
     {
         private static ConfigEntry<bool> debug_skipIntro;
@@ -53,12 +53,14 @@ namespace FarlandsCoreMod
         private void LoadFCMResources()
         {
             //Utiles.Resources.AddCore("bad", TextureLoader.LoadMod("FarlandsCoreMod.Resources.fcm-bad.png"));
-            
+
             //foreach (var item in UnityEngine.Resources.FindObjectsOfTypeAll(typeof(TMP_FontAsset)))
             //{
             //    var font = item as TMP_FontAsset;
             //    Utiles.Resources.AddBase(font.name, font);
             //}
+
+            Source.GetObject(Properties.Farlands.Prefabs.Valla);
         }
 
         private IEnumerator allLoaded()
@@ -72,7 +74,6 @@ namespace FarlandsCoreMod
         {
             
             Logger.LogMessage("************************");
-            Logger.LogMessage($"FCM v{PluginInfo.PLUGIN_VERSION}:");
             var target = "top.magincian.fcm";
 
             UnityChainloader.Instance.Plugins.Values

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FarlandsCoreMod.Properties {
+namespace FarlandsCoreMod.Properties.Farlands {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace FarlandsCoreMod.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    internal class Prefabs {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Resources() {
+        internal Prefabs() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace FarlandsCoreMod.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FarlandsCoreMod.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FarlandsCoreMod.Properties.Farlands.Prefabs", typeof(Prefabs).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,11 +61,11 @@ namespace FarlandsCoreMod.Properties {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a 0.0.4.
+        ///   Busca una cadena traducida similar a 13490.
         /// </summary>
-        internal static string Version {
+        internal static string Valla {
             get {
-                return ResourceManager.GetString("Version", resourceCulture);
+                return ResourceManager.GetString("Valla", resourceCulture);
             }
         }
     }
