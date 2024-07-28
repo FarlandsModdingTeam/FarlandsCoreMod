@@ -15,7 +15,8 @@ namespace FarlandsCoreMod.FarlandsTextureMod
 
         public static void LoadAllTextures()
         {
-            if (!Directory.Exists(Paths.Texture)) return;
+            if (!Directory.Exists(Paths.Texture)) 
+                Directory.CreateDirectory(Paths.Texture);
 
             var src = Directory.GetFiles(Paths.Texture, "*.zip");
 
