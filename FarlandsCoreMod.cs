@@ -59,8 +59,6 @@ namespace FarlandsCoreMod
             //    var font = item as TMP_FontAsset;
             //    Utiles.Resources.AddBase(font.name, font);
             //}
-
-            Source.GetObject(Properties.Farlands.Prefabs.Valla);
         }
 
         private IEnumerator allLoaded()
