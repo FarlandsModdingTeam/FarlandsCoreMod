@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Version>0.0.7</Version>
+    <Version>0.0.8</Version>
     <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>FarlandsCoreMod</AssemblyName>
     <Description>Simplify Modding for Farlands</Description>
@@ -125,10 +125,10 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Compile Update="Resources\Farlands\Prefabs.Designer.cs">
+    <Compile Update="Resources\Farlands.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>Prefabs.resx</DependentUpon>
+      <DependentUpon>Farlands.resx</DependentUpon>
     </Compile>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -138,9 +138,9 @@
   </ItemGroup>
   
   <ItemGroup>
-    <EmbeddedResource Update="Resources\Farlands\Prefabs.resx">
+    <EmbeddedResource Update="Resources\Farlands.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Prefabs.Designer.cs</LastGenOutput>
+      <LastGenOutput>Farlands.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
