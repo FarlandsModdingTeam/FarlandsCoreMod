@@ -2,7 +2,7 @@
 Farlands Core Mod es un mod para [Farlands](https://store.steampowered.com/app/2252680/Farlands) que pretende simplificar el desarrollo de mods para dicho juego.
 
 ## Dependencias
-* [BepInEx 6](https://github.com/BepInEx/BepInEx)
+* [BepInEx 6]([https://github.com/BepInEx/BepInEx](https://github.com/BepInEx/BepInEx/releases/download/v6.0.0-pre.1/BepInEx_UnityMono_x64_6.0.0-pre.1.zip))
 
 ## Instalación
 Estos son los pasos que debes hacer para instalar un mod
