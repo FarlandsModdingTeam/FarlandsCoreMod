@@ -31,6 +31,7 @@ namespace FarlandsCoreMod.FarlandsTextureMod
             LoadTextures("Placeable", Source.Replace.PlaceableTexture);
             LoadTextures("Plant", Source.Replace.PlantTextue);
             LoadTextures("World", Source.Replace.WorldResourceTexture);
+            LoadTextures("Other", Source.Replace.OtherTexture);
         }
 
         private static void LoadTextures(string subdir, Action<string, byte[]> load)

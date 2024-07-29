@@ -5,6 +5,7 @@ using Farlands.PlantSystem;
 using Farlands.WorldResources;
 using System.Collections.Generic;
 using System.Text;
+using System.Xml.Linq;
 using UnityEngine;
 
 namespace FarlandsCoreMod.Utiles
@@ -61,6 +62,16 @@ namespace FarlandsCoreMod.Utiles
             return null;
         }
 
+        public static Texture2D GetTexture(string texture)
+        {
+            foreach (var i in UnityEngine.Resources.FindObjectsOfTypeAll<Texture2D>())
+            {
+                if (i.name == texture) return i;
+            }
+
+            return null;
+        }
+
         public static void Init()
         {
             DB = GameObject.FindObjectOfType<ScriptableObjectsDB>();
@@ -68,6 +79,8 @@ namespace FarlandsCoreMod.Utiles
 
         public static class Replace
         {
+
+            public static void OtherTexture(string id, byte[] raw) => GetTexture(id).LoadImage(raw);
             public static void PlaceableTexture(string id, byte[] raw)
             { 
                 var placeable = GetPlaceable(id);

@@ -19,7 +19,7 @@ using UnityEngine.SceneManagement;
 
 namespace FarlandsCoreMod
 {
-    [BepInPlugin("top.magincian.fcm", "FarlandsCoreMod", "0.0.5")]
+    [BepInPlugin("top.magincian.fcm", "FarlandsCoreMod", "0.0.6")]
     public class FarlandsCoreMod : BaseUnityPlugin
     {
         private static ConfigEntry<bool> debug_skipIntro;
@@ -31,8 +31,6 @@ namespace FarlandsCoreMod
         public static FarlandsCoreMod instance;
 
         public string SHORT_NAME => "FCM";
-
-        
 
         private void Awake()
         {
