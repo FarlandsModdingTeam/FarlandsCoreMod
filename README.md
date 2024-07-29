@@ -6,7 +6,7 @@ Farlands Core Mod es un mod para [Farlands](https://store.steampowered.com/app/2
 
 ## Instalación
 Estos son los pasos que debes hacer para instalar un mod
-1. Instalar la demo de Farlands.
+1. Buscar la carpeta raíz de Farlands.
 2. Extraer [BepInEx 6](https://github.com/BepInEx/BepInEx) en la carpeta raíz del juego.
 3. Ejecutar la demo de Farlands.
 4. Poner los mods en la carpeta *BepInEx/plugins* dela raíz del juego.
