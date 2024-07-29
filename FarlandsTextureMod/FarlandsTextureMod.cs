@@ -44,6 +44,8 @@ namespace FarlandsCoreMod.FarlandsTextureMod
 
                 foreach (ZipArchiveEntry entry in entriesInSubdirectory)
                 {
+                    if (Path.GetExtension(entry.FullName) != ".png") continue;
+
                     Console.WriteLine("Nombre del archivo en el subdirectorio: " + entry.FullName);
 
                     using (MemoryStream memoryStream = new MemoryStream())
