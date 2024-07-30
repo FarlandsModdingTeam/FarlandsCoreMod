@@ -9,10 +9,11 @@ using System.Text;
 
 namespace FarlandsCoreMod.FarlandsTextureMod
 {
-    public static class FarlandsTextureMod
+    public class Manager : IManager
     {
         static string zipFilePath;
 
+        public void Init() => LoadAllTextures();
         public static void LoadAllTextures()
         {
             if (!Directory.Exists(Paths.Texture)) 

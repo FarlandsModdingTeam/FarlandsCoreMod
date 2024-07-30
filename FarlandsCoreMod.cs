@@ -34,10 +34,12 @@ namespace FarlandsCoreMod
 
         private void Awake()
         {
+            debug_skipIntro = AddConfig("Debug", "SkipIntro", 
+                "If true the intro will be skipped", false);
+
+            debug_quitEarlyAccessScreen = AddConfig("Debug", "QuitEarlyAccessScreen", 
+                "If true the Early Access Screen will be removed", false);
             
-            debug_skipIntro = Config.Bind("Debug", "SkipIntro", false, "If true the intro will be skipped");
-            debug_quitEarlyAccessScreen = Config.Bind("Debug", "QuitEarlyAccessScreen", false, "If true the Early Access Screen will be removed");
-            // Plugin startup logic
             Logger.LogInfo($"Plugin {this.Info.Metadata.GUID} is loaded!");
             instance = this;
 
@@ -49,15 +51,11 @@ namespace FarlandsCoreMod
             StartCoroutine(allLoaded());
         }
 
-        private void LoadFCMResources()
+        private void LoadManagers()
         {
-            //Utiles.Resources.AddCore("bad", TextureLoader.LoadMod("FarlandsCoreMod.Resources.fcm-bad.png"));
 
-            //foreach (var item in UnityEngine.Resources.FindObjectsOfTypeAll(typeof(TMP_FontAsset)))
-            //{
-            //    var font = item as TMP_FontAsset;
-            //    Utiles.Resources.AddBase(font.name, font);
-            //}
+            new FarlandsTextureMod.Manager().Init();
+            new FarlandsDialogueMod.Manager().Init();
         }
 
         private static bool isLoaded = false;
@@ -66,13 +64,14 @@ namespace FarlandsCoreMod
             yield return new WaitForEndOfFrame();
             Source.Init();
             OnAllModsLoaded();
-            LoadFCMResources();
-            FarlandsTextureMod.FarlandsTextureMod.LoadAllTextures();
+            LoadManagers();
+
             isLoaded = true;
         }
 
         public static bool IsAllLoaded() => isLoaded;
-
+        public static ConfigEntry<T> AddConfig<T>(string section, string key, string description, T defaultValue) =>
+            instance.Config.Bind(section, key, defaultValue, description);
         private void OnAllModsLoaded()
         {
             
