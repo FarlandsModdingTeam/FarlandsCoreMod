@@ -18,13 +18,15 @@ namespace FarlandsCoreMod.FarlandsDialogueMod
         public static bool isSourcesLoaded = false;
         public static bool isDialoguesLoaded = false;
 
-        public static List<SourceJSON> sources = null;
-
+        private static List<SourceJSON> sources = null;
+        private static List<SourceJSON> addedSources = new();
         public static ConfigEntry<bool> Config_exportDialogues;
+
+        public static void AddSource(SourceJSON source) => addedSources.Add(source);
 
         public void Init()
         {
-            Config_exportDialogues = FarlandsCoreMod.AddConfig("FarlandsCoreMod", "ExportDialogues", "If true, a export file will be created and will save all the dialogues", false);
+            Config_exportDialogues = FarlandsCoreMod.AddConfig("FarlandsDialogueMod", "ExportDialogues", "If true, a export file will be created and will save all the dialogues", false);
         }
 
         private static void GetSources()
@@ -32,11 +34,12 @@ namespace FarlandsCoreMod.FarlandsDialogueMod
             var src = Directory.GetFiles(Paths.Dialogue, "*.source.json", SearchOption.TopDirectoryOnly);
             if (src.Count() < 1) 
             { 
-                sources = new();
+                sources = addedSources;
                 return;
             }
 
             sources = src.Select(SourceJSON.FromFile).ToList();
+            sources.AddRange(addedSources);
         }
 
         public static void export()
@@ -46,7 +49,7 @@ namespace FarlandsCoreMod.FarlandsDialogueMod
                 var source = SourceJSON.FromFull(LocalizationManager.Sources.First(), DialogueManager.instance.masterDatabase);
 
                 File.WriteAllText(
-                    Path.Combine(Paths.Dialogue, "/export.json"),
+                    Path.Combine(Paths.Dialogue, "export.json"),
                     Newtonsoft.Json.JsonConvert.SerializeObject(source)
                 );
             }

@@ -1,22 +1,35 @@
-﻿using FarlandsCoreMod.Utiles;
+﻿using FarlandsCoreMod.Attributes;
+using FarlandsCoreMod.Utiles;
+using HarmonyLib;
 using JetBrains.Annotations;
+using PixelCrushers.DialogueSystem;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Text;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace FarlandsCoreMod.FarlandsTextureMod
 {
+    [Patcher]
     public class Manager : IManager
     {
         static string zipFilePath;
-
         public void Init() => LoadAllTextures();
+        
+
+        [HarmonyPatch(typeof(DialogueSystemController), "Awake")]
+        [HarmonyPostfix]
+        public static void LoadDialoguesTextures()
+        {
+            LoadTextures("Dialogue", Source.Replace.DialogueTexture);
+        }
         public static void LoadAllTextures()
         {
-            if (!Directory.Exists(Paths.Texture)) 
+            if (!Directory.Exists(Paths.Texture))
                 Directory.CreateDirectory(Paths.Texture);
 
             var src = Directory.GetFiles(Paths.Texture, "*.zip");
@@ -40,7 +53,7 @@ namespace FarlandsCoreMod.FarlandsTextureMod
             using (ZipArchive archive = ZipFile.OpenRead(zipFilePath))
             {
                 var entriesInSubdirectory = archive.Entries
-                .Where(entry => entry.FullName.StartsWith(subdir+"/", StringComparison.OrdinalIgnoreCase))
+                .Where(entry => entry.FullName.StartsWith(subdir + "/", StringComparison.OrdinalIgnoreCase))
                 .ToList();
 
                 foreach (ZipArchiveEntry entry in entriesInSubdirectory)
@@ -61,5 +74,7 @@ namespace FarlandsCoreMod.FarlandsTextureMod
                 }
             }
         }
+
+        
     }
 }

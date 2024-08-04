@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Version>0.0.11</Version>
+    <Version>0.0.16</Version>
     <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>FarlandsCoreMod</AssemblyName>
     <Description>Simplify Modding for Farlands</Description>
@@ -14,10 +14,6 @@
     <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" />
     <PackageReference Include="BepInEx.Unity" Version="6.0.0-*" IncludeAssets="compile" />
     <PackageReference Include="BepInEx.PluginInfoProps" Version="2.1.0" />
-    <PackageReference Include="FarlandsAnalyzer" Version="1.0.10">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
 	<PackageReference Include="UnityEngine.Modules" Version="2021.3.16" IncludeAssets="compile" />
   </ItemGroup>
   

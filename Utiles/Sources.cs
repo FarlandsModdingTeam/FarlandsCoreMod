@@ -3,6 +3,7 @@ using Farlands.Inventory;
 using Farlands.PlaceableObjectsSystem;
 using Farlands.PlantSystem;
 using Farlands.WorldResources;
+using PixelCrushers.DialogueSystem;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml.Linq;
@@ -62,15 +63,7 @@ namespace FarlandsCoreMod.Utiles
             return null;
         }
 
-        public static Texture2D GetTexture(string texture)
-        {
-            foreach (var i in UnityEngine.Resources.FindObjectsOfTypeAll<Texture2D>())
-            {
-                if (i.name == texture) return i;
-            }
-
-            return null;
-        }
+        public static Texture2D GetTexture(string texture) => UnityEngine.Resources.Load<Texture2D>(texture);
 
         public static void Init()
         {
@@ -103,6 +96,13 @@ namespace FarlandsCoreMod.Utiles
             {
                 var plant = GetPlant(id);
                 plant.seedSprite.texture.LoadImage(raw);
+            }
+            public static void DialogueTexture(string id, byte[] raw)
+            {
+                var asset = (Sprite)DialogueManager.instance.LoadAsset(id, typeof(Sprite));
+                if (asset == null) return;
+
+                asset.texture.LoadImage(raw);
             }
         }
     }

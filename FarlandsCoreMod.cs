@@ -19,7 +19,7 @@ using UnityEngine.SceneManagement;
 
 namespace FarlandsCoreMod
 {
-    [BepInPlugin("top.magincian.fcm", "FarlandsCoreMod", "0.0.6")]
+    [BepInPlugin("top.magincian.fcm", "FarlandsCoreMod", "0.0.7")]
     public class FarlandsCoreMod : BaseUnityPlugin
     {
         private static ConfigEntry<bool> debug_skipIntro;
@@ -29,11 +29,12 @@ namespace FarlandsCoreMod
         public static bool Debug_quitEarlyAccessScreen => debug_quitEarlyAccessScreen.Value;
 
         public static FarlandsCoreMod instance;
-
         public string SHORT_NAME => "FCM";
 
         private void Awake()
         {
+            instance = this;
+
             debug_skipIntro = AddConfig("Debug", "SkipIntro", 
                 "If true the intro will be skipped", false);
 
@@ -41,7 +42,7 @@ namespace FarlandsCoreMod
                 "If true the Early Access Screen will be removed", false);
             
             Logger.LogInfo($"Plugin {this.Info.Metadata.GUID} is loaded!");
-            instance = this;
+            
 
 
             Patcher.LoadAll();
@@ -53,18 +54,19 @@ namespace FarlandsCoreMod
 
         private void LoadManagers()
         {
-
             new FarlandsTextureMod.Manager().Init();
             new FarlandsDialogueMod.Manager().Init();
+            
         }
 
         private static bool isLoaded = false;
         private IEnumerator allLoaded()
-        { 
+        {
             yield return new WaitForEndOfFrame();
+
             Source.Init();
-            OnAllModsLoaded();
             LoadManagers();
+            OnAllModsLoaded();
 
             isLoaded = true;
         }
