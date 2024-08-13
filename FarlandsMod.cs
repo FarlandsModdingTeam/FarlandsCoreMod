@@ -13,7 +13,7 @@ using UnityEngine;
 
 namespace FarlandsCoreMod
 {
-    [BepInDependency("top.magincian.fcm", "~0.0.7")]
+    [BepInDependency("top.magincian.fcm", "~0.0.8")]
     public abstract class FarlandsMod : BaseUnityPlugin
     {
         public Assembly ASM => Assembly.GetAssembly(this.GetType());

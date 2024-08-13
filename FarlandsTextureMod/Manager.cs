@@ -20,9 +20,8 @@ namespace FarlandsCoreMod.FarlandsTextureMod
         static string zipFilePath;
         public void Init() => LoadAllTextures();
         
-
-        [HarmonyPatch(typeof(DialogueSystemController), "Awake")]
-        [HarmonyPostfix]
+        //[HarmonyPatch(typeof(DialogueSystemController), "Awake")]
+        //[HarmonyPostfix]
         public static void LoadDialoguesTextures()
         {
             LoadTextures("Dialogue", Source.Replace.DialogueTexture);

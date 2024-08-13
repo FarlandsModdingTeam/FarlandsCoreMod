@@ -1,6 +1,7 @@
 ﻿using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Unity.Bootstrap;
+using Farlands.Dev;
 using Farlands.PlaceableObjectsSystem;
 using FarlandsCoreMod.Attributes;
 using FarlandsCoreMod.Patchers;
@@ -19,7 +20,7 @@ using UnityEngine.SceneManagement;
 
 namespace FarlandsCoreMod
 {
-    [BepInPlugin("top.magincian.fcm", "FarlandsCoreMod", "0.0.7")]
+    [BepInPlugin("top.magincian.fcm", "FarlandsCoreMod", "0.0.8")]
     public class FarlandsCoreMod : BaseUnityPlugin
     {
         private static ConfigEntry<bool> debug_skipIntro;
@@ -28,7 +29,10 @@ namespace FarlandsCoreMod
         private static ConfigEntry<bool> debug_quitEarlyAccessScreen;
         public static bool Debug_quitEarlyAccessScreen => debug_quitEarlyAccessScreen.Value;
 
+        
+
         public static FarlandsCoreMod instance;
+        
         public string SHORT_NAME => "FCM";
 
         private void Awake()
@@ -40,11 +44,9 @@ namespace FarlandsCoreMod
 
             debug_quitEarlyAccessScreen = AddConfig("Debug", "QuitEarlyAccessScreen", 
                 "If true the Early Access Screen will be removed", false);
-            
+
             Logger.LogInfo($"Plugin {this.Info.Metadata.GUID} is loaded!");
             
-
-
             Patcher.LoadAll();
 
             OnLoadScene.onLoadScene();
@@ -54,9 +56,9 @@ namespace FarlandsCoreMod
 
         private void LoadManagers()
         {
-            new FarlandsTextureMod.Manager().Init();
+            // new FarlandsTextureMod.Manager().Init();
             new FarlandsDialogueMod.Manager().Init();
-            
+            new FarlandsConsole.Manager().Init();
         }
 
         private static bool isLoaded = false;
@@ -65,6 +67,7 @@ namespace FarlandsCoreMod
             yield return new WaitForEndOfFrame();
 
             Source.Init();
+
             LoadManagers();
             OnAllModsLoaded();
 
@@ -76,7 +79,6 @@ namespace FarlandsCoreMod
             instance.Config.Bind(section, key, defaultValue, description);
         private void OnAllModsLoaded()
         {
-            
             Logger.LogMessage("************************");
             var target = "top.magincian.fcm";
 
