@@ -5,13 +5,16 @@ using System.IO;
 using System.Text;
 using PixelCrushers;
 using System.Diagnostics;
+using MoonSharp.Interpreter;
 
 namespace FarlandsCoreMod.FarlandsConsole
 {
     public class FarlandsEasyMod
     {
+        public DynValue Mod;
+        public string Tag;
         public Dictionary<string, byte[]> PathValue = new();
-
+        
         public void LoadZip(string zipPath)
         {
             using (FileStream zipToOpen = new FileStream(zipPath, FileMode.Open))
@@ -49,8 +52,11 @@ namespace FarlandsCoreMod.FarlandsConsole
             set => PathValue[path] = value;
         }
 
-        public void ExecuteMain() =>
-            Manager.Execute(Encoding.UTF8.GetString(this["main.bohr"]).Split('\n'), this);
-        
+        public void ExecuteMain()
+        {
+            Manager.Execute(this["main.lua"], this);
+            Mod = Manager.LUA.Globals.Get("_mod_");
+            Tag = Mod.Table.Get("tag").String;
+        }
     }
 }

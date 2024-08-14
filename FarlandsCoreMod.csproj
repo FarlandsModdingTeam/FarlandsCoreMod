@@ -91,6 +91,9 @@
     <Reference Include="UnityEngine.UIModule">
       <HintPath>lib\UnityEngine.UIModule.dll</HintPath>
     </Reference>
+    <Reference Include="MoonSharp.Interpreter">
+      <HintPath>lib\MoonSharp.Interpreter.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 
@@ -118,6 +121,7 @@
     <None Include="lib\UnityEngine.UIElementsModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
     <None Include="lib\UnityEngine.UIElementsNativeModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
     <None Include="lib\UnityEngine.UIModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\MoonSharp.Interpreter.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
   </ItemGroup>
   
   <ItemGroup>

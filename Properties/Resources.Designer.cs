@@ -61,6 +61,16 @@ namespace FarlandsCoreMod.Properties {
         }
         
         /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Byte[].
+        /// </summary>
+        public static byte[] init {
+            get {
+                object obj = ResourceManager.GetObject("init", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a 0.0.8.
         /// </summary>
         public static string Version {

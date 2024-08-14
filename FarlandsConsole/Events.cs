@@ -1,5 +1,6 @@
 ﻿using FarlandsCoreMod.Attributes;
 using HarmonyLib;
+using MoonSharp.Interpreter;
 using PixelCrushers.DialogueSystem;
 using System;
 using System.Collections.Generic;
@@ -16,8 +17,8 @@ namespace FarlandsCoreMod.FarlandsConsole
         [HarmonyPostfix]
         public static void DialogPortraitX(string commandName, string[] args)
         {
-            Manager.ExecuteEvent("dialogue.portrait.*");
-            Manager.ExecuteEvent($"dialogue.portrait.{args[1]}");
+            Manager.ExecuteEvent("dialogue", "portrait", "any");
+            Manager.ExecuteEvent("dialogue", "portrait", args[1]);
         }
     }
 }
