@@ -27,7 +27,11 @@ namespace FarlandsCoreMod.FarlandsConsole
         public static Dictionary<string, List<Action>> OnEvents = new();
         public static FarlandsEasyMod CURRENT_MOD;
         public static Script LUA = new();
-
+        public static DynValue MOD 
+        {
+            get => LUA.Globals.Get("_mod_");
+            set => LUA.Globals.Set("_mod_", value);
+        }
         public static void ExecuteEvent(params string[] ev)
         {
             Debug.Log(string.Join('.', ev));
@@ -40,14 +44,18 @@ namespace FarlandsCoreMod.FarlandsConsole
                     dyn = dyn.Table.Get(single);
                     if (dyn.Type == DataType.Nil) break;
                 }
-                if (dyn.Type != DataType.Nil)  LUA.Call(dyn);
+
+                if (dyn.Type != DataType.Nil)
+                {
+                    MOD = mod.Mod; // TODO revisar si funciona
+                    LUA.Call(dyn);
+                } 
             }
         }
         public void Init()
         {
             EnableConsole = FarlandsCoreMod.AddConfig("Debug", "EnableConsole", "", false);
 
-            
             AuxiliarFunctions();
 
             if (!Directory.Exists(Paths.Plugin))
@@ -68,7 +76,7 @@ namespace FarlandsCoreMod.FarlandsConsole
         {
             var i = path.IndexOf('/');
             var mod = path.Substring(0, i);
-            // if (mod == ".") mod = CURRENT_MOD.Tag;
+            if (mod == ".") mod = MOD.Table.Get("tag").String;
             return EasyMods[mod][path.Substring(i+1, path.Length-i-1)];
         }
         public static void AuxiliarFunctions()
@@ -86,24 +94,22 @@ namespace FarlandsCoreMod.FarlandsConsole
                 Source.Replace.OtherTexture(origin, GetFromMod(path));
             };
 
-            LUA.Globals["portrait_override"] = portrait_override;
+            LUA.Globals["portrait_override"] = (string origin, string path) => 
+            {
+                Debug.Log("PEPINO");
+                string code =
+@$"
+function _mod_.event.dialogue.portrait:{origin}()
+    texture_override('{origin}', '{path}')
+end
+";
+                LUA.DoString(code);
+            };
 
             LUA.Globals["show"] = (string txt) =>
             {
                 Debug.Log(txt);
             };
-        }
-
-        public static void portrait_override(string origin, string path)
-        {
-            Debug.Log("PEPINO");
-            string code =
-    @$"
-function _mod_.event.dialogue.portrait:{origin}()
-    texture_override('{origin}', '{path}')
-end
-";
-            LUA.DoString(code);
         }
 
         [HarmonyPatch(typeof(DebugController), "Update")]
@@ -201,8 +207,8 @@ end
 
         public static DynValue Execute(string codes, FarlandsEasyMod fem)
         {
-            CURRENT_MOD = fem; // QUITAR
-            if(fem != null && fem.Tag != null)LUA.DoString($"_mod_ = {fem.Tag}");
+            if(fem != null && fem.Tag != null)
+                MOD=DynValue.NewString(fem.Tag);
 
 
             Debug.Log(codes);

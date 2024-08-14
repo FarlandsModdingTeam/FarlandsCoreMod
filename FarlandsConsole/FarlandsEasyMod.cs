@@ -55,7 +55,7 @@ namespace FarlandsCoreMod.FarlandsConsole
         public void ExecuteMain()
         {
             Manager.Execute(this["main.lua"], this);
-            Mod = Manager.LUA.Globals.Get("_mod_");
+            Mod = Manager.MOD;
             Tag = Mod.Table.Get("tag").String;
         }
     }
