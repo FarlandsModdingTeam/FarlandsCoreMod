@@ -30,21 +30,23 @@ namespace FarlandsCoreMod.FarlandsConsole
         public static FarlandsEasyMod CURRENT_MOD;
         public static Script LUA = new();
 
-        /*
-         * name: MOD
-         * especie de getter y setter para la variable global _mod_
-         */
+
+        /// <summary>
+        /// name: MOD
+        /// especie de getter y setter para la variable global _mod_
+        /// </summary>
         public static DynValue MOD
         {
             get => LUA.Globals.Get("_mod_");
             set => LUA.Globals.Set("_mod_", value);
         }
 
-        /*
-         * name: ExecuteEvent
-         * ejecuta un evento en todos los mods cargados
-         * 
-         */
+
+        /// <summary>
+        ///     name: ExecuteEvent
+        ///     Ejecuta un evento en todos los mods cargados
+        /// </summary>
+        /// <param name="ev"></param>
         public static void ExecuteEvent(params string[] ev)
         {
             Debug.Log(string.Join('.', ev));
@@ -66,7 +68,9 @@ namespace FarlandsCoreMod.FarlandsConsole
             }
         }
 
-        // Método para inicializar el Manager
+        /// <summary>
+        ///     Método para inicializar el Manager
+        /// </summary>
         public void Init()
         {
             EnableConsole = FarlandsCoreMod.AddConfig("Debug", "EnableConsole", "", false);
@@ -87,7 +91,11 @@ namespace FarlandsCoreMod.FarlandsConsole
 
         }
 
-        // Método para obtener datos de un mod
+        /// <summary>
+        ///     Método para obtener datos de un mod
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns>EasyMods[mod][path.Substring(i + 1, path.Length - i - 1)];</returns>
         public static byte[] GetFromMod(string path)
         {
             var i = path.IndexOf('/');
@@ -142,7 +150,11 @@ _mod_ = {tag}";
             };
         }
 
-        // Método para actualizar la consola de depuración
+        /// <summary>
+        ///     Método para actualizar la consola de depuración
+        /// </summary>
+        /// <param name="__instance"></param>
+        /// <returns>false</returns>
         [HarmonyPatch(typeof(DebugController), "Update")]
         [HarmonyPrefix]
         public static bool UpdateConsole(DebugController __instance)
@@ -175,7 +187,11 @@ _mod_ = {tag}";
             return false;
         }
 
-        // Método para dibujar la interfaz de usuario de la consola de depuración
+        /// <summary>
+        ///     Método para dibujar la interfaz de usuario de la consola de depuración
+        /// </summary>
+        /// <param name="__instance"></param>
+        /// <returns>false</returns>
         [HarmonyPatch(typeof(DebugController), "OnGUI")]
         [HarmonyPrefix]
         public static bool OnGui(DebugController __instance)
@@ -234,10 +250,22 @@ _mod_ = {tag}";
             return false;
         }
 
-        // Método para ejecutar código en LUA
+        /// <summary>
+        ///     Método para ejecutar código en LUA
+        /// </summary>
+        /// <param name="codes"></param>
+        /// <param name="fem"></param>
         public static DynValue Execute(byte[] codes, FarlandsEasyMod fem) =>
             Execute(Encoding.UTF8.GetString(codes), fem);
 
+        /// <summary>
+        ///    Método para ejecutar código generico en LUA
+        ///    comprueba si el mod es nulo
+        ///    
+        /// </summary>
+        /// <param name="codes"></param>
+        /// <param name="fem"></param>
+        /// <returns>LUA.DoString(codes)</returns>
         public static DynValue Execute(string codes, FarlandsEasyMod fem)
         {
             if (fem != null && fem.Tag != null)
@@ -251,6 +279,11 @@ _mod_ = {tag}";
 
         private static string currentEvent = null;
 
+        /// <summary>
+        ///    Método para ejecutar un evento en LUA
+        /// </summary>
+        /// <param name="__instance"></param>
+        /// <returns>false</returns>
         [HarmonyPatch(typeof(DebugController), "HandleInput")]
         [HarmonyPrefix]
         public static bool ExecuteInput(DebugController __instance)
