@@ -22,16 +22,28 @@ namespace FarlandsCoreMod.FarlandsConsole
     [Patcher]
     public class Manager : IManager
     {
+        // ----------------------- DECLARACIONES ----------------------- //
         public static ConfigEntry<bool> EnableConsole;
         public static Dictionary<string, FarlandsEasyMod> EasyMods = new();
         public static Dictionary<string, List<Action>> OnEvents = new();
         public static FarlandsEasyMod CURRENT_MOD;
         public static Script LUA = new();
-        public static DynValue MOD 
+
+        /*
+         * name: MOD
+         * especie de getter y setter para la variable global _mod_
+         */
+        public static DynValue MOD
         {
             get => LUA.Globals.Get("_mod_");
             set => LUA.Globals.Set("_mod_", value);
         }
+
+        /*
+         * name: ExecuteEvent
+         * ejecuta un evento en todos los mods cargados
+         * 
+         */
         public static void ExecuteEvent(params string[] ev)
         {
             Debug.Log(string.Join('.', ev));
@@ -49,9 +61,11 @@ namespace FarlandsCoreMod.FarlandsConsole
                 {
                     MOD = mod.Mod; // TODO revisar si funciona
                     LUA.Call(dyn);
-                } 
+                }
             }
         }
+
+        // Método para inicializar el Manager
         public void Init()
         {
             EnableConsole = FarlandsCoreMod.AddConfig("Debug", "EnableConsole", "", false);
@@ -69,23 +83,26 @@ namespace FarlandsCoreMod.FarlandsConsole
                 fem.ExecuteMain();
                 EasyMods.Add(fem.Tag, fem);
             }
-                
+
         }
 
+        // Método para obtener datos de un mod
         public static byte[] GetFromMod(string path)
         {
             var i = path.IndexOf('/');
             var mod = path.Substring(0, i);
             if (mod == ".") mod = MOD.Table.Get("tag").String;
-            return EasyMods[mod][path.Substring(i+1, path.Length-i-1)];
+            return EasyMods[mod][path.Substring(i + 1, path.Length - i - 1)];
         }
+
+        // Método para definir funciones auxiliares en LUA
         public static void AuxiliarFunctions()
         {
 
             LUA.Globals["MOD"] = (string tag) =>
             {
                 var code = Encoding.UTF8.GetString(Properties.Resources.init);
-                Execute(code.Replace("%%",tag), null);
+                Execute(code.Replace("%%", tag), null);
             };
 
             LUA.Globals["texture_override"] = (string origin, string path) =>
@@ -94,15 +111,15 @@ namespace FarlandsCoreMod.FarlandsConsole
                 Source.Replace.OtherTexture(origin, GetFromMod(path));
             };
 
-            LUA.Globals["portrait_override"] = (string origin, string path) => 
+            LUA.Globals["portrait_override"] = (string origin, string path) =>
             {
                 Debug.Log("PEPINO");
                 string code =
 @$"
-function _mod_.event.dialogue.portrait:{origin}()
-    texture_override('{origin}', '{path}')
-end
-";
+    function _mod_.event.dialogue.portrait:{origin}()
+        texture_override('{origin}', '{path}')
+    end
+    ";
                 LUA.DoString(code);
             };
 
@@ -112,13 +129,14 @@ end
             };
         }
 
+        // Método para actualizar la consola de depuración
         [HarmonyPatch(typeof(DebugController), "Update")]
         [HarmonyPrefix]
         public static bool UpdateConsole(DebugController __instance)
         {
-            if(EnableConsole == null || !EnableConsole.Value) return false;
+            if (EnableConsole == null || !EnableConsole.Value) return false;
 
-            var Set= (string field, object val) => Private.SetFieldValue(__instance, field, val);
+            var Set = (string field, object val) => Private.SetFieldValue(__instance, field, val);
             var Get = (string field) => Private.GetFieldValue(__instance, field);
             if (Input.GetKeyDown(KeyCode.Backslash))
             {
@@ -127,7 +145,7 @@ end
                 if ((bool)Get("showConsole"))
                 {
                     Set("consoleActive", true);
-                    
+
                     __instance.player.controllers.maps.SetAllMapsEnabled(state: false);
                     ReInput.players.GetSystemPlayer().controllers.maps.SetAllMapsEnabled(state: false);
                     Set("inputFocused", true);
@@ -144,6 +162,7 @@ end
             return false;
         }
 
+        // Método para dibujar la interfaz de usuario de la consola de depuración
         [HarmonyPatch(typeof(DebugController), "OnGUI")]
         [HarmonyPrefix]
         public static bool OnGui(DebugController __instance)
@@ -202,13 +221,14 @@ end
             return false;
         }
 
+        // Método para ejecutar código en LUA
         public static DynValue Execute(byte[] codes, FarlandsEasyMod fem) =>
             Execute(Encoding.UTF8.GetString(codes), fem);
 
         public static DynValue Execute(string codes, FarlandsEasyMod fem)
         {
-            if(fem != null && fem.Tag != null)
-                MOD=DynValue.NewString(fem.Tag);
+            if (fem != null && fem.Tag != null)
+                MOD = DynValue.NewString(fem.Tag);
 
 
             Debug.Log(codes);
@@ -246,7 +266,7 @@ end
         //    Action Invoke = null;
         //    List<Action> actionList = new();
 
-            
+
         //    for (int i = 0; i < Commands.commandList.Count; i++)
         //    {
         //        DebugCommandBase debugCommandBase = Commands.commandList[i] as DebugCommandBase;
