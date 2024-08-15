@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Windows;
 using static FarlandsCoreMod.Attributes.Configuration;
 using static PixelCrushers.DialogueSystem.UnityGUI.GUIProgressBar;
@@ -101,19 +102,31 @@ namespace FarlandsCoreMod.FarlandsConsole
 
             LUA.Globals["MOD"] = (string tag) =>
             {
-                var code = Encoding.UTF8.GetString(Properties.Resources.init);
-                Execute(code.Replace("%%", tag), null);
+                var code =
+@$"
+{tag} = {{}}
+{tag}.tag = '{tag}'
+{tag}.event = {{}}
+{tag}.event.dialogue = {{}}
+{tag}.event.dialogue.portrait = {{}}
+
+_mod_ = {tag}";
+
+                Execute(code, null);
+            };
+
+            LUA.Globals["load_scene"] = (string scene) =>
+            {
+                SceneManager.LoadScene(scene);
             };
 
             LUA.Globals["texture_override"] = (string origin, string path) =>
             {
-                Debug.Log(origin);
                 Source.Replace.OtherTexture(origin, GetFromMod(path));
             };
 
             LUA.Globals["portrait_override"] = (string origin, string path) =>
             {
-                Debug.Log("PEPINO");
                 string code =
 @$"
     function _mod_.event.dialogue.portrait:{origin}()
@@ -207,7 +220,7 @@ namespace FarlandsCoreMod.FarlandsConsole
                 if (Event.current.keyCode == KeyCode.Return || Event.current.keyCode == KeyCode.KeypadEnter)
                 {
                     GUI.FocusControl(null);
-                    //ExecuteInput(__instance);
+                    ExecuteInput(__instance);
                     Set("input", "");
 
                     Set("showConsole", false);
@@ -238,82 +251,12 @@ namespace FarlandsCoreMod.FarlandsConsole
 
         private static string currentEvent = null;
 
-        //[HarmonyPatch(typeof(DebugController), "HandleInput")]
-        //[HarmonyPrefix]
-        //public static bool ExecuteInput(DebugController __instance)
-        //{
-        //    Execute(Private.GetFieldValue<string>(__instance, "input"));
-        //    return false;
-        //}
-
-        //public static void Execute(string code)
-        //{
-        //    code = code.Trim();
-
-        //    Regex regex = new Regex(@"(?<=^|\s)([^\s']+|'[^']+')");
-
-        //    MatchCollection matches = regex.Matches(code);
-        //    List<string> r = new List<string>();
-        //    foreach (Match match in matches)
-        //    {
-        //        // Limpiamos las comillas si es necesario
-        //        r.Add(match.Value.Trim('\''));
-        //    }
-
-        //    // Convertimos la lista a un array
-        //    string[] array = r.ToArray();
-        //    r = null;
-        //    Action Invoke = null;
-        //    List<Action> actionList = new();
-
-
-        //    for (int i = 0; i < Commands.commandList.Count; i++)
-        //    {
-        //        DebugCommandBase debugCommandBase = Commands.commandList[i] as DebugCommandBase;
-
-        //        if (!code.StartsWith(debugCommandBase.commandId))
-        //        {
-        //            continue;
-        //        }
-
-        //        var end = false;
-        //        end = debugCommandBase.commandId == "end";
-
-        //        if (Commands.commandList[i] is DebugCommand)
-        //        {
-        //            Invoke = (Commands.commandList[i] as DebugCommand).Invoke;
-        //        }
-        //        else if (Commands.commandList[i] is DebugCommand<int>)
-        //        {
-        //            Invoke = () => (Commands.commandList[i] as DebugCommand<int>).Invoke(int.Parse(array[1]));
-        //        }
-        //        else if (Commands.commandList[i] is DebugCommand<int, int>)
-        //        {
-        //            int result = int.Parse(array[1]);
-        //            int result2 = int.Parse(array[2]);
-        //            if (int.TryParse(array[1], out result) && int.TryParse(array[2], out result2))
-        //            {
-        //                Invoke = () => (Commands.commandList[i] as DebugCommand<int, int>).Invoke(result, result2);
-        //            }
-        //            else
-        //            {
-        //                Debug.LogWarning("Invalid parameter format for DebugCommand<int, int>.");
-        //            }
-        //        }
-        //        else if (Commands.commandList[i] is DebugCommand<string, string>)
-        //        {
-        //            Invoke = () => (Commands.commandList[i] as DebugCommand<string, string>).Invoke(array[1], array[2]);
-        //        }
-
-        //        if (currentEvent == null || end) Invoke();
-        //        else if(Invoke != null) actionList.Add(Invoke);
-
-        //        break;
-        //    }
-
-        //    if(currentEvent != null && actionList.Count > 0)
-        //    OnEvents[currentEvent].Add(() => actionList.ForEach(x => x.Invoke()));
-        //}
-
+        [HarmonyPatch(typeof(DebugController), "HandleInput")]
+        [HarmonyPrefix]
+        public static bool ExecuteInput(DebugController __instance)
+        {
+            Execute(Private.GetFieldValue<string>(__instance, "input"), null);
+            return false;
+        }
     }
 }
