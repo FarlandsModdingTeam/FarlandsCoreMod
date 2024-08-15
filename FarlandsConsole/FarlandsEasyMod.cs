@@ -11,10 +11,12 @@ namespace FarlandsCoreMod.FarlandsConsole
 {
     public class FarlandsEasyMod
     {
+        // ----------------------- DECLARACIONES ----------------------- //
         public DynValue Mod;
         public string Tag;
         public Dictionary<string, byte[]> PathValue = new();
         
+
         public void LoadZip(string zipPath)
         {
             using (FileStream zipToOpen = new FileStream(zipPath, FileMode.Open))
