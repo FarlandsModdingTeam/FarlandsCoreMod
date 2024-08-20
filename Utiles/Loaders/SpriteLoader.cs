@@ -14,9 +14,6 @@ namespace FarlandsCoreMod.Utiles.Loaders
                 new Rect(0, 0, texture.width, texture.height),
                 new Vector2(0.5f, 0.5f));
 
-        public static Sprite LoadMod(string resourceName) => 
-            FromTexture(TextureLoader.LoadMod(resourceName));
-
 
     }
 }

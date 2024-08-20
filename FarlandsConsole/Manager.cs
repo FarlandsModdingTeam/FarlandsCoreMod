@@ -3,6 +3,7 @@ using Farlands.Dev;
 using FarlandsCoreMod.Attributes;
 using FarlandsCoreMod.Utiles;
 using HarmonyLib;
+using I2.Loc;
 using MoonSharp.Interpreter;
 using Rewired;
 using System;
@@ -81,10 +82,18 @@ namespace FarlandsCoreMod.FarlandsConsole
             foreach (var item in src)
             {
                 var fem = FarlandsEasyMod.FromZip(item);
+                CURRENT_MOD = fem;
                 fem.ExecuteMain();
-                EasyMods.Add(fem.Tag, fem);
             }
 
+        }
+
+        public static string[] GetFilesInMod(string path)
+        {
+            var i = path.IndexOf('/');
+            var mod = path.Substring(0, i);
+            if (mod == ".") mod = MOD.Table.Get("tag").String;
+            return EasyMods[mod].GetFilesInFolder(mod, path.Substring(i + 1, path.Length - i - 1));
         }
 
         // Método para obtener datos de un mod
@@ -99,7 +108,6 @@ namespace FarlandsCoreMod.FarlandsConsole
         // Método para definir funciones auxiliares en LUA
         public static void AuxiliarFunctions()
         {
-
             LUA.Globals["MOD"] = (string tag) =>
             {
                 var code =
@@ -107,12 +115,17 @@ namespace FarlandsCoreMod.FarlandsConsole
 {tag} = {{}}
 {tag}.tag = '{tag}'
 {tag}.event = {{}}
+{tag}.event.scene = {{}}
+{tag}.event.scene.change = {{}}
+{tag}.event.language = {{}}
+{tag}.event.language.change = {{}}
 {tag}.event.dialogue = {{}}
 {tag}.event.dialogue.portrait = {{}}
 
 _mod_ = {tag}";
 
                 Execute(code, null);
+                EasyMods.Add(tag, CURRENT_MOD);
             };
 
             LUA.Globals["load_scene"] = (string scene) =>
@@ -120,9 +133,40 @@ _mod_ = {tag}";
                 SceneManager.LoadScene(scene);
             };
 
-            LUA.Globals["texture_override"] = (string origin, string path) =>
+            LUA.Globals["texture_override"] = DynValue.NewCallback((ctx, args) =>
             {
-                Source.Replace.OtherTexture(origin, GetFromMod(path));
+                if (args.Count == 0) throw new Exception("Invalid args for TextureOverride");
+                else if (args.Count == 1)
+                {
+                    var path = args[0].String;
+                    Source.Replace.OtherTexture(Path.GetFileNameWithoutExtension(path), GetFromMod(path));
+                }
+                else if (args.Count == 2)
+                {
+                    var origin = args[0].String;
+                    var path = args[1].String;
+                    Source.Replace.OtherTexture(origin, GetFromMod(path));
+                }
+
+                return DynValue.Void;
+            });
+
+            LUA.Globals["texture_override_in"] = DynValue.NewCallback((ctx, args) =>
+            {
+                var path = args[0].String;
+                Debug.Log(string.Join('\n', GetFilesInMod(path)));
+
+                foreach (var item in GetFilesInMod(path))
+                    Source.Replace.OtherTexture(Path.GetFileNameWithoutExtension(item), GetFromMod(item));
+
+                return DynValue.Void;
+            });
+
+            // No funciona
+            LUA.Globals["sprite_override"] = (string origin, int[] position, string path) =>
+            {
+                var vec = new Vector2Int(position[0], position[1]);
+                Source.Replace.ReplaceSprite(origin, vec, GetFromMod(path));
             };
 
             LUA.Globals["portrait_override"] = (string origin, string path) =>
@@ -134,6 +178,28 @@ _mod_ = {tag}";
     end
     ";
                 LUA.DoString(code);
+            };
+
+            LUA.Globals["add_language"] = (string path) =>
+            {
+                FarlandsDialogueMod.Manager.AddSourceFromBytes(GetFromMod(path));
+            };
+            LUA.Globals["get_language"] = () =>
+            {
+                return LocalizationManager.CurrentLanguage;
+            };
+            // TODO crear una función find_object que permita obtener un game object
+            // Dicho debe agregar diferentes propiedades en función de los componentes que tenga
+            /*
+             
+            FarlandsLogo = find_object("FarlandsLogo")
+            FarlandsLogo.set_sprite("./FarlandsAndaluh.png")
+             
+             */
+            LUA.Globals["find_object"] = (string name) =>
+            {
+                var go = GameObject.Find(name);
+                return LuaGameObject.FromGameObject(go);
             };
 
             LUA.Globals["show"] = (string txt) =>
@@ -241,7 +307,10 @@ _mod_ = {tag}";
         public static DynValue Execute(string codes, FarlandsEasyMod fem)
         {
             if (fem != null && fem.Tag != null)
+            {
+                CURRENT_MOD = fem;  
                 MOD = DynValue.NewString(fem.Tag);
+            }
 
 
             Debug.Log(codes);

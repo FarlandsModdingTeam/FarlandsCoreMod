@@ -6,6 +6,7 @@ using System.Text;
 using PixelCrushers;
 using System.Diagnostics;
 using MoonSharp.Interpreter;
+using System.Linq;
 
 namespace FarlandsCoreMod.FarlandsConsole
 {
@@ -13,10 +14,9 @@ namespace FarlandsCoreMod.FarlandsConsole
     {
         // ----------------------- DECLARACIONES ----------------------- //
         public DynValue Mod;
-        public string Tag;
         public Dictionary<string, byte[]> PathValue = new();
-        
 
+        public string Tag;
         public void LoadZip(string zipPath)
         {
             using (FileStream zipToOpen = new FileStream(zipPath, FileMode.Open))
@@ -53,6 +53,9 @@ namespace FarlandsCoreMod.FarlandsConsole
             get => PathValue[path];
             set => PathValue[path] = value;
         }
+
+        public string[] GetFilesInFolder(string t, string folder) =>
+            PathValue.Where(x => x.Key.StartsWith(folder) && !x.Key.EndsWith("/")).Select(x=> t + "/" + x.Key).ToArray();
 
         public void ExecuteMain()
         {

@@ -28,7 +28,11 @@ namespace FarlandsCoreMod.FarlandsDialogueMod
         {
             Config_exportDialogues = FarlandsCoreMod.AddConfig("FarlandsDialogueMod", "ExportDialogues", "If true, a export file will be created and will save all the dialogues", false);
         }
-
+        public static void AddSourceFromBytes(byte[] raw)
+        {
+            var json = Encoding.UTF8.GetString(raw);
+            AddSource(SourceJSON.FromJson(json));
+        }
         private static void GetSources()
         {
             var src = Directory.GetFiles(Paths.Dialogue, "*.source.json", SearchOption.TopDirectoryOnly);

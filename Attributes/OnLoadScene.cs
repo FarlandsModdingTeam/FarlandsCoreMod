@@ -13,6 +13,10 @@ namespace FarlandsCoreMod.Attributes
     {
         public string SceneName;
 
+        public OnLoadScene()
+        {
+            SceneName = "*";
+        }
         public OnLoadScene(string sceneName)
         { 
             SceneName = sceneName;
@@ -63,7 +67,7 @@ namespace FarlandsCoreMod.Attributes
                                 Debug.Log(x.Name);
                                 SceneManager.sceneLoaded += (Scene scene, LoadSceneMode mode) =>
                                 {
-                                    if (scene.name == x.GetCustomAttribute<OnLoadScene>().SceneName)
+                                    if (x.GetCustomAttribute<OnLoadScene>().SceneName == "*" || scene.name == x.GetCustomAttribute<OnLoadScene>().SceneName)
                                     {
                                         x.Invoke(null, [scene]);
                                     }
