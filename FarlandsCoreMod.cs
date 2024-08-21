@@ -13,6 +13,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Bindings;
@@ -56,9 +57,11 @@ namespace FarlandsCoreMod
 
         private void LoadManagers()
         {
-            // new FarlandsTextureMod.Manager().Init();
-            new FarlandsDialogueMod.Manager().Init();
-            new FarlandsConsole.Manager().Init();
+            var managers = Assembly.GetAssembly(this.GetType())
+                .GetTypes().Where(x => typeof(IManager).IsAssignableFrom(x) && x.IsClass && !x.IsAbstract);
+
+            foreach (var manager in managers) 
+                (Activator.CreateInstance(manager) as IManager).Init(); 
         }
 
         private static bool isLoaded = false;
