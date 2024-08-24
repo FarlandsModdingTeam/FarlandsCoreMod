@@ -41,6 +41,8 @@ namespace FarlandsCoreMod.FarlandsConsole
             set => LUA.Globals.Set("_mod_", value);
         }
 
+        public int Index => 1;
+
         /*
          * name: ExecuteEvent
          * ejecuta un evento en todos los mods cargados
@@ -114,6 +116,7 @@ namespace FarlandsCoreMod.FarlandsConsole
 @$"
 {tag} = {{}}
 {tag}.tag = '{tag}'
+{tag}.scenes = {{}}
 {tag}.event = {{}}
 {tag}.event.scene = {{}}
 {tag}.event.scene.change = {{}}
@@ -125,7 +128,28 @@ namespace FarlandsCoreMod.FarlandsConsole
 _mod_ = {tag}";
 
                 Execute(code, null);
+                CURRENT_MOD.ConfigFile = new(Path.Combine(Paths.Config, $"{tag}.cfg"), true);
                 EasyMods.Add(tag, CURRENT_MOD);
+            };
+            
+            LUA.Globals["config"] = (string section, string key, DynValue def, string description) =>
+            {
+                var code =
+@$"
+_mod_.config = _mod_.config or {{}}
+_mod_.config.{section} = _mod_.config.{section} or {{}}
+";
+                Execute(code, null);
+                if (def.Type == DataType.Boolean)
+                {
+                    var entry = CURRENT_MOD.ConfigFile.Bind(section, key, def.Boolean, description);
+
+                    LUA.Globals.Get("_mod_")
+                        .Table.Get("config")
+                        .Table.Get(section)
+                        .Table.Set(key, DynValue.NewCallback((ctx, args) => DynValue.NewBoolean(entry.Value)));
+                }
+                
             };
 
             LUA.Globals["load_scene"] = (string scene) =>
@@ -188,18 +212,23 @@ _mod_ = {tag}";
             {
                 return LocalizationManager.CurrentLanguage;
             };
-            // TODO crear una función find_object que permita obtener un game object
-            // Dicho debe agregar diferentes propiedades en función de los componentes que tenga
-            /*
-             
-            FarlandsLogo = find_object("FarlandsLogo")
-            FarlandsLogo.set_sprite("./FarlandsAndaluh.png")
-             
-             */
+
             LUA.Globals["find_object"] = (string name) =>
             {
                 var go = GameObject.Find(name);
                 return LuaGameObject.FromGameObject(go);
+            };
+
+            LUA.Globals["create_object"] = (string name) =>
+            {
+                var go = new GameObject(name);
+                return LuaGameObject.FromGameObject(go);
+            };
+
+            LUA.Globals["create_scene"] = (string name) =>
+            {
+                var scene = SceneManager.CreateScene(name);
+                //TODO agergar creación del objeto de la escena para lua
             };
 
             LUA.Globals["show"] = (string txt) =>

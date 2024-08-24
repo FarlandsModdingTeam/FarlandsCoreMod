@@ -290,6 +290,7 @@ namespace FarlandsCoreMod.FarlandsDialogueMod
 
             public static Conversation ToConversation(TermJSON term) => term.ToConversation();
         }
+        public static SourceJSON FromBytes(byte[] raw) => SourceJSON.FromJson(Encoding.UTF8.GetString(raw));
 
         private static string splitInFirst(string str,string separator, out string rest)
         { 

@@ -21,7 +21,7 @@ using UnityEngine.SceneManagement;
 
 namespace FarlandsCoreMod
 {
-    [BepInPlugin("top.magincian.fcm", "FarlandsCoreMod", "0.0.8")]
+    [BepInPlugin("top.magincian.fcm", "FarlandsCoreMod", "0.1.1")]
     public class FarlandsCoreMod : BaseUnityPlugin
     {
         private static ConfigEntry<bool> debug_skipIntro;
@@ -58,10 +58,13 @@ namespace FarlandsCoreMod
         private void LoadManagers()
         {
             var managers = Assembly.GetAssembly(this.GetType())
-                .GetTypes().Where(x => typeof(IManager).IsAssignableFrom(x) && x.IsClass && !x.IsAbstract);
+                .GetTypes().Where(x => typeof(IManager).IsAssignableFrom(x) && x.IsClass && !x.IsAbstract)
+                .Select(x => (Activator.CreateInstance(x) as IManager))
+                .ToList();
 
-            foreach (var manager in managers) 
-                (Activator.CreateInstance(manager) as IManager).Init(); 
+            IComparer<IManager> comparer = Comparer<IManager>.Create((x,y)=>x.Index.CompareTo(y.Index));
+            managers.Sort(comparer);
+            managers.ForEach(m => m.Init());
         }
 
         private static bool isLoaded = false;

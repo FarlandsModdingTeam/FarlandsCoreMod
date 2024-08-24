@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace FarlandsCoreMod.FarlandsConsole
@@ -15,6 +16,20 @@ namespace FarlandsCoreMod.FarlandsConsole
         public static DynValue FromGameObject(GameObject gameObject)
         {
             DynValue result = DynValue.NewTable(new Table(Manager.LUA));
+            
+            result.Table.Set("add_component", DynValue.NewCallback((ctx, args) =>
+            {
+                if (args != null || args.Count < 1)
+                    return DynValue.Void;
+
+                foreach (DynValue arg in args.GetArray())
+                { 
+                    if(arg.String == "image") gameObject.AddComponent<Image>();
+                    if(arg.String == "sprite") gameObject.AddComponent<SpriteRenderer>();
+                }
+
+                return DynValue.Void;
+            }));
 
             if (gameObject.TryGetComponent<SpriteRenderer>(out var spriteRenderer))
             {

@@ -7,6 +7,7 @@ using PixelCrushers;
 using System.Diagnostics;
 using MoonSharp.Interpreter;
 using System.Linq;
+using BepInEx.Configuration;
 
 namespace FarlandsCoreMod.FarlandsConsole
 {
@@ -15,8 +16,11 @@ namespace FarlandsCoreMod.FarlandsConsole
         // ----------------------- DECLARACIONES ----------------------- //
         public DynValue Mod;
         public Dictionary<string, byte[]> PathValue = new();
+        public ConfigFile ConfigFile;
 
         public string Tag;
+
+        //TODO que se puedan leer carpetas
         public void LoadZip(string zipPath)
         {
             using (FileStream zipToOpen = new FileStream(zipPath, FileMode.Open))
