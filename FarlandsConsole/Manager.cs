@@ -4,12 +4,13 @@ using FarlandsCoreMod.Attributes;
 using FarlandsCoreMod.Utiles;
 using HarmonyLib;
 using I2.Loc;
-using MoonSharp.Interpreter;
+using MoonSharp.Interpreter;using PixelCrushers.DialogueSystem;
 using Rewired;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
 using UnityEngine;
@@ -81,13 +82,7 @@ namespace FarlandsCoreMod.FarlandsConsole
 
             var src = Directory.GetFiles(Paths.Plugin, "*.zip");
 
-            foreach (var item in src)
-            {
-                var fem = FarlandsEasyMod.FromZip(item);
-                CURRENT_MOD = fem;
-                fem.ExecuteMain();
-            }
-
+            src.ToList().ForEach(FarlandsEasyMod.LoadAndAddZip);
         }
 
         public static string[] GetFilesInMod(string path)
@@ -157,6 +152,14 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 SceneManager.LoadScene(scene);
             };
 
+
+            //TODO comprobar que funcione
+            LUA.Globals["toggle_ui"] = () =>
+            {
+                var canvas = SceneManager.GetActiveScene().GetRootGameObjects().First(x=>x.name == "Canvas");
+                canvas.SetActive(!canvas.activeSelf);
+            };
+            
             LUA.Globals["texture_override"] = DynValue.NewCallback((ctx, args) =>
             {
                 if (args.Count == 0) throw new Exception("Invalid args for TextureOverride");

@@ -8,6 +8,7 @@ using System.Diagnostics;
 using MoonSharp.Interpreter;
 using System.Linq;
 using BepInEx.Configuration;
+using UnityEngine.UIElements;
 
 namespace FarlandsCoreMod.FarlandsConsole
 {
@@ -46,11 +47,31 @@ namespace FarlandsCoreMod.FarlandsConsole
                 }
             }
         }
+
+        
+        //TODO comprobar
+        public void LoadFolder(string path, string acumPath = "")
+        {
+            foreach (var file in Directory.EnumerateFiles(path))
+                PathValue[Path.Combine(acumPath, file)] = File.ReadAllBytes(file);
+
+            foreach (var dir in Directory.EnumerateDirectories(path))
+                LoadFolder(Path.Combine(path, dir), Path.Combine(path, acumPath));
+
+        }
+
         public static FarlandsEasyMod FromZip(string zipPath)
         { 
             var fem = new FarlandsEasyMod();
             fem.LoadZip(zipPath);
             return fem;
+        }
+
+        public static void LoadAndAddZip(string zipPath)
+        {
+            var fem = FromZip(zipPath);
+            Manager.CURRENT_MOD = fem;
+            fem.ExecuteMain();
         }
         public byte[] this[string path]
         {

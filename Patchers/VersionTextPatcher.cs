@@ -1,4 +1,5 @@
 using BepInEx.Logging;
+using CommandTerminal;
 using Farlands;
 using FarlandsCoreMod.Attributes;
 using FarlandsCoreMod.Utiles;
@@ -24,6 +25,7 @@ namespace FarlandsCoreMod.Patchers
             } else Debug.Log("not error");
 
             var vText = __instance.GetComponent<Text>();
+            FarlandsCoreMod.instance.gameObject.GetComponent<Terminal>().ConsoleFont = vText.font;
 
             vText.text = vText.text.Trim();
             vText.text += $"\n{FarlandsCoreMod.instance.SHORT_NAME}: {Properties.Resources.Version}";

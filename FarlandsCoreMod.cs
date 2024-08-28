@@ -1,6 +1,7 @@
 ﻿using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Unity.Bootstrap;
+using CommandTerminal;
 using Farlands.Dev;
 using Farlands.PlaceableObjectsSystem;
 using FarlandsCoreMod.Attributes;
@@ -8,6 +9,7 @@ using FarlandsCoreMod.Patchers;
 using FarlandsCoreMod.Utiles;
 using FarlandsCoreMod.Utiles.Loaders;
 using HarmonyLib;
+using PixelCrushers.DialogueSystem;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,6 +20,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Bindings;
 using UnityEngine.SceneManagement;
+using UnityEngine.TextCore.Text;
 
 namespace FarlandsCoreMod
 {
@@ -39,6 +42,8 @@ namespace FarlandsCoreMod
         private void Awake()
         {
             instance = this;
+
+            this.gameObject.AddComponent<Terminal>();
 
             debug_skipIntro = AddConfig("Debug", "SkipIntro", 
                 "If true the intro will be skipped", false);
