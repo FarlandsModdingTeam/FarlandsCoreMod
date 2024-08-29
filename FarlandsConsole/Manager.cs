@@ -27,6 +27,14 @@ namespace FarlandsCoreMod.FarlandsConsole
         public static FarlandsEasyMod CURRENT_MOD;
         public static Script LUA = new();
 
+<<<<<<< HEAD
+=======
+
+        /// <summary>
+        /// name: MOD
+        /// especie de getter y setter para la variable global _mod_
+        /// </summary>
+>>>>>>> parent of 6014009 (que te cuesta no borrarme el comentario)
         /*
          * name: MOD
          * especie de getter y setter para la variable global _mod_
