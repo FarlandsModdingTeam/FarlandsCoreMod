@@ -151,9 +151,21 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 
             };
 
-            LUA.Globals["load_scene"] = (string scene) =>
+            LUA.Globals["load.scene"] = (string scene) =>
             {
                 SceneManager.LoadScene(scene);
+            };
+
+            LUA.Globals["load.scene.i"] = (int scene) =>
+            {
+                SceneManager.LoadScene(scene);
+            };
+
+            LUA.Globals["scene"] = (string scene) =>
+            {
+                Scene _escenaActiva = SceneManager.GetActiveScene();
+                string _nombreEscena = _escenaActiva.name;
+                Terminal.Log(_nombreEscena);
             };
 
             // Lua toggle_ui // creo que esto era
