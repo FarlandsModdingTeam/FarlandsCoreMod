@@ -16,7 +16,13 @@ namespace FarlandsCoreMod.FarlandsConsole
         public static DynValue FromGameObject(GameObject gameObject)
         {
             DynValue result = DynValue.NewTable(new Table(Manager.LUA));
-            
+
+            result.Table.Set("toggle_active", DynValue.NewCallback((ctx, args) =>
+            {
+                gameObject.SetActive(gameObject.activeSelf);
+                return DynValue.Void;
+            }));
+
             result.Table.Set("add_component", DynValue.NewCallback((ctx, args) =>
             {
                 if (args != null || args.Count < 1)

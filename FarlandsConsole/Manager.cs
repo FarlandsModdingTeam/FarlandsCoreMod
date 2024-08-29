@@ -1,10 +1,12 @@
 ﻿using BepInEx.Configuration;
+using CommandTerminal;
 using Farlands.Dev;
 using FarlandsCoreMod.Attributes;
 using FarlandsCoreMod.Utiles;
 using HarmonyLib;
 using I2.Loc;
-using MoonSharp.Interpreter;using PixelCrushers.DialogueSystem;
+using MoonSharp.Interpreter;
+using PixelCrushers.DialogueSystem;
 using Rewired;
 using System;
 using System.Collections.Generic;
@@ -26,7 +28,7 @@ namespace FarlandsCoreMod.FarlandsConsole
     public class Manager : IManager
     {
         // ----------------------- DECLARACIONES ----------------------- //
-        public static ConfigEntry<bool> EnableConsole;
+        public static ConfigEntry<bool> UnityDebug;
         public static Dictionary<string, FarlandsEasyMod> EasyMods = new();
         public static Dictionary<string, List<Action>> OnEvents = new();
         public static FarlandsEasyMod CURRENT_MOD;
@@ -73,7 +75,7 @@ namespace FarlandsCoreMod.FarlandsConsole
         // Método para inicializar el Manager
         public void Init()
         {
-            EnableConsole = FarlandsCoreMod.AddConfig("Debug", "EnableConsole", "", false);
+            UnityDebug = FarlandsCoreMod.AddConfig("Debug", "UnityDebug", "", false);
 
             AuxiliarFunctions();
 
@@ -105,6 +107,8 @@ namespace FarlandsCoreMod.FarlandsConsole
         // Método para definir funciones auxiliares en LUA
         public static void AuxiliarFunctions()
         {
+            //TODO agergar forma para ampliar la cámara
+
             LUA.Globals["MOD"] = (string tag) =>
             {
                 var code =
@@ -152,13 +156,11 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 SceneManager.LoadScene(scene);
             };
 
-
-            //TODO comprobar que funcione
-            LUA.Globals["toggle_ui"] = () =>
-            {
-                var canvas = SceneManager.GetActiveScene().GetRootGameObjects().First(x=>x.name == "Canvas");
-                canvas.SetActive(!canvas.activeSelf);
-            };
+            //LUA.Globals["toggle_ui"] = () =>
+            //{
+            //    var canvas = SceneManager.GetActiveScene().GetRootGameObjects().First(x=>x.name == "Canvas");
+            //    canvas.SetActive(!canvas.activeSelf);
+            //};
             
             LUA.Globals["texture_override"] = DynValue.NewCallback((ctx, args) =>
             {
@@ -234,102 +236,13 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 //TODO agergar creación del objeto de la escena para lua
             };
 
-            LUA.Globals["show"] = (string txt) =>
+            LUA.Globals["print"] = (string txt) =>
             {
-                Debug.Log(txt);
+                if(!UnityDebug.Value) Debug.Log(txt); 
+                Terminal.Log(txt);
+                
             };
-        }
 
-        // Método para actualizar la consola de depuración
-        [HarmonyPatch(typeof(DebugController), "Update")]
-        [HarmonyPrefix]
-        public static bool UpdateConsole(DebugController __instance)
-        {
-            if (EnableConsole == null || !EnableConsole.Value) return false;
-
-            var Set = (string field, object val) => Private.SetFieldValue(__instance, field, val);
-            var Get = (string field) => Private.GetFieldValue(__instance, field);
-            if (Input.GetKeyDown(KeyCode.Backslash))
-            {
-                Set("showConsole", !(bool)Get("showConsole"));
-
-                if ((bool)Get("showConsole"))
-                {
-                    Set("consoleActive", true);
-
-                    __instance.player.controllers.maps.SetAllMapsEnabled(state: false);
-                    ReInput.players.GetSystemPlayer().controllers.maps.SetAllMapsEnabled(state: false);
-                    Set("inputFocused", true);
-                }
-                else
-                {
-                    Set("consoleActive", false);
-                    __instance.player.controllers.maps.SetAllMapsEnabled(state: true);
-                    ReInput.players.GetSystemPlayer().controllers.maps.SetAllMapsEnabled(state: true);
-                    Set("inputFocused", false);
-                }
-            }
-
-            return false;
-        }
-
-        // Método para dibujar la interfaz de usuario de la consola de depuración
-        [HarmonyPatch(typeof(DebugController), "OnGUI")]
-        [HarmonyPrefix]
-        public static bool OnGui(DebugController __instance)
-        {
-            if (EnableConsole == null || !EnableConsole.Value) return false;
-
-            var Set = (string field, object val) => Private.SetFieldValue(__instance, field, val);
-            var Get = (string field) => Private.GetFieldValue(__instance, field);
-
-            if (!(bool)Get("showConsole"))
-                return false;
-
-            float num = 0f;
-            GUIStyle gUIStyle = new GUIStyle(GUI.skin.label);
-            gUIStyle.fontSize = 28;
-            GUIStyle gUIStyle2 = new GUIStyle(GUI.skin.label);
-            gUIStyle2.fontSize = 24;
-            //if (showHelp)
-            //{
-            //    GUI.Box(new Rect(0f, num, Screen.width, 200f), "");
-            //    Rect viewRect = new Rect(0f, 0f, Screen.width - 30, 20 * commandList.Count);
-            //    Vector2 zero = Vector2.zero;
-            //    zero = GUI.BeginScrollView(new Rect(0f, num + 5f, Screen.width, 190f), zero, viewRect);
-            //    for (int i = 0; i < commandList.Count; i++)
-            //    {
-            //        DebugCommandBase debugCommandBase = commandList[i] as DebugCommandBase;
-            //        string text = debugCommandBase.commandFormat + " - " + debugCommandBase.commandDescription;
-            //        GUI.Label(new Rect(5f, 20 * i, viewRect.width - 100f, 120f), text, gUIStyle2);
-            //    }
-
-            //    GUI.EndScrollView();
-            //    num += 200f;
-            //}
-
-            GUI.Box(new Rect(0f, num, Screen.width, 52f), "");
-            GUI.backgroundColor = Color.black;
-            if ((bool)Get("inputFocused"))
-            {
-                GUI.SetNextControlName("InputTextField");
-                GUI.FocusControl("InputTextField");
-                Set("input", GUI.TextField(new Rect(10f, num + 5f, (float)Screen.width - 20f, 100f), (string)Get("input"), gUIStyle));
-                if (Event.current.keyCode == KeyCode.Return || Event.current.keyCode == KeyCode.KeypadEnter)
-                {
-                    GUI.FocusControl(null);
-                    ExecuteInput(__instance);
-                    Set("input", "");
-
-                    Set("showConsole", false);
-                    Set("consoleActive", false);
-                    __instance.player.controllers.maps.SetAllMapsEnabled(state: true);
-                    ReInput.players.GetSystemPlayer().controllers.maps.SetAllMapsEnabled(state: true);
-                    Set("inputFocused", false);
-                }
-            }
-
-            return false;
         }
 
         // Método para ejecutar código en LUA
@@ -344,10 +257,7 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 MOD = DynValue.NewString(fem.Tag);
             }
 
-
-            Debug.Log(codes);
             return LUA.DoString(codes);
-            // foreach (string code in codes) Execute(code);
         }
 
         private static string currentEvent = null;
