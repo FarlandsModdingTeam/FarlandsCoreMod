@@ -5,6 +5,7 @@ using FarlandsCoreMod.Attributes;
 using FarlandsCoreMod.Utiles;
 using HarmonyLib;
 using I2.Loc;
+using Language.Lua;
 using MoonSharp.Interpreter;
 using System;
 using System.Collections.Generic;
@@ -161,12 +162,34 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 SceneManager.LoadScene(scene);
             };
 
-            LUA.Globals["scene"] = (string scene) =>
+            LUA.Globals["scene"] = () =>
             {
                 Scene _escenaActiva = SceneManager.GetActiveScene();
                 string _nombreEscena = _escenaActiva.name;
                 Terminal.Log(_nombreEscena);
             };
+
+            LUA.Globals["ftm"] = DynValue.NewCallback((ctx, args) =>
+            {
+                if (args.Count < 1) return DynValue.Nil;
+
+                if (args.Count == 1)
+                {
+                    if (args[0].Type == DataType.String)
+                    {
+                        var go = GetAllGameObjectsInScene(SceneManager.GetActiveScene()).First(x => x.name == args[0].String);
+                        return LuaGameObject.FromGameObject(go);
+                    }
+                    else if (args[0].Type == DataType.Number)
+                    {
+                        var go = (GameObject)GameObject.FindObjectFromInstanceID((int)args[0].Number);
+                        return LuaGameObject.FromGameObject(go);
+                    }
+                }
+
+                var gameObject = GetAllGameObjectsInScene(SceneManager.GetSceneByName(args[1].String)).First(x => x.name == args[0].String);
+                return LuaGameObject.FromGameObject(gameObject);
+            });
 
             // Lua toggle_ui // creo que esto era
             //LUA.Globals["toggle_ui"] = () =>
@@ -224,6 +247,7 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
 
             /// <summary>
             /// 
+            /// </summary>
             LUA.Globals["add_language"] = (string path) =>
             {
                 FarlandsDialogueMod.Manager.AddSourceFromBytes(GetFromMod(path));
