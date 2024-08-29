@@ -6,22 +6,13 @@ using FarlandsCoreMod.Utiles;
 using HarmonyLib;
 using I2.Loc;
 using MoonSharp.Interpreter;
-using PixelCrushers.DialogueSystem;
-using Rewired;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Xml.Linq;
+using System.Linq; 
+using System.Text; 
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.Windows;
-using static FarlandsCoreMod.Attributes.Configuration;
-using static PixelCrushers.DialogueSystem.UnityGUI.GUIProgressBar;
-using Input = UnityEngine.Input;
+using UnityEngine.SceneManagement; 
 
 namespace FarlandsCoreMod.FarlandsConsole
 {
