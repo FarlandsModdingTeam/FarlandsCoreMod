@@ -103,7 +103,7 @@ namespace CommandTerminal
         static void CommandNoop(CommandArg[] args) { }
 
         [RegisterCommand(Help = "Quit running application", MaxArgCount = 0)]
-        static void CommandQuit(CommandArg[] args) {
+        static void Commandsa(CommandArg[] args) {
         #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
         #else
