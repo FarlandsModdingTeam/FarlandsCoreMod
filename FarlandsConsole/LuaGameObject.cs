@@ -1,7 +1,9 @@
 ﻿using FarlandsCoreMod.Utiles.Loaders;
 using MoonSharp.Interpreter;
+using PixelCrushers.DialogueSystem;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using UnityEngine;
@@ -17,6 +19,43 @@ namespace FarlandsCoreMod.FarlandsConsole
         public static DynValue FromGameObject(GameObject gameObject)
         {
             DynValue result = DynValue.NewTable(new Table(Manager.LUA));
+
+            result.Table.Set("set_position", DynValue.NewCallback((ctx, args) =>
+            {
+                if (args.Count < 1) return DynValue.Void;
+                var nameObjects = args.GetArray().Select(x => x.String);
+
+                var position = gameObject.transform.position;
+                // Modificar el transform
+
+                var addition = new Vector3(
+                    args.Count < 1 ? (float)args[0].Number : 0f,
+                    args.Count < 2 ? (float)args[1].Number : 0f,
+                    args.Count < 3 ? (float)args[2].Number : 0f);
+
+                gameObject.transform.position = addition;
+
+                return DynValue.Void;
+            }));
+            // Nombre del objeto, eje, valor
+            result.Table.Set("add_position",DynValue.NewCallback((ctx, args) =>
+            {
+                if (args.Count < 1) return DynValue.Void;
+                var nameObjects = args.GetArray().Select(x => x.String);
+
+                var position = gameObject.transform.position;
+                // Modificar el transform
+
+                var addition = new Vector3(
+                    args.Count >= 1 ? (float)args[0].Number: 0f,
+                    args.Count >= 2 ? (float)args[1].Number: 0f,
+                    args.Count >= 3 ? (float)args[2].Number: 0f);
+
+                Debug.Log(gameObject.transform.position);
+                gameObject.transform.position += addition;
+                Debug.Log(gameObject.transform.position);
+                return DynValue.Void;
+            }));
 
             result.Table.Set("set_scale", DynValue.NewCallback((ctx, args) =>
             {

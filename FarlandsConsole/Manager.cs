@@ -148,73 +148,19 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
 
 
             // ----------------------- FUNCIONES DE ESCENA ----------------------- //
-            LUA.Globals["load_scene"] = (string scene) =>
+            LUA.Globals["load_scene"] = (DynValue scene) =>
             {
-                SceneManager.LoadScene(scene);
+                if(scene.Type == DataType.String)
+                    SceneManager.LoadScene(scene.String);
+                else if(scene.Type == DataType.Number)
+                    SceneManager.LoadScene(Convert.ToInt32(scene.Number));
             };
 
-            LUA.Globals["load_scene_i"] = (int scene) =>
+            LUA.Globals["print_scene"] = () =>
             {
-                SceneManager.LoadScene(scene);
+                Scene currentScene = SceneManager.GetActiveScene();
+                Terminal.Log($"({currentScene.buildIndex}) {currentScene.name}");
             };
-
-            LUA.Globals["scene"] = () =>
-            {
-                Scene _escenaActiva = SceneManager.GetActiveScene();
-                string _nombreEscena = _escenaActiva.name;
-                Terminal.Log(_nombreEscena);
-            };
-
-            // Nombre del objeto, eje, valor
-            LUA.Globals["ftm"] = DynValue.NewCallback((ctx, args) =>
-            {
-                if (args.Count < 1) return DynValue.Nil;
-                var nameObjects = args.GetArray().Select(x => x.String);
-
-                var scene = SceneManager.GetActiveScene();
-                GameObject previous = null;
-
-                foreach (var go in nameObjects)
-                {
-                    if (previous == null) previous = scene.GetRootGameObjects().First(x => x.name == go);
-                    else
-                    {
-                        for (var i = 0; i < previous.transform.childCount; i++)
-                        {
-                            var next = previous.transform.GetChild(i).gameObject;
-                            if (next.name == go)
-                            {
-                                previous = next;
-                                break;
-                            }
-                        }
-                    }
-                }
-
-
-                var position = previous.transform.position;
-                // Modificar el transform
-                switch (args[1].String)
-                {
-                    case "y":
-                        position.y += (float)args[2].Number; 
-                        previous.transform.position = position;
-                    break;
-
-                    case "x":
-                        position.x += (float)args[2].Number;
-                        previous.transform.position = position;
-                    break;
-                }
-                return DynValue.Nil;
-            });
-
-            // Lua toggle_ui // creo que esto era
-            //LUA.Globals["toggle_ui"] = () =>
-            //{
-            //    var canvas = SceneManager.GetActiveScene().GetRootGameObjects().First(x=>x.name == "Canvas");
-            //    canvas.SetActive(!canvas.activeSelf);
-            //};
 
             LUA.Globals["texture_override"] = DynValue.NewCallback((ctx, args) =>
             {
@@ -284,7 +230,7 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
             };
 
             // ----------------------- BUSCAR OBJETOS ----------------------- //
-            LUA.Globals["find_object_by_path"] = DynValue.NewCallback((ctx, args) =>
+            LUA.Globals["get_object"] = DynValue.NewCallback((ctx, args) =>
             {
                 if (args.Count < 1) return DynValue.Nil;
                 var nameObjects = args.GetArray().Select(x => x.String);
@@ -366,7 +312,7 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                         }
                         else
                         {
-                            Debug.Log("str:" + boolValue);
+                            Debug.Log("str:" + a.String);
                             arguments.Add(DynValue.NewString(a.String));
                         }
                     }
