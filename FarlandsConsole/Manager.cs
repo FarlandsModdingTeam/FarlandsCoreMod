@@ -1,4 +1,4 @@
-﻿﻿using BepInEx.Configuration;
+using BepInEx.Configuration;
 using CommandTerminal;
 using Farlands.Dev;
 using FarlandsCoreMod.Attributes;
@@ -32,6 +32,10 @@ namespace FarlandsCoreMod.FarlandsConsole
         /// name: MOD
         /// especie de getter y setter para la variable global _mod_
         /// </summary>
+        /*
+         * name: MOD
+         * especie de getter y setter para la variable global _mod_
+         */
         public static DynValue MOD
         {
             get => LUA.Globals.Get("_mod_");
@@ -67,9 +71,7 @@ namespace FarlandsCoreMod.FarlandsConsole
             }
         }
 
-        /// <summary>
-        ///     Método para inicializar el Manager
-        /// </summary>
+        // Método para inicializar el Manager
         public void Init()
         {
             UnityDebug = FarlandsCoreMod.AddConfig("Debug", "UnityDebug", "", false);
@@ -92,10 +94,6 @@ namespace FarlandsCoreMod.FarlandsConsole
             return EasyMods[mod].GetFilesInFolder(mod, path.Substring(i + 1, path.Length - i - 1));
         }
 
-        /// <summary>
-        ///     Método para obtener datos de un mod
-        /// </summary>
-        /// <param name="path"></param>
         /// <returns>EasyMods[mod][path.Substring(i + 1, path.Length - i - 1)];</returns>
         public static byte[] GetFromMod(string path)
         {
@@ -131,7 +129,7 @@ _mod_ = {tag}";
                 CURRENT_MOD.ConfigFile = new(Path.Combine(Paths.Config, $"{tag}.cfg"), true);
                 EasyMods.Add(tag, CURRENT_MOD);
             };
-            
+
             LUA.Globals["config"] = (string section, string key, DynValue def, string description) =>
             {
                 var code =
@@ -149,7 +147,7 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                         .Table.Get(section)
                         .Table.Set(key, DynValue.NewCallback((ctx, args) => DynValue.NewBoolean(entry.Value)));
                 }
-                
+
             };
 
             LUA.Globals["load_scene"] = (string scene) =>
@@ -291,7 +289,7 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 //TODO agergar creación del objeto de la escena para lua
             };
 
-            LUA.Globals["echo"] = (string txt) =>
+            LUA.Globals["print"] = (string txt) =>
             {
                 if (!UnityDebug.Value) Debug.Log(txt);
                 Terminal.Log(txt);
@@ -300,31 +298,37 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
 
             LUA.Globals["add_command"] = (string name, DynValue luaFunc, string help) =>
             {
-                Action<CommandArg[]> action = (CommandArg[] args) => LUA.Call(luaFunc, args.Select(x =>
+                Action<CommandArg[]> action = (CommandArg[] args) =>
                 {
-                    if (float.TryParse(x.String, out var floatValue))
+                    var arguments = new List<DynValue>();
+
+                    foreach (var a in args)
                     {
-                        Debug.Log(floatValue);
-                        return DynValue.NewNumber(floatValue);
+                        if (float.TryParse(a.String, out var floatValue))
+                        {
+                            Debug.Log("float:" + floatValue);
+                            arguments.Add(DynValue.NewNumber(floatValue));
+                        }
+                        else if (int.TryParse(a.String, out var intValue))
+                        {
+                            Debug.Log("int:" + intValue);
+                            arguments.Add(DynValue.NewNumber(floatValue));
+                        }
+                        else if (bool.TryParse(a.String, out var boolValue))
+                        {
+                            Debug.Log("bool:" + boolValue);
+                            arguments.Add(DynValue.NewBoolean(boolValue));
+                        }
+                        else
+                        {
+                            Debug.Log("str:" + boolValue);
+                            arguments.Add(DynValue.NewString(a.String));
+                        }
                     }
 
+                    LUA.Call(luaFunc, arguments.ToArray());
 
-                    if (int.TryParse(x.String, out var intValue))
-                    {
-                        Debug.Log(intValue);
-                        return DynValue.NewNumber(intValue);
-                    }
-
-
-                    if (bool.TryParse(x.String, out var boolValue))
-                    {
-                        Debug.Log(boolValue);
-                        return DynValue.NewBoolean(boolValue);
-                    }
-
-                    return DynValue.NewString(x.String);
-                }));
-
+                };
                 Terminal.Shell.AddCommand(name, action, help: help);
             };
 
@@ -334,14 +338,6 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
         public static DynValue Execute(byte[] codes, FarlandsEasyMod fem) =>
             Execute(Encoding.UTF8.GetString(codes), fem);
 
-        /// <summary>
-        ///    Método para ejecutar código generico en LUA
-        ///    comprueba si el mod es nulo
-        ///    
-        /// </summary>
-        /// <param name="codes"></param>
-        /// <param name="fem"></param>
-        /// <returns>LUA.DoString(codes)</returns>
         public static DynValue Execute(string codes, FarlandsEasyMod fem)
         {
             if (fem != null && fem.Tag != null)
@@ -350,19 +346,11 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 MOD = DynValue.NewString(fem.Tag);
             }
 
-
-            Debug.Log(codes);
             return LUA.DoString(codes);
-            // foreach (string code in codes) Execute(code);
         }
 
         private static string currentEvent = null;
 
-        /// <summary>
-        ///    Método para ejecutar un evento en LUA
-        /// </summary>
-        /// <param name="__instance"></param>
-        /// <returns>false</returns>
         [HarmonyPatch(typeof(DebugController), "HandleInput")]
         [HarmonyPrefix]
         public static bool ExecuteInput(DebugController __instance)

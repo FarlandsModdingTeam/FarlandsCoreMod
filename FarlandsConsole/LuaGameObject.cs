@@ -16,7 +16,23 @@ namespace FarlandsCoreMod.FarlandsConsole
         public static DynValue FromGameObject(GameObject gameObject)
         {
             DynValue result = DynValue.NewTable(new Table(Manager.LUA));
-            
+
+            result.Table.Set("set_scale", DynValue.NewCallback((ctx, args) =>
+            {
+
+                if (args.Count == 1) gameObject.transform.localScale = new((float)args[0].Number, (float)args[0].Number, 1);
+                else if (args.Count == 2) gameObject.transform.localScale = new((float)args[0].Number, (float)args[1].Number, 1);
+                else if (args.Count == 3) gameObject.transform.localScale = new((float)args[0].Number, (float)args[1].Number, (float)args[2].Number);
+
+                return DynValue.Void;
+            }));
+
+            result.Table.Set("toggle_active", DynValue.NewCallback((ctx, args) =>
+            {
+                gameObject.SetActive(!gameObject.activeSelf);
+                return DynValue.Void;
+            }));
+
             result.Table.Set("add_component", DynValue.NewCallback((ctx, args) =>
             {
                 if (args != null || args.Count < 1)
@@ -26,6 +42,7 @@ namespace FarlandsCoreMod.FarlandsConsole
                 { 
                     if(arg.String == "image") gameObject.AddComponent<Image>();
                     if(arg.String == "sprite") gameObject.AddComponent<SpriteRenderer>();
+                    if (arg.String == "camera") gameObject.AddComponent<Camera>();
                 }
 
                 return DynValue.Void;
@@ -64,7 +81,7 @@ namespace FarlandsCoreMod.FarlandsConsole
 
                     return DynValue.Void;
                 }));
-            }
+            } 
             return result;
         }
     }

@@ -37,7 +37,6 @@ namespace FarlandsCoreMod.FarlandsConsole
         // P_PCero
         public Dictionary<string, byte[]> PathValue = new();
         public ConfigFile ConfigFile;
-
       
         //TODO que se puedan leer carpetas
 

@@ -58,7 +58,7 @@ namespace CommandTerminal
         [RegisterCommand(Help = "Execute Lua commands")]
         static void CommandLua(CommandArg[] args)
         {
-            FarlandsCoreMod.FarlandsConsole.Manager.Execute(string.Join(' ', args.Select(x => x.String)), null);        
+            FarlandsCoreMod.FarlandsConsole.Manager.Execute(string.Join(' ', args.Select(x => x.String)), null);    
         }
 
 #if DEBUG

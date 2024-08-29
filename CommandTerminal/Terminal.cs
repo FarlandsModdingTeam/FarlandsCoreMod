@@ -3,6 +3,9 @@ using System.Text;
 using System.Collections;
 using UnityEngine.Assertions;
 using System.Linq;
+using Rewired;
+using Farlands.Dev;
+using FarlandsCoreMod.FarlandsConsole;
 
 namespace CommandTerminal
 {
@@ -29,7 +32,7 @@ namespace CommandTerminal
         float ToggleSpeed = 360;
 
         [SerializeField] string ToggleHotkey      = KeyCode.Backslash.ToString();
-        [SerializeField] string ToggleFullHotkey  = (KeyCode.Backslash | KeyCode.LeftShift).ToString() ;
+        [SerializeField] string ToggleFullHotkey  = "#" + KeyCode.Backslash.ToString();
         [SerializeField] int BufferSize           = 512;
 
         [Header("Input")]
@@ -44,7 +47,7 @@ namespace CommandTerminal
         [Range(0, 1)]
         [SerializeField] float InputAlpha         = 1f;
         [SerializeField] Color BackgroundColor    = new Color(5/255f, 158/255f, 151/255f, 0.85f);
-        [SerializeField] Color ForegroundColor    = new Color(26 / 255f, 17 / 255f, 49 / 255f);
+        [SerializeField] Color ForegroundColor    = new Color(71 / 255f, 65 / 255f, 85 / 255f);
         [SerializeField] Color ShellColor         = Color.white;
         [SerializeField] Color InputColor         = new Color(26 / 255f, 17 / 255f, 49 / 255f);
         [SerializeField] Color WarningColor       = Color.yellow;
@@ -96,10 +99,14 @@ namespace CommandTerminal
 
             switch (new_state) {
                 case TerminalState.Close: {
+                    GameObject.FindObjectOfType<DebugController>().player.controllers.maps.SetAllMapsEnabled(state: true);
+                    ReInput.players.GetSystemPlayer().controllers.maps.SetAllMapsEnabled(state: true);
                     open_target = 0;
                     break;
                 }
                 case TerminalState.OpenSmall: {
+                    GameObject.FindObjectOfType<DebugController>().player.controllers.maps.SetAllMapsEnabled(state: false);
+                    ReInput.players.GetSystemPlayer().controllers.maps.SetAllMapsEnabled(state: false);
                     open_target = Screen.height * MaxHeight * SmallTerminalRatio;
                     if (current_open_t > open_target) {
                         // Prevent resizing from OpenFull to OpenSmall if window y position
@@ -114,6 +121,8 @@ namespace CommandTerminal
                 }
                 case TerminalState.OpenFull:
                 default: {
+                    GameObject.FindObjectOfType<DebugController>().player.controllers.maps.SetAllMapsEnabled(state: false);
+                    ReInput.players.GetSystemPlayer().controllers.maps.SetAllMapsEnabled(state: false);
                     real_window_size = Screen.height * MaxHeight;
                     open_target = real_window_size;
                     break;
@@ -387,8 +396,9 @@ namespace CommandTerminal
             editor_state.MoveCursorToPosition(new Vector2(999, 999));
         }
 
+
         void HandleUnityLog(string message, string stack_trace, LogType type) {
-            Buffer.HandleLog(message, stack_trace, (TerminalLogType)type);
+            if(Manager.UnityDebug.Value) Buffer.HandleLog(message, stack_trace, (TerminalLogType)type);
             scroll_position.y = int.MaxValue;
         }
 

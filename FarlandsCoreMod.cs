@@ -24,7 +24,7 @@ using UnityEngine.TextCore.Text;
 
 namespace FarlandsCoreMod
 {
-    [BepInPlugin("top.magincian.fcm", "FarlandsCoreMod", "0.1.1")]
+    [BepInPlugin("top.magincian.fcm", "FarlandsCoreMod", "0.1.2")]
     public class FarlandsCoreMod : BaseUnityPlugin
     {
         private static ConfigEntry<bool> debug_skipIntro;
