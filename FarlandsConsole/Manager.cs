@@ -1,10 +1,11 @@
-﻿using BepInEx.Configuration;
+using BepInEx.Configuration;
 using CommandTerminal;
 using Farlands.Dev;
 using FarlandsCoreMod.Attributes;
 using FarlandsCoreMod.Utiles;
 using HarmonyLib;
 using I2.Loc;
+using Language.Lua;
 using MoonSharp.Interpreter;
 using System;
 using System.Collections.Generic;
@@ -26,10 +27,12 @@ namespace FarlandsCoreMod.FarlandsConsole
         public static FarlandsEasyMod CURRENT_MOD;
         public static Script LUA = new();
 
-        /*
-         * name: MOD
-         * especie de getter y setter para la variable global _mod_
-         */
+
+
+        /// <summary>
+        /// name: MOD
+        /// especie de getter y setter para la variable global _mod_
+        /// </summary>
         public static DynValue MOD
         {
             get => LUA.Globals.Get("_mod_");
@@ -38,11 +41,11 @@ namespace FarlandsCoreMod.FarlandsConsole
 
         public int Index => 1;
 
-        /*
-         * name: ExecuteEvent
-         * ejecuta un evento en todos los mods cargados
-         * 
-         */
+        /// <summary>
+        ///     name: ExecuteEvent
+        ///     Ejecuta un evento en todos los mods cargados
+        /// </summary>
+        /// <param name="ev"></param>
         public static void ExecuteEvent(params string[] ev)
         {
             Debug.Log(string.Join('.', ev));
@@ -143,11 +146,70 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
 
             };
 
+
+            // ----------------------- FUNCIONES DE ESCENA ----------------------- //
             LUA.Globals["load_scene"] = (string scene) =>
             {
                 SceneManager.LoadScene(scene);
             };
 
+            LUA.Globals["load_scene_i"] = (int scene) =>
+            {
+                SceneManager.LoadScene(scene);
+            };
+
+            LUA.Globals["scene"] = () =>
+            {
+                Scene _escenaActiva = SceneManager.GetActiveScene();
+                string _nombreEscena = _escenaActiva.name;
+                Terminal.Log(_nombreEscena);
+            };
+
+            // Nombre del objeto, eje, valor
+            LUA.Globals["ftm"] = DynValue.NewCallback((ctx, args) =>
+            {
+                if (args.Count < 1) return DynValue.Nil;
+                var nameObjects = args.GetArray().Select(x => x.String);
+
+                var scene = SceneManager.GetActiveScene();
+                GameObject previous = null;
+
+                foreach (var go in nameObjects)
+                {
+                    if (previous == null) previous = scene.GetRootGameObjects().First(x => x.name == go);
+                    else
+                    {
+                        for (var i = 0; i < previous.transform.childCount; i++)
+                        {
+                            var next = previous.transform.GetChild(i).gameObject;
+                            if (next.name == go)
+                            {
+                                previous = next;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+
+                var position = previous.transform.position;
+                // Modificar el transform
+                switch (args[1].String)
+                {
+                    case "y":
+                        position.y += (float)args[2].Number; 
+                        previous.transform.position = position;
+                    break;
+
+                    case "x":
+                        position.x += (float)args[2].Number;
+                        previous.transform.position = position;
+                    break;
+                }
+                return DynValue.Nil;
+            });
+
+            // Lua toggle_ui // creo que esto era
             //LUA.Globals["toggle_ui"] = () =>
             //{
             //    var canvas = SceneManager.GetActiveScene().GetRootGameObjects().First(x=>x.name == "Canvas");
@@ -201,6 +263,9 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 LUA.DoString(code);
             };
 
+            /// <summary>
+            /// 
+            /// </summary>
             LUA.Globals["add_language"] = (string path) =>
             {
                 FarlandsDialogueMod.Manager.AddSourceFromBytes(GetFromMod(path));
@@ -209,6 +274,42 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
             {
                 return LocalizationManager.CurrentLanguage;
             };
+
+            
+            LUA.Globals["print"] = (string txt) =>
+            {
+                if (!UnityDebug.Value) Debug.Log(txt);
+                Terminal.Log(txt);
+
+            };
+
+            // ----------------------- BUSCAR OBJETOS ----------------------- //
+            LUA.Globals["find_object_by_path"] = DynValue.NewCallback((ctx, args) =>
+            {
+                if (args.Count < 1) return DynValue.Nil;
+                var nameObjects = args.GetArray().Select(x => x.String);
+
+                var scene = SceneManager.GetActiveScene();
+                GameObject previous = null;
+
+                foreach (var go in nameObjects)
+                {
+                    if (previous == null) previous = scene.GetRootGameObjects().First(x => x.name == go);
+                    else
+                    {
+                        for (var i = 0; i < previous.transform.childCount; i++)
+                        {
+                            var next = previous.transform.GetChild(i).gameObject;
+                            if (next.name == go)
+                            {
+                                previous = next;
+                                break;
+                            }
+                        }
+                    }
+                }
+                return LuaGameObject.FromGameObject(previous);
+            });
 
             LUA.Globals["find_object"] = DynValue.NewCallback((ctx, args) =>
             {
@@ -224,33 +325,9 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 return LuaGameObject.FromGameObject(gameObject);
             });
 
-            LUA.Globals["find_object_by_path"] = DynValue.NewCallback((ctx, args) =>
-            {
-                if (args.Count < 1) return DynValue.Nil;
-                var nameObjects = args.GetArray().Select(x=>x.String);
 
-                var scene = SceneManager.GetActiveScene();
-                GameObject previous = null;
 
-                foreach (var go in nameObjects)
-                {
-                    if (previous == null) previous = scene.GetRootGameObjects().First(x => x.name == go);
-                    else
-                    {
-                        for (var i = 0; i < previous.transform.childCount; i++)
-                        { 
-                            var next = previous.transform.GetChild(i).gameObject;
-                            if (next.name == go)
-                            {
-                                previous = next;
-                                break;
-                            }
-                        }
-                    }
-                }
-                return LuaGameObject.FromGameObject(previous);
-            });
-
+            // ----------------------- CREAR OBJETOS ----------------------- //
             LUA.Globals["create_object"] = (string name) =>
             {
                 var go = new GameObject(name);
@@ -263,12 +340,6 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 //TODO agergar creación del objeto de la escena para lua
             };
 
-            LUA.Globals["print"] = (string txt) =>
-            {
-                if (!UnityDebug.Value) Debug.Log(txt);
-                Terminal.Log(txt);
-
-            };
 
             LUA.Globals["add_command"] = (string name, DynValue luaFunc, string help) =>
             {
