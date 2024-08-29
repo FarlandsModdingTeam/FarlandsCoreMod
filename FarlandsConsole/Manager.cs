@@ -256,13 +256,24 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 Action<CommandArg[]> action = (CommandArg[] args) => LUA.Call(luaFunc, args.Select(x =>
                 {
                     if (float.TryParse(x.String, out var floatValue))
+                    {
+                        Debug.Log(floatValue);
                         return DynValue.NewNumber(floatValue);
+                    }
+
 
                     if (int.TryParse(x.String, out var intValue))
+                    {
+                        Debug.Log(intValue);
                         return DynValue.NewNumber(intValue);
+                    }
+
 
                     if (bool.TryParse(x.String, out var boolValue))
+                    {
+                        Debug.Log(boolValue);
                         return DynValue.NewBoolean(boolValue);
+                    }
 
                     return DynValue.NewString(x.String);
                 }));
