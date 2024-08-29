@@ -146,6 +146,8 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
 
             };
 
+
+            // ----------------------- FUNCIONES DE ESCENA ----------------------- //
             LUA.Globals["load_scene"] = (string scene) =>
             {
                 SceneManager.LoadScene(scene);
@@ -163,26 +165,48 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 Terminal.Log(_nombreEscena);
             };
 
+            // Nombre del objeto, eje, valor
             LUA.Globals["ftm"] = DynValue.NewCallback((ctx, args) =>
             {
                 if (args.Count < 1) return DynValue.Nil;
+                var nameObjects = args.GetArray().Select(x => x.String);
 
-                if (args.Count == 1)
+                var scene = SceneManager.GetActiveScene();
+                GameObject previous = null;
+
+                foreach (var go in nameObjects)
                 {
-                    if (args[0].Type == DataType.String)
+                    if (previous == null) previous = scene.GetRootGameObjects().First(x => x.name == go);
+                    else
                     {
-                        var go = GetAllGameObjectsInScene(SceneManager.GetActiveScene()).First(x => x.name == args[0].String);
-                        return LuaGameObject.FromGameObject(go);
-                    }
-                    else if (args[0].Type == DataType.Number)
-                    {
-                        var go = (GameObject)GameObject.FindObjectFromInstanceID((int)args[0].Number);
-                        return LuaGameObject.FromGameObject(go);
+                        for (var i = 0; i < previous.transform.childCount; i++)
+                        {
+                            var next = previous.transform.GetChild(i).gameObject;
+                            if (next.name == go)
+                            {
+                                previous = next;
+                                break;
+                            }
+                        }
                     }
                 }
 
-                var gameObject = GetAllGameObjectsInScene(SceneManager.GetSceneByName(args[1].String)).First(x => x.name == args[0].String);
-                return LuaGameObject.FromGameObject(gameObject);
+
+                var position = previous.transform.position;
+                // Modificar el transform
+                switch (args[1].String)
+                {
+                    case "y":
+                        position.y += (float)args[2].Number; 
+                        previous.transform.position = position;
+                    break;
+
+                    case "x":
+                        position.x += (float)args[2].Number;
+                        previous.transform.position = position;
+                    break;
+                }
+                return DynValue.Nil;
             });
 
             // Lua toggle_ui // creo que esto era
@@ -251,6 +275,13 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 return LocalizationManager.CurrentLanguage;
             };
 
+            
+            LUA.Globals["print"] = (string txt) =>
+            {
+                if (!UnityDebug.Value) Debug.Log(txt);
+                Terminal.Log(txt);
+
+            };
 
             // ----------------------- BUSCAR OBJETOS ----------------------- //
             LUA.Globals["find_object_by_path"] = DynValue.NewCallback((ctx, args) =>
@@ -294,6 +325,9 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 return LuaGameObject.FromGameObject(gameObject);
             });
 
+
+
+            // ----------------------- CREAR OBJETOS ----------------------- //
             LUA.Globals["create_object"] = (string name) =>
             {
                 var go = new GameObject(name);
@@ -306,12 +340,6 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 //TODO agergar creación del objeto de la escena para lua
             };
 
-            LUA.Globals["print"] = (string txt) =>
-            {
-                if (!UnityDebug.Value) Debug.Log(txt);
-                Terminal.Log(txt);
-
-            };
 
             LUA.Globals["add_command"] = (string name, DynValue luaFunc, string help) =>
             {
