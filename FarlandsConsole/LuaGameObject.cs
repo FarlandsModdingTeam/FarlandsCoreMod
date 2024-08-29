@@ -20,8 +20,8 @@ namespace FarlandsCoreMod.FarlandsConsole
             result.Table.Set("set_scale", DynValue.NewCallback((ctx, args) =>
             {
 
-                if (args.Count == 1) gameObject.transform.localScale = new((float)args[0].Number, (float)args[0].Number, 0);
-                else if (args.Count == 2) gameObject.transform.localScale = new((float)args[0].Number, (float)args[1].Number, 0);
+                if (args.Count == 1) gameObject.transform.localScale = new((float)args[0].Number, (float)args[0].Number, 1);
+                else if (args.Count == 2) gameObject.transform.localScale = new((float)args[0].Number, (float)args[1].Number, 1);
                 else if (args.Count == 3) gameObject.transform.localScale = new((float)args[0].Number, (float)args[1].Number, (float)args[2].Number);
 
                 return DynValue.Void;

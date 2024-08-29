@@ -253,31 +253,37 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
 
             LUA.Globals["add_command"] = (string name, DynValue luaFunc, string help) =>
             {
-                Action<CommandArg[]> action = (CommandArg[] args) => LUA.Call(luaFunc, args.Select(x =>
+                Action<CommandArg[]> action = (CommandArg[] args) =>
                 {
-                    if (float.TryParse(x.String, out var floatValue))
+                    var arguments = new List<DynValue>();
+
+                    foreach (var a in args)
                     {
-                        Debug.Log(floatValue);
-                        return DynValue.NewNumber(floatValue);
+                        if (float.TryParse(a.String, out var floatValue))
+                        {
+                            Debug.Log("float:" + floatValue);
+                            arguments.Add(DynValue.NewNumber(floatValue));
+                        }
+                        else if (int.TryParse(a.String, out var intValue))
+                        {
+                            Debug.Log("int:" + intValue);
+                            arguments.Add(DynValue.NewNumber(floatValue));
+                        }
+                        else if (bool.TryParse(a.String, out var boolValue))
+                        {
+                            Debug.Log("bool:" + boolValue);
+                            arguments.Add(DynValue.NewBoolean(boolValue));
+                        }
+                        else
+                        {
+                            Debug.Log("str:" + boolValue);
+                            arguments.Add(DynValue.NewString(a.String));
+                        }
                     }
 
+                    LUA.Call(luaFunc, arguments.ToArray());
 
-                    if (int.TryParse(x.String, out var intValue))
-                    {
-                        Debug.Log(intValue);
-                        return DynValue.NewNumber(intValue);
-                    }
-
-
-                    if (bool.TryParse(x.String, out var boolValue))
-                    {
-                        Debug.Log(boolValue);
-                        return DynValue.NewBoolean(boolValue);
-                    }
-
-                    return DynValue.NewString(x.String);
-                }));
-
+                };
                 Terminal.Shell.AddCommand(name, action, help: help);
             };
 
