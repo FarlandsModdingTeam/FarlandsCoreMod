@@ -1,24 +1,18 @@
-﻿using BepInEx.Configuration;
+﻿﻿using BepInEx.Configuration;
+using CommandTerminal;
 using Farlands.Dev;
 using FarlandsCoreMod.Attributes;
 using FarlandsCoreMod.Utiles;
 using HarmonyLib;
 using I2.Loc;
-using MoonSharp.Interpreter;using PixelCrushers.DialogueSystem;
-using Rewired;
+using MoonSharp.Interpreter;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Text.RegularExpressions;
+using System.Linq; 
+using System.Text; 
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.Windows;
-using static FarlandsCoreMod.Attributes.Configuration;
-using static PixelCrushers.DialogueSystem.UnityGUI.GUIProgressBar;
-using Input = UnityEngine.Input;
+using UnityEngine.SceneManagement; 
 
 namespace FarlandsCoreMod.FarlandsConsole
 {
@@ -26,7 +20,7 @@ namespace FarlandsCoreMod.FarlandsConsole
     public class Manager : IManager
     {
         // ----------------------- DECLARACIONES ----------------------- //
-        public static ConfigEntry<bool> EnableConsole;
+        public static ConfigEntry<bool> UnityDebug;
         public static Dictionary<string, FarlandsEasyMod> EasyMods = new();
         public static Dictionary<string, List<Action>> OnEvents = new();
         public static FarlandsEasyMod CURRENT_MOD;
@@ -45,12 +39,6 @@ namespace FarlandsCoreMod.FarlandsConsole
 
 
         public int Index => 1;
-
-        /*
-         * name: ExecuteEvent
-         * ejecuta un evento en todos los mods cargados
-         * 
-         */
 
         /// <summary>
         ///     name: ExecuteEvent
@@ -83,7 +71,7 @@ namespace FarlandsCoreMod.FarlandsConsole
         /// </summary>
         public void Init()
         {
-            EnableConsole = FarlandsCoreMod.AddConfig("Debug", "EnableConsole", "", false);
+            UnityDebug = FarlandsCoreMod.AddConfig("Debug", "UnityDebug", "", false);
 
             AuxiliarFunctions();
 
@@ -119,6 +107,8 @@ namespace FarlandsCoreMod.FarlandsConsole
         // Método para definir funciones auxiliares en LUA
         public static void AuxiliarFunctions()
         {
+            //TODO agergar forma para ampliar la cámara
+
             LUA.Globals["MOD"] = (string tag) =>
             {
                 var code =
@@ -166,14 +156,13 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 SceneManager.LoadScene(scene);
             };
 
+            // Lua toggle_ui // creo que esto era
+            //LUA.Globals["toggle_ui"] = () =>
+            //{
+            //    var canvas = SceneManager.GetActiveScene().GetRootGameObjects().First(x=>x.name == "Canvas");
+            //    canvas.SetActive(!canvas.activeSelf);
+            //};
 
-            //TODO comprobar que funcione
-            LUA.Globals["toggle_ui"] = () =>
-            {
-                var canvas = SceneManager.GetActiveScene().GetRootGameObjects().First(x=>x.name == "Canvas");
-                canvas.SetActive(!canvas.activeSelf);
-            };
-            
             LUA.Globals["texture_override"] = DynValue.NewCallback((ctx, args) =>
             {
                 if (args.Count == 0) throw new Exception("Invalid args for TextureOverride");
@@ -221,6 +210,8 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 LUA.DoString(code);
             };
 
+            /// <summary>
+            /// 
             LUA.Globals["add_language"] = (string path) =>
             {
                 FarlandsDialogueMod.Manager.AddSourceFromBytes(GetFromMod(path));
@@ -230,11 +221,27 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 return LocalizationManager.CurrentLanguage;
             };
 
-            LUA.Globals["find_object"] = (string name) =>
-            {
-                var go = GameObject.Find(name);
-                return LuaGameObject.FromGameObject(go);
-            };
+            LUA.Globals["find_object"] = DynValue.NewCallback((ctx, args) =>
+                {
+                    if (args.Count < 1) return DynValue.Nil;
+
+                    if (args.Count == 1)
+                    {
+                        if (args[0].Type == DataType.String)
+                        {
+                            var go = GetAllGameObjectsInScene(SceneManager.GetActiveScene()).First(x => x.name == args[0].String);
+                            return LuaGameObject.FromGameObject(go);
+                        }
+                        else if (args[0].Type == DataType.Number)
+                        {
+                            var go = (GameObject)GameObject.FindObjectFromInstanceID((int)args[0].Number);
+                            return LuaGameObject.FromGameObject(go);
+                        }
+                    }
+
+                    var gameObject = GetAllGameObjectsInScene(SceneManager.GetSceneByName(args[1].String)).First(x => x.name == args[0].String);
+                    return LuaGameObject.FromGameObject(gameObject);
+                });
 
             LUA.Globals["create_object"] = (string name) =>
             {
@@ -248,117 +255,46 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 //TODO agergar creación del objeto de la escena para lua
             };
 
-            LUA.Globals["show"] = (string txt) =>
+            LUA.Globals["print"] = (string txt) =>
             {
-                Debug.Log(txt);
+                if (!UnityDebug.Value) Debug.Log(txt);
+                Terminal.Log(txt);
+
             };
-        }
 
-        /// <summary>
-        ///     Método para actualizar la consola de depuración
-        /// </summary>
-        /// <param name="__instance"></param>
-        /// <returns>false</returns>
-        [HarmonyPatch(typeof(DebugController), "Update")]
-        [HarmonyPrefix]
-        public static bool UpdateConsole(DebugController __instance)
-        {
-            if (EnableConsole == null || !EnableConsole.Value) return false;
-
-            var Set = (string field, object val) => Private.SetFieldValue(__instance, field, val);
-            var Get = (string field) => Private.GetFieldValue(__instance, field);
-            if (Input.GetKeyDown(KeyCode.Backslash))
+            LUA.Globals["add_command"] = (string name, DynValue luaFunc, string help) =>
             {
-                Set("showConsole", !(bool)Get("showConsole"));
-
-                if ((bool)Get("showConsole"))
+                Action<CommandArg[]> action = (CommandArg[] args) => LUA.Call(luaFunc, args.Select(x =>
                 {
-                    Set("consoleActive", true);
+                    if (float.TryParse(x.String, out var floatValue))
+                    {
+                        Debug.Log(floatValue);
+                        return DynValue.NewNumber(floatValue);
+                    }
 
-                    __instance.player.controllers.maps.SetAllMapsEnabled(state: false);
-                    ReInput.players.GetSystemPlayer().controllers.maps.SetAllMapsEnabled(state: false);
-                    Set("inputFocused", true);
-                }
-                else
-                {
-                    Set("consoleActive", false);
-                    __instance.player.controllers.maps.SetAllMapsEnabled(state: true);
-                    ReInput.players.GetSystemPlayer().controllers.maps.SetAllMapsEnabled(state: true);
-                    Set("inputFocused", false);
-                }
-            }
 
-            return false;
+                    if (int.TryParse(x.String, out var intValue))
+                    {
+                        Debug.Log(intValue);
+                        return DynValue.NewNumber(intValue);
+                    }
+
+
+                    if (bool.TryParse(x.String, out var boolValue))
+                    {
+                        Debug.Log(boolValue);
+                        return DynValue.NewBoolean(boolValue);
+                    }
+
+                    return DynValue.NewString(x.String);
+                }));
+
+                Terminal.Shell.AddCommand(name, action, help: help);
+            };
+
         }
 
-        /// <summary>
-        ///     Método para dibujar la interfaz de usuario de la consola de depuración
-        /// </summary>
-        /// <param name="__instance"></param>
-        /// <returns>false</returns>
-        [HarmonyPatch(typeof(DebugController), "OnGUI")]
-        [HarmonyPrefix]
-        public static bool OnGui(DebugController __instance)
-        {
-            if (EnableConsole == null || !EnableConsole.Value) return false;
-
-            var Set = (string field, object val) => Private.SetFieldValue(__instance, field, val);
-            var Get = (string field) => Private.GetFieldValue(__instance, field);
-
-            if (!(bool)Get("showConsole"))
-                return false;
-
-            float num = 0f;
-            GUIStyle gUIStyle = new GUIStyle(GUI.skin.label);
-            gUIStyle.fontSize = 28;
-            GUIStyle gUIStyle2 = new GUIStyle(GUI.skin.label);
-            gUIStyle2.fontSize = 24;
-            //if (showHelp)
-            //{
-            //    GUI.Box(new Rect(0f, num, Screen.width, 200f), "");
-            //    Rect viewRect = new Rect(0f, 0f, Screen.width - 30, 20 * commandList.Count);
-            //    Vector2 zero = Vector2.zero;
-            //    zero = GUI.BeginScrollView(new Rect(0f, num + 5f, Screen.width, 190f), zero, viewRect);
-            //    for (int i = 0; i < commandList.Count; i++)
-            //    {
-            //        DebugCommandBase debugCommandBase = commandList[i] as DebugCommandBase;
-            //        string text = debugCommandBase.commandFormat + " - " + debugCommandBase.commandDescription;
-            //        GUI.Label(new Rect(5f, 20 * i, viewRect.width - 100f, 120f), text, gUIStyle2);
-            //    }
-
-            //    GUI.EndScrollView();
-            //    num += 200f;
-            //}
-
-            GUI.Box(new Rect(0f, num, Screen.width, 52f), "");
-            GUI.backgroundColor = Color.black;
-            if ((bool)Get("inputFocused"))
-            {
-                GUI.SetNextControlName("InputTextField");
-                GUI.FocusControl("InputTextField");
-                Set("input", GUI.TextField(new Rect(10f, num + 5f, (float)Screen.width - 20f, 100f), (string)Get("input"), gUIStyle));
-                if (Event.current.keyCode == KeyCode.Return || Event.current.keyCode == KeyCode.KeypadEnter)
-                {
-                    GUI.FocusControl(null);
-                    ExecuteInput(__instance);
-                    Set("input", "");
-
-                    Set("showConsole", false);
-                    Set("consoleActive", false);
-                    __instance.player.controllers.maps.SetAllMapsEnabled(state: true);
-                    ReInput.players.GetSystemPlayer().controllers.maps.SetAllMapsEnabled(state: true);
-                    Set("inputFocused", false);
-                }
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        ///     Método para ejecutar código en LUA
-        /// </summary>
-        /// <param name="codes"></param>
-        /// <param name="fem"></param>
+        // Método para ejecutar código en LUA
         public static DynValue Execute(byte[] codes, FarlandsEasyMod fem) =>
             Execute(Encoding.UTF8.GetString(codes), fem);
 
@@ -374,7 +310,7 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
         {
             if (fem != null && fem.Tag != null)
             {
-                CURRENT_MOD = fem;  
+                CURRENT_MOD = fem;
                 MOD = DynValue.NewString(fem.Tag);
             }
 
@@ -397,6 +333,31 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
         {
             Execute(Private.GetFieldValue<string>(__instance, "input"), null);
             return false;
+        }
+
+        static List<GameObject> GetAllGameObjectsInScene(Scene scene)
+        {
+            // Obtén todos los objetos raíz de la escena
+            GameObject[] rootObjects = scene.GetRootGameObjects();
+            System.Collections.Generic.List<GameObject> allObjects = new System.Collections.Generic.List<GameObject>();
+
+            // Recorre cada objeto raíz y sus hijos
+            foreach (GameObject rootObject in rootObjects)
+            {
+                allObjects.Add(rootObject);
+                AddChildObjects(rootObject.transform, allObjects);
+            }
+
+            return allObjects;
+        }
+
+        static void AddChildObjects(Transform parent, System.Collections.Generic.List<GameObject> allObjects)
+        {
+            foreach (Transform child in parent)
+            {
+                allObjects.Add(child.gameObject);
+                AddChildObjects(child, allObjects);
+            }
         }
     }
 }

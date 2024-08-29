@@ -38,8 +38,6 @@ namespace FarlandsCoreMod.FarlandsConsole
         public Dictionary<string, byte[]> PathValue = new();
         public ConfigFile ConfigFile;
 
-        public string Tag;
-
       
         //TODO que se puedan leer carpetas
 
