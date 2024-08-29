@@ -42,7 +42,6 @@ namespace FarlandsCoreMod.FarlandsConsole
             set => LUA.Globals.Set("_mod_", value);
         }
 
-
         public int Index => 1;
 
         /// <summary>
@@ -94,7 +93,7 @@ namespace FarlandsCoreMod.FarlandsConsole
             return EasyMods[mod].GetFilesInFolder(mod, path.Substring(i + 1, path.Length - i - 1));
         }
 
-        /// <returns>EasyMods[mod][path.Substring(i + 1, path.Length - i - 1)];</returns>
+        // Método para obtener datos de un mod
         public static byte[] GetFromMod(string path)
         {
             var i = path.IndexOf('/');
