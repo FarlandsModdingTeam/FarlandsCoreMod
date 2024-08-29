@@ -19,7 +19,7 @@ namespace FarlandsCoreMod.FarlandsConsole
 
             result.Table.Set("toggle_active", DynValue.NewCallback((ctx, args) =>
             {
-                gameObject.SetActive(gameObject.activeSelf);
+                gameObject.SetActive(!gameObject.activeSelf);
                 return DynValue.Void;
             }));
 
@@ -32,6 +32,7 @@ namespace FarlandsCoreMod.FarlandsConsole
                 { 
                     if(arg.String == "image") gameObject.AddComponent<Image>();
                     if(arg.String == "sprite") gameObject.AddComponent<SpriteRenderer>();
+                    if (arg.String == "camera") gameObject.AddComponent<Camera>();
                 }
 
                 return DynValue.Void;

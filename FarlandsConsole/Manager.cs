@@ -15,6 +15,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Windows;
@@ -130,7 +131,7 @@ _mod_ = {tag}";
                 CURRENT_MOD.ConfigFile = new(Path.Combine(Paths.Config, $"{tag}.cfg"), true);
                 EasyMods.Add(tag, CURRENT_MOD);
             };
-            
+
             LUA.Globals["config"] = (string section, string key, DynValue def, string description) =>
             {
                 var code =
@@ -148,7 +149,7 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                         .Table.Get(section)
                         .Table.Set(key, DynValue.NewCallback((ctx, args) => DynValue.NewBoolean(entry.Value)));
                 }
-                
+
             };
 
             LUA.Globals["load_scene"] = (string scene) =>
@@ -161,7 +162,7 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
             //    var canvas = SceneManager.GetActiveScene().GetRootGameObjects().First(x=>x.name == "Canvas");
             //    canvas.SetActive(!canvas.activeSelf);
             //};
-            
+
             LUA.Globals["texture_override"] = DynValue.NewCallback((ctx, args) =>
             {
                 if (args.Count == 0) throw new Exception("Invalid args for TextureOverride");
@@ -218,11 +219,27 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 return LocalizationManager.CurrentLanguage;
             };
 
-            LUA.Globals["find_object"] = (string name) =>
-            {
-                var go = GameObject.Find(name);
-                return LuaGameObject.FromGameObject(go);
-            };
+            LUA.Globals["find_object"] = DynValue.NewCallback((ctx, args) =>
+                {
+                    if (args.Count < 1) return DynValue.Nil;
+
+                    if (args.Count == 1)
+                    {
+                        if (args[0].Type == DataType.String)
+                        {
+                            var go = GetAllGameObjectsInScene(SceneManager.GetActiveScene()).First(x => x.name == args[0].String);
+                            return LuaGameObject.FromGameObject(go);
+                        }
+                        else if (args[0].Type == DataType.Number)
+                        {
+                            var go = (GameObject)GameObject.FindObjectFromInstanceID((int)args[0].Number);
+                            return LuaGameObject.FromGameObject(go);
+                        }
+                    }
+
+                    var gameObject = GetAllGameObjectsInScene(SceneManager.GetSceneByName(args[1].String)).First(x => x.name == args[0].String);
+                    return LuaGameObject.FromGameObject(gameObject);
+                });
 
             LUA.Globals["create_object"] = (string name) =>
             {
@@ -238,9 +255,28 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
 
             LUA.Globals["print"] = (string txt) =>
             {
-                if(!UnityDebug.Value) Debug.Log(txt); 
+                if (!UnityDebug.Value) Debug.Log(txt);
                 Terminal.Log(txt);
-                
+
+            };
+
+            LUA.Globals["add_command"] = (string name, DynValue luaFunc, string help) =>
+            {
+                Action<CommandArg[]> action = (CommandArg[] args) => LUA.Call(luaFunc, args.Select(x =>
+                {
+                    if (float.TryParse(x.String, out var floatValue))
+                        return DynValue.NewNumber(floatValue);
+
+                    if (int.TryParse(x.String, out var intValue))
+                        return DynValue.NewNumber(intValue);
+
+                    if (bool.TryParse(x.String, out var boolValue))
+                        return DynValue.NewBoolean(boolValue);
+
+                    return DynValue.NewString(x.String);
+                }));
+
+                Terminal.Shell.AddCommand(name, action, help: help);
             };
 
         }
@@ -253,7 +289,7 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
         {
             if (fem != null && fem.Tag != null)
             {
-                CURRENT_MOD = fem;  
+                CURRENT_MOD = fem;
                 MOD = DynValue.NewString(fem.Tag);
             }
 
@@ -268,6 +304,31 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
         {
             Execute(Private.GetFieldValue<string>(__instance, "input"), null);
             return false;
+        }
+
+        static List<GameObject> GetAllGameObjectsInScene(Scene scene)
+        {
+            // Obtén todos los objetos raíz de la escena
+            GameObject[] rootObjects = scene.GetRootGameObjects();
+            System.Collections.Generic.List<GameObject> allObjects = new System.Collections.Generic.List<GameObject>();
+
+            // Recorre cada objeto raíz y sus hijos
+            foreach (GameObject rootObject in rootObjects)
+            {
+                allObjects.Add(rootObject);
+                AddChildObjects(rootObject.transform, allObjects);
+            }
+
+            return allObjects;
+        }
+
+        static void AddChildObjects(Transform parent, System.Collections.Generic.List<GameObject> allObjects)
+        {
+            foreach (Transform child in parent)
+            {
+                allObjects.Add(child.gameObject);
+                AddChildObjects(child, allObjects);
+            }
         }
     }
 }
