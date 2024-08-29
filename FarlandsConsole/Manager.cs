@@ -151,12 +151,12 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 
             };
 
-            LUA.Globals["load.scene"] = (string scene) =>
+            LUA.Globals["load_scene"] = (string scene) =>
             {
                 SceneManager.LoadScene(scene);
             };
 
-            LUA.Globals["load.scene.i"] = (int scene) =>
+            LUA.Globals["load_scene_i"] = (int scene) =>
             {
                 SceneManager.LoadScene(scene);
             };
@@ -267,7 +267,7 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 //TODO agergar creación del objeto de la escena para lua
             };
 
-            LUA.Globals["print"] = (string txt) =>
+            LUA.Globals["echo"] = (string txt) =>
             {
                 if (!UnityDebug.Value) Debug.Log(txt);
                 Terminal.Log(txt);
