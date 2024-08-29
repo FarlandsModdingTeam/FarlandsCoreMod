@@ -12,16 +12,42 @@ using UnityEngine.UIElements;
 
 namespace FarlandsCoreMod.FarlandsConsole
 {
+
+    /// <summary>
+    ///     FarlandsEasyMod es el mod en si 
+    /// </summary>
     public class FarlandsEasyMod
     {
         // ----------------------- DECLARACIONES ----------------------- //
+        /// <summary>
+        ///     Informacion del mod en lua
+        /// </summary>
         public DynValue Mod;
+      
+
+
+        /// <summary>
+        ///     a inventar
+        /// </summary>
+        public string Tag;
+
+        /// <summary>
+        ///     Diccionario que contiene la ruta y el contenido de los archivos del mod
+        /// </summary>
+        // P_PCero
         public Dictionary<string, byte[]> PathValue = new();
         public ConfigFile ConfigFile;
 
         public string Tag;
 
+      
         //TODO que se puedan leer carpetas
+
+        /// <summary>
+        ///     carga un archivo zip y lo guarda en el diccionario
+        /// </summary>
+        /// <param name="zipPath"></param>
+        // CIUDADO
         public void LoadZip(string zipPath)
         {
             using (FileStream zipToOpen = new FileStream(zipPath, FileMode.Open))
@@ -48,7 +74,7 @@ namespace FarlandsCoreMod.FarlandsConsole
             }
         }
 
-        
+      
         //TODO comprobar
         public void LoadFolder(string path, string acumPath = "")
         {
@@ -60,6 +86,13 @@ namespace FarlandsCoreMod.FarlandsConsole
 
         }
 
+      
+        /// <summary>
+        ///     
+        /// </summary>
+        /// <param name="zipPath"></param>
+        /// <returns>fem</returns> 
+        // CIUDADO
         public static FarlandsEasyMod FromZip(string zipPath)
         { 
             var fem = new FarlandsEasyMod();
@@ -67,12 +100,18 @@ namespace FarlandsCoreMod.FarlandsConsole
             return fem;
         }
 
+        // CIUDADO
         public static void LoadAndAddZip(string zipPath)
         {
             var fem = FromZip(zipPath);
             Manager.CURRENT_MOD = fem;
             fem.ExecuteMain();
         }
+
+        /// <summary>
+        ///     Getters y Setters de PathValue
+        /// </summary>
+        /// <param name="path"></param>
         public byte[] this[string path]
         {
             get => PathValue[path];
@@ -82,6 +121,10 @@ namespace FarlandsCoreMod.FarlandsConsole
         public string[] GetFilesInFolder(string t, string folder) =>
             PathValue.Where(x => x.Key.StartsWith(folder) && !x.Key.EndsWith("/")).Select(x=> t + "/" + x.Key).ToArray();
 
+        /// <summary>
+        ///    Ejecuta el archivo main.lua
+        ///    y guarda la informacion del mod
+        /// </summary>
         public void ExecuteMain()
         {
             Manager.Execute(this["main.lua"], this);
