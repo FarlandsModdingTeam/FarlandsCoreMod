@@ -211,26 +211,45 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
             };
 
             LUA.Globals["find_object"] = DynValue.NewCallback((ctx, args) =>
-                {
-                    if (args.Count < 1) return DynValue.Nil;
+            {
+                if (args.Count < 1) return DynValue.Nil;
 
-                    if (args.Count == 1)
+                if (args.Count == 1)
+                {
+                    var go = GetAllGameObjectsInScene(SceneManager.GetActiveScene()).First(x => x.name == args[0].String);
+                    return LuaGameObject.FromGameObject(go);
+                }
+
+                var gameObject = GetAllGameObjectsInScene(SceneManager.GetSceneByName(args[1].String)).First(x => x.name == args[0].String);
+                return LuaGameObject.FromGameObject(gameObject);
+            });
+
+            LUA.Globals["find_object_by_path"] = DynValue.NewCallback((ctx, args) =>
+            {
+                if (args.Count < 1) return DynValue.Nil;
+                var nameObjects = args.GetArray().Select(x=>x.String);
+
+                var scene = SceneManager.GetActiveScene();
+                GameObject previous = null;
+
+                foreach (var go in nameObjects)
+                {
+                    if (previous == null) previous = scene.GetRootGameObjects().First(x => x.name == go);
+                    else
                     {
-                        if (args[0].Type == DataType.String)
-                        {
-                            var go = GetAllGameObjectsInScene(SceneManager.GetActiveScene()).First(x => x.name == args[0].String);
-                            return LuaGameObject.FromGameObject(go);
-                        }
-                        else if (args[0].Type == DataType.Number)
-                        {
-                            var go = (GameObject)GameObject.FindObjectFromInstanceID((int)args[0].Number);
-                            return LuaGameObject.FromGameObject(go);
+                        for (var i = 0; i < previous.transform.childCount; i++)
+                        { 
+                            var next = previous.transform.GetChild(i).gameObject;
+                            if (next.name == go)
+                            {
+                                previous = next;
+                                break;
+                            }
                         }
                     }
-
-                    var gameObject = GetAllGameObjectsInScene(SceneManager.GetSceneByName(args[1].String)).First(x => x.name == args[0].String);
-                    return LuaGameObject.FromGameObject(gameObject);
-                });
+                }
+                return LuaGameObject.FromGameObject(previous);
+            });
 
             LUA.Globals["create_object"] = (string name) =>
             {
