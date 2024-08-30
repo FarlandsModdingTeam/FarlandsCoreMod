@@ -155,6 +155,7 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
             // ----------------------- COMANDO DE COMANDOS ----------------------- //
             LUA.Globals["o"] = (string _comando) =>
             {
+                // Es cutre si pero DebugController da null
                 List<object> _lista = new()
                 {
                     DebugController.HELP,
