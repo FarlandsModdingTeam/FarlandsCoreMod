@@ -6,6 +6,7 @@ using FarlandsCoreMod.Attributes;
 using FarlandsCoreMod.Utiles;
 using HarmonyLib;
 using I2.Loc;
+using JanduSoft;
 using Language.Lua;
 using MoonSharp.Interpreter;
 using System;
@@ -154,7 +155,6 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
             // ----------------------- COMANDO DE COMANDOS ----------------------- //
             LUA.Globals["o"] = (string _comando) =>
             {
-                //DebugController.SET_CREDITS.Invoke(_cantidad);
                 List<object> _lista = new()
                 {
                     DebugController.HELP,
@@ -357,9 +357,9 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 UnityEngine.Object.FindObjectOfType<InventorySystem>().AddItemByID(_id, _cantidad);
             };
 
-            LUA.Globals["set_din"] = (int _cantidad) =>
+            LUA.Globals["add_din"] = (int _cantidad) =>
             {
-                (DebugController.SET_CREDITS).Invoke(_cantidad);
+                (DebugController.SET_CREDITS).Invoke(Singleton<FarlandsGameManager>.Instance.persistentDataScript.credits + _cantidad);
             };
 
             // ----------------------- CREAR OBJETOS ----------------------- //
