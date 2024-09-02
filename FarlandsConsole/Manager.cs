@@ -29,7 +29,7 @@ namespace FarlandsCoreMod.FarlandsConsole
         public static Dictionary<string, List<Action>> OnEvents = new();
         public static FarlandsEasyMod CURRENT_MOD;
         public static Script LUA = new();
-
+        public static GameObject _o; // public static, Odio mi vida
 
 
         /// <summary>
@@ -155,47 +155,15 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
             // ----------------------- COMANDO DE COMANDOS ----------------------- //
             LUA.Globals["o"] = (string _comando) =>
             {
-                // Es cutre si pero DebugController da null
-                List<object> _lista = new()
+                if (_o == null)
                 {
-                    DebugController.HELP,
-                    DebugController.SET_CREDITS,
-                    DebugController.ADD_ITEM,
-                    DebugController.SET_ENERGY,
-                    DebugController.GET_ROBOT_ITEMS,
-                    DebugController.SFX_ENABLE,
-                    DebugController.SFX_DISABLE,
-                    DebugController.MUSIC_ENABLE,
-                    DebugController.MUSIC_DISABLE,
-                    DebugController.HUD_ENABLE,
-                    DebugController.HUD_DISABLE,
-                    DebugController.SET_HOUR,
-                    DebugController.SET_CELLS,
-                    DebugController.TP,
-                    DebugController.ENABLE_TRAVEL,
-                    DebugController.SET_SEASON,
-                    DebugController.GET_PLACEITEM,
-                    DebugController.ADD_TOOLS,
-                    DebugController.UPDATE_SHIP,
-                    DebugController.GET_ARCA_RESOURCES,
-                    DebugController.GET_ARCA_VEGETABLES,
-                    DebugController.GET_ARCA_MINERALS,
-                    DebugController.GET_ARCA_ARTIFACTS,
-                    DebugController.GET_ARCA_INSECTS,
-                    DebugController.GET_ARCA_FISH,
-                    DebugController.COMPLETE_ARCA,
-                    DebugController.GET_RESOURCES_ITEMS,
-                    DebugController.GET_VEGETABLES_ITEMS,
-                    DebugController.GET_MINERAL_ITEMS,
-                    DebugController.GET_INSECT_ITEMS,
-                    DebugController.LUMBERJACK,
-                    DebugController.ACTIVATE_ROBEETS,
-                    DebugController.GET_ALL_ROBEETS,
-                    DebugController.INVENTORY_SNAP
-                };
+                    _o = new GameObject("FalsoDebugController");
+                    _o.AddComponent<Farlands.Dev.DebugController>();
+                }
+                List<object> _lista = _o.GetComponent<Farlands.Dev.DebugController>().commandList;
+
 
                 string[] args = _comando.Split(' ', StringSplitOptions.None);
-                
                 for (int i = 0; i < _lista.Count; i++)
                 {
                     DebugCommandBase debugCommandBase = _lista[i] as DebugCommandBase;
@@ -224,6 +192,8 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                         }
                     }
                 }
+
+                //Destroy(_o);
             };
 
 
