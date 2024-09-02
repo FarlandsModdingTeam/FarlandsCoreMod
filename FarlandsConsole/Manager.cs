@@ -149,11 +149,8 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
 
             };
 
-
-
-
             // ----------------------- COMANDO DE COMANDOS ----------------------- //
-            LUA.Globals["o"] = (string _comando) =>
+            LUA.Globals["execute_command"] = (string _comando) =>
             {
                 if (_o == null)
                 {
@@ -195,8 +192,6 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
 
                 //Destroy(_o);
             };
-
-
 
             // ----------------------- FUNCIONES DE ESCENA ----------------------- //
             LUA.Globals["load_scene"] = (DynValue scene) =>
@@ -328,9 +323,10 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 UnityEngine.Object.FindObjectOfType<InventorySystem>().AddItemByID(_id, _cantidad);
             };
 
-            LUA.Globals["add_din"] = (int _cantidad) =>
+            LUA.Globals["add_credits"] = (int _cantidad) =>
             {
-                (DebugController.SET_CREDITS).Invoke(Singleton<FarlandsGameManager>.Instance.persistentDataScript.credits + _cantidad);
+                Singleton<FarlandsGameManager>.Instance.persistentDataScript.credits += _cantidad;
+                UnityEngine.Object.FindObjectOfType<HUDMoneyScript>().UpdateCredits();
             };
 
             // ----------------------- CREAR OBJETOS ----------------------- //
@@ -345,7 +341,6 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 var scene = SceneManager.CreateScene(name);
                 //TODO agergar creación del objeto de la escena para lua
             };
-
 
             LUA.Globals["add_command"] = (string name, DynValue luaFunc, string help) =>
             {
@@ -380,7 +375,9 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                     LUA.Call(luaFunc, arguments.ToArray());
 
                 };
+
                 Terminal.Shell.AddCommand(name, action, help: help);
+                Terminal.Autocomplete.Register(name);
             };
 
         }

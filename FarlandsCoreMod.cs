@@ -29,14 +29,10 @@ namespace FarlandsCoreMod
     {
         private static ConfigEntry<bool> debug_skipIntro;
         public static bool Debug_skipIntro => debug_skipIntro.Value;
-
         private static ConfigEntry<bool> debug_quitEarlyAccessScreen;
         public static bool Debug_quitEarlyAccessScreen => debug_quitEarlyAccessScreen.Value;
-
-        
-
         public static FarlandsCoreMod instance;
-        
+
         public string SHORT_NAME => "FCM";
 
         private void Awake()
