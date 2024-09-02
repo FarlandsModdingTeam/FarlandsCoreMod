@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
 
 namespace FarlandsCoreMod.Utiles.Loaders
 {
@@ -14,6 +15,6 @@ namespace FarlandsCoreMod.Utiles.Loaders
                 new Rect(0, 0, texture.width, texture.height),
                 new Vector2(0.5f, 0.5f));
 
-
+        public static Sprite FromRaw(byte[] raw) => FromTexture(TextureLoader.FromRaw(raw));
     }
 }

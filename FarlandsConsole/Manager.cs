@@ -4,6 +4,7 @@ using Farlands.Dev;
 using Farlands.Inventory;
 using FarlandsCoreMod.Attributes;
 using FarlandsCoreMod.Utiles;
+using FarlandsCoreMod.Utiles.Loaders;
 using HarmonyLib;
 using I2.Loc;
 using JanduSoft;
@@ -334,6 +335,35 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
             {
                 var go = new GameObject(name);
                 return LuaGameObject.FromGameObject(go);
+            };
+
+            LUA.Globals["create_inventory_item"] = (string name, string itemType, string spritePath, int buyPrice, int sellPrice, bool canBeStacked, bool canBeDestroyed, float matterPercent) =>
+            {
+
+                var sprite = SpriteLoader.FromRaw(GetFromMod(spritePath));
+
+                var type = InventoryItem.ItemType.Resource;
+
+                if (itemType.ToUpper() == "RESOURCE") type = InventoryItem.ItemType.Resource;
+                else if (itemType.ToUpper() == "TOOL") type = InventoryItem.ItemType.Tool;
+                else if (itemType.ToUpper() == "SEED") type = InventoryItem.ItemType.Seed;
+                else if (itemType.ToUpper() == "CRAFTING") type = InventoryItem.ItemType.Crafting;
+                else if (itemType.ToUpper() == "FISH") type = InventoryItem.ItemType.Fish;
+                else if (itemType.ToUpper() == "INSECT") type = InventoryItem.ItemType.Insect;
+                else if (itemType.ToUpper() == "PLACEABLE") type = InventoryItem.ItemType.Placeable;
+                else type = InventoryItem.ItemType.TreeSeed;
+
+                return FarlandsItems.AddInventoryItem(new()
+                {
+                    itemName = name,
+                    itemType = type,
+                    itemIcon = sprite,
+                    canBeDestroyed = canBeDestroyed,
+                    canBeStacked = canBeStacked,
+                    itemPrice = buyPrice,
+                    itemSellPrice = sellPrice,
+                    matterPercent = matterPercent
+                });
             };
 
             LUA.Globals["create_scene"] = (string name) =>
