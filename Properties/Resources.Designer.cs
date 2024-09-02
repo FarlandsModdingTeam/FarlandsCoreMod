@@ -61,7 +61,7 @@ namespace FarlandsCoreMod.Properties {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a 0.1.1.
+        ///   Busca una cadena traducida similar a 0.1.3.
         /// </summary>
         public static string Version {
             get {
