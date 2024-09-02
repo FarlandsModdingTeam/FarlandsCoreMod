@@ -1,19 +1,22 @@
 using BepInEx.Configuration;
 using CommandTerminal;
 using Farlands.Dev;
+using Farlands.Inventory;
 using FarlandsCoreMod.Attributes;
 using FarlandsCoreMod.Utiles;
 using HarmonyLib;
 using I2.Loc;
+using JanduSoft;
 using Language.Lua;
 using MoonSharp.Interpreter;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq; 
 using System.Text; 
 using UnityEngine;
-using UnityEngine.SceneManagement; 
+using UnityEngine.SceneManagement;
 
 namespace FarlandsCoreMod.FarlandsConsole
 {
@@ -26,7 +29,7 @@ namespace FarlandsCoreMod.FarlandsConsole
         public static Dictionary<string, List<Action>> OnEvents = new();
         public static FarlandsEasyMod CURRENT_MOD;
         public static Script LUA = new();
-
+        public static GameObject _o; // public static, Odio mi vida
 
 
         /// <summary>
@@ -146,6 +149,49 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
 
             };
 
+            // ----------------------- COMANDO DE COMANDOS ----------------------- //
+            LUA.Globals["execute_command"] = (string _comando) =>
+            {
+                if (_o == null)
+                {
+                    _o = new GameObject("FalsoDebugController");
+                    _o.AddComponent<Farlands.Dev.DebugController>();
+                }
+                List<object> _lista = _o.GetComponent<Farlands.Dev.DebugController>().commandList;
+
+
+                string[] args = _comando.Split(' ', StringSplitOptions.None);
+                for (int i = 0; i < _lista.Count; i++)
+                {
+                    DebugCommandBase debugCommandBase = _lista[i] as DebugCommandBase;
+                    if (args.Contains(debugCommandBase.commandId))
+                    {
+                        if (_lista[i] is DebugCommand)
+                        {
+                            (_lista[i] as DebugCommand).Invoke();
+                        }
+                        else if (_lista[i] is DebugCommand<int>)
+                        {
+                            (_lista[i] as DebugCommand<int>).Invoke(int.Parse(args[1]));
+                        }
+                        else if (_lista[i] is DebugCommand<int, int>)
+                        {
+                            int value = int.Parse(args[1]);
+                            int value2 = int.Parse(args[2]);
+                            if (int.TryParse(args[1], out value) && int.TryParse(args[2], out value2))
+                            {
+                                (_lista[i] as DebugCommand<int, int>).Invoke(value, value2);
+                            }
+                            else
+                            {
+                                Debug.LogWarning("Invalid parameter format for DebugCommand<int, int>.");
+                            }
+                        }
+                    }
+                }
+
+                //Destroy(_o);
+            };
 
             // ----------------------- FUNCIONES DE ESCENA ----------------------- //
             LUA.Globals["load_scene"] = (DynValue scene) =>
@@ -272,6 +318,16 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
             });
 
 
+            LUA.Globals["add_item"] = (int _id, int _cantidad) =>
+            {
+                UnityEngine.Object.FindObjectOfType<InventorySystem>().AddItemByID(_id, _cantidad);
+            };
+
+            LUA.Globals["add_credits"] = (int _cantidad) =>
+            {
+                Singleton<FarlandsGameManager>.Instance.persistentDataScript.credits += _cantidad;
+                UnityEngine.Object.FindObjectOfType<HUDMoneyScript>().UpdateCredits();
+            };
 
             // ----------------------- CREAR OBJETOS ----------------------- //
             LUA.Globals["create_object"] = (string name) =>
@@ -285,7 +341,6 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 var scene = SceneManager.CreateScene(name);
                 //TODO agergar creación del objeto de la escena para lua
             };
-
 
             LUA.Globals["add_command"] = (string name, DynValue luaFunc, string help) =>
             {
@@ -320,7 +375,9 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                     LUA.Call(luaFunc, arguments.ToArray());
 
                 };
+
                 Terminal.Shell.AddCommand(name, action, help: help);
+                Terminal.Autocomplete.Register(name);
             };
 
         }

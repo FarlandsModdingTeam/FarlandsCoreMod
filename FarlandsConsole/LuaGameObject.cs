@@ -20,6 +20,7 @@ namespace FarlandsCoreMod.FarlandsConsole
         {
             DynValue result = DynValue.NewTable(new Table(Manager.LUA));
 
+            // X, Y , Z
             result.Table.Set("set_position", DynValue.NewCallback((ctx, args) =>
             {
                 if (args.Count < 1) return DynValue.Void;
@@ -37,7 +38,7 @@ namespace FarlandsCoreMod.FarlandsConsole
 
                 return DynValue.Void;
             }));
-            // Nombre del objeto, eje, valor
+            // X, Y , Z
             result.Table.Set("add_position",DynValue.NewCallback((ctx, args) =>
             {
                 if (args.Count < 1) return DynValue.Void;

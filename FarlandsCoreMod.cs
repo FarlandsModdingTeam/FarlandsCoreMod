@@ -24,19 +24,15 @@ using UnityEngine.TextCore.Text;
 
 namespace FarlandsCoreMod
 {
-    [BepInPlugin("top.magincian.fcm", "FarlandsCoreMod", "0.1.2")]
+    [BepInPlugin("top.magincian.fcm", "FarlandsCoreMod", "0.1.3")]
     public class FarlandsCoreMod : BaseUnityPlugin
     {
         private static ConfigEntry<bool> debug_skipIntro;
         public static bool Debug_skipIntro => debug_skipIntro.Value;
-
         private static ConfigEntry<bool> debug_quitEarlyAccessScreen;
         public static bool Debug_quitEarlyAccessScreen => debug_quitEarlyAccessScreen.Value;
-
-        
-
         public static FarlandsCoreMod instance;
-        
+
         public string SHORT_NAME => "FCM";
 
         private void Awake()

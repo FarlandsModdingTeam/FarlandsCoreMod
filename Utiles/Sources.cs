@@ -15,9 +15,6 @@ namespace FarlandsCoreMod.Utiles
 {
     public static class Source
     {
-        public static Object GetObject(string id) => 
-            Object.FindObjectFromInstanceID(int.Parse(id));
-
         public static ScriptableObjectsDB DB;
 
         public static InventoryItem GetInventory(int id) => DB.GetInventoryItem(id);
@@ -127,6 +124,7 @@ namespace FarlandsCoreMod.Utiles
                 var texture = GetTexture(id);
                 texture.LoadImage(raw); 
             }
+
             public static void PlaceableTexture(string id, byte[] raw)
             { 
                 var placeable = GetPlaceable(id);
@@ -150,6 +148,7 @@ namespace FarlandsCoreMod.Utiles
                 var plant = GetPlant(id);
                 plant.seedSprite.texture.LoadImage(raw);
             }
+
             public static void DialogueTexture(string id, byte[] raw)
             {
                 var asset = (Sprite)DialogueManager.instance.LoadAsset(id, typeof(Sprite));
