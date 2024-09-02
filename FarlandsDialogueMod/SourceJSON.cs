@@ -429,6 +429,12 @@ namespace FarlandsCoreMod.FarlandsDialogueMod
         {
             if (!data.ContainsTerm(key))
             {
+                if (value.Entries == null)
+                {
+                    AddNewTerm($"{key}", value.Entry, data);
+                    return;
+                }
+
                 int i = 0;
                 foreach (var entry in value.Entries)
                 {

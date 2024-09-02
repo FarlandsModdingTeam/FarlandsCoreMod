@@ -56,21 +56,17 @@ namespace FarlandsCoreMod.FarlandsDialogueMod
             Config_exportDialogues = FarlandsCoreMod.AddConfig("FarlandsDialogueMod", "ExportDialogues", "If true, a export file will be created and will save all the dialogues", false);
         }
 
-        public static void AddInventoryTranslation(int id, string[] names, string[] descriptions)
+        public static void AddInventoryTranslation(int id, List<string> names, List<string> descriptions)
         {
-            Debug.Log(LocalizationManager.Sources.Count);
-            var source = LocalizationManager.Sources.First();
-            var nameTerm = source.AddTerm($"Inventory/item_name_{id}");
+            var translation = new SourceJSON();
+            
+            translation.create.Inventory.Add(id.ToString(), new()
+            {
+                name = new() { Entry = new() { Languages = names } },
+                description = new() { Entry = new() { Languages = descriptions } },
+            });
 
-            for (int i = 0; i < names.Length; i++)
-                nameTerm.SetTranslation(i, names[i]);
-
-            var descTerm = source.AddTerm($"Inventory/item_description_{id}");
-
-            for (int i = 0; i < descriptions.Length; i++)
-                descTerm.SetTranslation(i, descriptions[i]);
-
-            source.UpdateDictionary(true);
+            addedSources.Add(translation);
         }
 
         public static void export()

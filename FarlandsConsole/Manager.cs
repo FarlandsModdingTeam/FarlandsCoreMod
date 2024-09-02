@@ -366,7 +366,7 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 });
             };
 
-            LUA.Globals["translate_inventory_item"] = (int id, string[] name , string[] description) =>
+            LUA.Globals["translate_inventory_item"] = (int id, List<string> name , List<string> description) =>
             {
                 FarlandsDialogueMod.Manager.AddInventoryTranslation(id, name, description);
             };
