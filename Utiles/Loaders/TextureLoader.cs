@@ -13,6 +13,7 @@ namespace FarlandsCoreMod.Utiles.Loaders
             var res = new Texture2D(1, 1);
             res.LoadImage(raw);
             res.filterMode = FilterMode.Point;
+            res.Apply();
 
             return res;
         }
