@@ -366,6 +366,11 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 });
             };
 
+            LUA.Globals["translate_inventory_item"] = (int id, string[] name , string[] description) =>
+            {
+                FarlandsDialogueMod.Manager.AddInventoryTranslation(id, name, description);
+            };
+
             LUA.Globals["create_scene"] = (string name) =>
             {
                 var scene = SceneManager.CreateScene(name);

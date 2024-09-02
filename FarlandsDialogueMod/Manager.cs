@@ -10,6 +10,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using UnityEngine;
 
@@ -54,7 +55,23 @@ namespace FarlandsCoreMod.FarlandsDialogueMod
         {
             Config_exportDialogues = FarlandsCoreMod.AddConfig("FarlandsDialogueMod", "ExportDialogues", "If true, a export file will be created and will save all the dialogues", false);
         }
-        
+
+        public static void AddInventoryTranslation(int id, string[] names, string[] descriptions)
+        {
+            Debug.Log(LocalizationManager.Sources.Count);
+            var source = LocalizationManager.Sources.First();
+            var nameTerm = source.AddTerm($"Inventory/item_name_{id}");
+
+            for (int i = 0; i < names.Length; i++)
+                nameTerm.SetTranslation(i, names[i]);
+
+            var descTerm = source.AddTerm($"Inventory/item_description_{id}");
+
+            for (int i = 0; i < descriptions.Length; i++)
+                descTerm.SetTranslation(i, descriptions[i]);
+
+            source.UpdateDictionary(true);
+        }
 
         public static void export()
         {
