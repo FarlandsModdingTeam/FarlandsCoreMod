@@ -17,6 +17,11 @@ namespace FarlandsCoreMod.FarlandsConsole
 {
     public static class LuaGameObject
     {
+        // ------------------- Variables ------------------- //
+        private static DynValue updateFunction;
+        private static DynValue startFunction;
+
+
         public static DynValue FromGameObject(GameObject gameObject)
         {
             DynValue result = DynValue.NewTable(new Table(Manager.LUA));
@@ -180,19 +185,29 @@ namespace FarlandsCoreMod.FarlandsConsole
 
                     return DynValue.Void;
                 }));
-            } 
+            }
+
+            updateFunction = Manager.LUA.Globals.Get("Update");
+            startFunction = Manager.LUA.Globals.Get("Start");
+
             return result;
         }
 
 
         public static void Update(/*GameObject _este*/)
         {
-            //DynValue moveFunction = main.Globals.Get("Update");
+            if (updateFunction != null && updateFunction.Type == DataType.Function)
+            {
+                updateFunction.Function.Call();
+            }
         }
 
         public static void Start(/*GameObject _este*/)
         {
-
+            if (startFunction != null && startFunction.Type == DataType.Function)
+            {
+                startFunction.Function.Call();
+            }
         }
     }
 }

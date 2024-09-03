@@ -10,6 +10,7 @@ namespace FarlandsCoreMod.FarlandsConsole
         // Start
         void Start()
         {
+            //LuaGameObject.FromGameObject(this.gameObject);
             LuaGameObject.Start();
         }
 
