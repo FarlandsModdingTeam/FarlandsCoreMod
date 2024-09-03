@@ -9,29 +9,39 @@ namespace FarlandsCoreMod.FarlandsConsole
     internal class scriptGenerico : MonoBehaviour
     {
         // ------------------- Declaraciones ------------------- //
-        private Script LUA = new();
+        // private Script LUA = new();
 
-        private static DynValue updateFunction;
-        private static DynValue startFunction;
+        private DynValue updateFunction;
+        private DynValue startFunction;
+        private DynValue _result;
 
 
+        public DynValue StartFunction { get => startFunction; set => startFunction = value; }
+        public DynValue UpdateFunction { get => updateFunction; set => updateFunction = value; }
+        public DynValue Result { get => _result; set => _result = value; }
 
         // Start
         void Start()
         {
+            StartFunction = _result.Table.Get("Start");
+            Debug.Log("StartFunction: " + StartFunction);
+
             //LuaGameObject.FromGameObject(this.gameObject);
-            if (updateFunction != null && updateFunction.Type == DataType.Function)
+            if (StartFunction != null && StartFunction.Type == DataType.Function)
             {
-                updateFunction.Function.Call();
+                StartFunction.Function.Call();
             }
         }
 
         // Update
         void Update()
         {
-            if (startFunction != null && startFunction.Type == DataType.Function)
+            UpdateFunction = _result.Table.Get("Update");
+            Debug.Log("UpdateFunction: " + UpdateFunction);
+
+            if (UpdateFunction != null && UpdateFunction.Type == DataType.Function)
             {
-                startFunction.Function.Call();
+                UpdateFunction.Function.Call();
             }
         }
 

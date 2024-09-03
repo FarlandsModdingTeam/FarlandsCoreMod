@@ -2,7 +2,6 @@ using BepInEx.Configuration;
 using CommandTerminal;
 using Farlands.Dev;
 using Farlands.Inventory;
-using Farlands.PlantSystem;
 using FarlandsCoreMod.Attributes;
 using FarlandsCoreMod.Utiles;
 using FarlandsCoreMod.Utiles.Loaders;
@@ -19,10 +18,6 @@ using System.Linq;
 using System.Text; 
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using PixelCrushers;
-using System.Diagnostics;
-using Debug = UnityEngine.Debug;
-using Farlands.DataBase;
 
 namespace FarlandsCoreMod.FarlandsConsole
 {
@@ -36,6 +31,7 @@ namespace FarlandsCoreMod.FarlandsConsole
         public static FarlandsEasyMod CURRENT_MOD;
         public static Script LUA = new();
         public static GameObject _o; // public static, Odio mi vida
+
 
         /// <summary>
         /// name: MOD
@@ -344,6 +340,7 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
 
             LUA.Globals["create_inventory_item"] = (string name, string itemType, string spritePath, int buyPrice, int sellPrice, bool canBeStacked, bool canBeDestroyed, float matterPercent) =>
             {
+
                 var sprite = SpriteLoader.FromRaw(GetFromMod(spritePath));
 
                 var type = InventoryItem.ItemType.Resource;
@@ -357,7 +354,7 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 else if (itemType.ToUpper() == "PLACEABLE") type = InventoryItem.ItemType.Placeable;
                 else type = InventoryItem.ItemType.TreeSeed;
 
-                return FarlandsItems.Manager.AddInventoryItem(new()
+                return FarlandsItems.AddInventoryItem(new()
                 {
                     itemName = name,
                     itemType = type,

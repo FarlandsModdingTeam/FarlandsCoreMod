@@ -17,6 +17,11 @@ namespace FarlandsCoreMod.FarlandsConsole
 {
     public static class LuaGameObject
     {
+        // ------------------- Variables ------------------- //
+        // private static DynValue updateFunction;
+        // private static DynValue startFunction;
+
+
         public static DynValue FromGameObject(GameObject gameObject)
         {
             DynValue result = DynValue.NewTable(new Table(Manager.LUA));
@@ -97,7 +102,7 @@ namespace FarlandsCoreMod.FarlandsConsole
                 return DynValue.Void;
             }));
             // X, Y , Z
-            result.Table.Set("add_position",DynValue.NewCallback((ctx, args) =>
+            result.Table.Set("add_position", DynValue.NewCallback((ctx, args) =>
             {
                 if (args.Count < 1) return DynValue.Void;
                 var nameObjects = args.GetArray().Select(x => x.String);
@@ -106,9 +111,9 @@ namespace FarlandsCoreMod.FarlandsConsole
                 // Modificar el transform
 
                 var addition = new Vector3(
-                    args.Count >= 1 ? (float)args[0].Number: 0f,
-                    args.Count >= 2 ? (float)args[1].Number: 0f,
-                    args.Count >= 3 ? (float)args[2].Number: 0f);
+                    args.Count >= 1 ? (float)args[0].Number : 0f,
+                    args.Count >= 2 ? (float)args[1].Number : 0f,
+                    args.Count >= 3 ? (float)args[2].Number : 0f);
 
                 Debug.Log(gameObject.transform.position);
                 gameObject.transform.position += addition;
@@ -181,12 +186,27 @@ namespace FarlandsCoreMod.FarlandsConsole
                     return DynValue.Void;
                 }));
             }
+            if (!gameObject.TryGetComponent<scriptGenerico>(out var _Ficha))
+            {
+                _Ficha = gameObject.AddComponent<scriptGenerico>();
+            }
 
-            // updateFunction = Manager.LUA.Globals.Get("Update");
-            // startFunction = Manager.LUA.Globals.Get("Start");
+            result.Table.Set("set_update", DynValue.NewCallback((ctx, args) =>
+            {
+                _Ficha.UpdateFunction = args[0];
+                return DynValue.Void;
+            }));
+            result.Table.Set("set_start", DynValue.NewCallback((ctx, args) =>
+            {
+                _Ficha.StartFunction = args[0];
+                return DynValue.Void;
+            }));
+
+            _Ficha.Result = result;
 
             return result;
         }
+
 
     }
 }
