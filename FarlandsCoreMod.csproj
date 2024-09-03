@@ -84,6 +84,12 @@
     <Reference Include="MoonSharp.Interpreter">
       <HintPath>lib\MoonSharp.Interpreter.dll</HintPath>
     </Reference>
+    <Reference Include="MoonSharp.RemoteDebugger">
+      <HintPath>lib\MoonSharp.RemoteDebugger.dll</HintPath>
+    </Reference>
+    <Reference Include="MoonSharp.VsCodeDebugger">
+      <HintPath>lib\MoonSharp.VsCodeDebugger.dll</HintPath>
+    </Reference>
     <Reference Include="NavMeshPlus">
       <HintPath>lib\NavMeshPlus.dll</HintPath>
     </Reference>

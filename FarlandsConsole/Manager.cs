@@ -2,6 +2,7 @@ using BepInEx.Configuration;
 using CommandTerminal;
 using Farlands.Dev;
 using Farlands.Inventory;
+using Farlands.PlantSystem;
 using FarlandsCoreMod.Attributes;
 using FarlandsCoreMod.Utiles;
 using FarlandsCoreMod.Utiles.Loaders;
@@ -18,6 +19,10 @@ using System.Linq;
 using System.Text; 
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using PixelCrushers;
+using System.Diagnostics;
+using Debug = UnityEngine.Debug;
+using Farlands.DataBase;
 
 namespace FarlandsCoreMod.FarlandsConsole
 {
@@ -31,7 +36,6 @@ namespace FarlandsCoreMod.FarlandsConsole
         public static FarlandsEasyMod CURRENT_MOD;
         public static Script LUA = new();
         public static GameObject _o; // public static, Odio mi vida
-
 
         /// <summary>
         /// name: MOD
@@ -339,7 +343,6 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
 
             LUA.Globals["create_inventory_item"] = (string name, string itemType, string spritePath, int buyPrice, int sellPrice, bool canBeStacked, bool canBeDestroyed, float matterPercent) =>
             {
-
                 var sprite = SpriteLoader.FromRaw(GetFromMod(spritePath));
 
                 var type = InventoryItem.ItemType.Resource;
@@ -353,7 +356,7 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 else if (itemType.ToUpper() == "PLACEABLE") type = InventoryItem.ItemType.Placeable;
                 else type = InventoryItem.ItemType.TreeSeed;
 
-                return FarlandsItems.AddInventoryItem(new()
+                return FarlandsItems.Manager.AddInventoryItem(new()
                 {
                     itemName = name,
                     itemType = type,
@@ -363,6 +366,52 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                     itemPrice = buyPrice,
                     itemSellPrice = sellPrice,
                     matterPercent = matterPercent
+                });
+            };
+
+            //TODO agregar múltiple
+            LUA.Globals["create_plant"] = (string name, int daysForDeath, int daysForStage, int growSeason,
+                 DynValue resources, string seedSprite, string s1Sprite, 
+                 string s2Sprite, string s3Sprite, string s4Sprite, string s5Sprite) =>
+            {
+
+                var plant = new PlantScriptableObject();
+                plant.plantName = name;
+                plant.daysForDeath = daysForDeath;
+                plant.daysForStage = daysForStage;
+                plant.growSeason = growSeason;
+                
+                var _resources = new List<DBResourceProbability>();
+
+
+                if (resources.Type == DataType.Number)
+                { 
+                    var res = new DBResourceProbability();
+                    res.itemID = Convert.ToInt32(resources.Number);
+                    res.item = FarlandsItems.Manager.DB.GetInventoryItem(res.itemID);
+                    res.probabilityList = [new() { amountToSpawn = 1, probability = 100 }];
+                    _resources.Add(res);
+                }
+
+                plant.resourcesList = _resources.ToArray();
+                plant.multiple = true;
+
+                plant.seedSprite = SpriteLoader.FromRaw(GetFromMod(seedSprite));
+                plant.stage1Sprite= SpriteLoader.FromRaw(GetFromMod(s1Sprite));
+                plant.stage2Sprite = SpriteLoader.FromRaw(GetFromMod(s2Sprite));
+                plant.stage3Sprite = SpriteLoader.FromRaw(GetFromMod(s3Sprite));
+                plant.stage4Sprite = SpriteLoader.FromRaw(GetFromMod(s4Sprite));
+                plant.stage5Sprite = SpriteLoader.FromRaw(GetFromMod(s5Sprite));
+
+                return FarlandsItems.Manager.AddPlant(plant);
+            };
+
+            LUA.Globals["create_seed"] = (int inventoryId, List<int> plantsId) =>
+            {
+                FarlandsItems.Manager.seeds.Add(new FarlandsItems.Manager.SeedData()
+                {
+                    ItemId = inventoryId,
+                    PlantsId = plantsId
                 });
             };
 
@@ -466,5 +515,14 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 AddChildObjects(child, allObjects);
             }
         }
+
+        [HarmonyPatch(typeof(InventorySystem), "EquipItem", [typeof(int)])]
+        [HarmonyPostfix]
+        public static void EquipPatcher(InventorySystem __instance, int itemIndex)
+        {
+            if(__instance.equippedClass != null)
+            __instance.equippedClass.SetActive(true);
+        }
+
     }
 }
