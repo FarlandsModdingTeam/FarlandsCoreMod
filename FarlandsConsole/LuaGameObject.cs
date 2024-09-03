@@ -21,7 +21,7 @@ namespace FarlandsCoreMod.FarlandsConsole
         {
             DynValue result = DynValue.NewTable(new Table(Manager.LUA));
 
-            // 
+            //TODO hacer que se agreguen al luaGo los componentes que ya tenga
 
             // añadir componente
             result.Table.Set("add_component", DynValue.NewCallback((ctx, args) =>
