@@ -21,8 +21,10 @@ namespace FarlandsCoreMod.FarlandsConsole
         {
             DynValue result = DynValue.NewTable(new Table(Manager.LUA));
 
+            // 
+
             // añadir componente
-            result.Table.Set("add_compo", DynValue.NewCallback((ctx, args) =>
+            result.Table.Set("add_component", DynValue.NewCallback((ctx, args) =>
             {
                 if (args == null || args.Count < 1)
                     return DynValue.Void;
@@ -30,7 +32,18 @@ namespace FarlandsCoreMod.FarlandsConsole
                 string componentName = args[0].String;
                 DynValue properties = args.Count > 1 ? args[1] : null;
 
-                Type componentType = Type.GetType("UnityEngine." + componentName + ", UnityEngine");
+
+                Type componentType = null;
+
+                foreach (var t in AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetTypes()))
+                {
+                    if (t.Name == componentName)
+                    {
+                        componentType = t;
+                        break;
+                    }
+                }
+
                 if (componentType == null || !typeof(Component).IsAssignableFrom(componentType))
                 {
                     Debug.LogError("El tipo especificado no es un componente válido: " + componentName);
@@ -119,20 +132,20 @@ namespace FarlandsCoreMod.FarlandsConsole
                 return DynValue.Void;
             }));
 
-            result.Table.Set("add_component", DynValue.NewCallback((ctx, args) =>
-            {
-                if (args != null || args.Count < 1)
-                    return DynValue.Void;
+            //result.Table.Set("add_component", DynValue.NewCallback((ctx, args) =>
+            //{
+            //    if (args != null || args.Count < 1)
+            //        return DynValue.Void;
 
-                foreach (DynValue arg in args.GetArray())
-                { 
-                    if(arg.String == "image") gameObject.AddComponent<Image>();
-                    if(arg.String == "sprite") gameObject.AddComponent<SpriteRenderer>();
-                    if (arg.String == "camera") gameObject.AddComponent<Camera>();
-                }
+            //    foreach (DynValue arg in args.GetArray())
+            //    { 
+            //        if(arg.String == "image") gameObject.AddComponent<Image>();
+            //        if(arg.String == "sprite") gameObject.AddComponent<SpriteRenderer>();
+            //        if (arg.String == "camera") gameObject.AddComponent<Camera>();
+            //    }
 
-                return DynValue.Void;
-            }));
+            //    return DynValue.Void;
+            //}));
 
             if (gameObject.TryGetComponent<SpriteRenderer>(out var spriteRenderer))
             {
