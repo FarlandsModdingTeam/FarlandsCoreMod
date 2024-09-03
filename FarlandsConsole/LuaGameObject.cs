@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -19,6 +20,50 @@ namespace FarlandsCoreMod.FarlandsConsole
         public static DynValue FromGameObject(GameObject gameObject)
         {
             DynValue result = DynValue.NewTable(new Table(Manager.LUA));
+
+            // añadir componente
+            result.Table.Set("add_compo", DynValue.NewCallback((ctx, args) =>
+            {
+                if (args == null || args.Count < 1)
+                    return DynValue.Void;
+
+                string componentName = args[0].String;
+                DynValue properties = args.Count > 1 ? args[1] : null;
+
+                Type componentType = Type.GetType("UnityEngine." + componentName + ", UnityEngine");
+                if (componentType == null || !typeof(Component).IsAssignableFrom(componentType))
+                {
+                    Debug.LogError("El tipo especificado no es un componente válido: " + componentName);
+                    return DynValue.Void;
+                }
+
+                Component component = gameObject.AddComponent(componentType);
+
+                if (properties != null && properties.Type == DataType.Table)
+                {
+                    foreach (var pair in properties.Table.Pairs)
+                    {
+                        string propertyName = pair.Key.String;
+                        DynValue propertyValue = pair.Value;
+
+                        PropertyInfo propertyInfo = componentType.GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance);
+                        if (propertyInfo != null && propertyInfo.CanWrite)
+                        {
+                            object value = null;
+                            if (propertyValue.Type == DataType.Boolean)
+                                value = propertyValue.Boolean;
+                            else if (propertyValue.Type == DataType.Number)
+                                value = propertyValue.Number;
+                            else if (propertyValue.Type == DataType.String)
+                                value = propertyValue.String;
+
+                            propertyInfo.SetValue(component, value);
+                        }
+                    }
+                }
+
+                return DynValue.Void;
+            }));
 
             // X, Y , Z
             result.Table.Set("set_position", DynValue.NewCallback((ctx, args) =>
@@ -124,6 +169,17 @@ namespace FarlandsCoreMod.FarlandsConsole
                 }));
             } 
             return result;
+        }
+
+
+        public static void Update(/*GameObject _este*/)
+        {
+            //DynValue moveFunction = main.Globals.Get("Update");
+        }
+
+        public static void Start(/*GameObject _este*/)
+        {
+
         }
     }
 }

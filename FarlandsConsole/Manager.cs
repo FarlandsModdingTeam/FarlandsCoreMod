@@ -338,6 +338,7 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
             LUA.Globals["create_object"] = (string name) =>
             {
                 var go = new GameObject(name);
+                go.AddComponent<scriptGenerico>();
                 return LuaGameObject.FromGameObject(go);
             };
 
