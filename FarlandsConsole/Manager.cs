@@ -385,12 +385,48 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
 
 
                 if (resources.Type == DataType.Number)
-                { 
+                {
                     var res = new DBResourceProbability();
                     res.itemID = Convert.ToInt32(resources.Number);
                     res.item = FarlandsItems.Manager.DB.GetInventoryItem(res.itemID);
                     res.probabilityList = [new() { amountToSpawn = 1, probability = 100 }];
                     _resources.Add(res);
+                }
+                else if (resources.Type == DataType.Table)
+                {
+                    foreach (var t in resources.Table.Values)
+                    {
+                        DBResourceProbability res = null;
+
+                        if (_resources.Any(x => x.itemID == t.Table.Get("item").Number))
+                            res = _resources.First(x => x.itemID == t.Table.Get("item").Number);
+                        
+                        if (res == null)
+                        {
+                            res = new DBResourceProbability();
+                            res.itemID = Convert.ToInt32(t.Table.Get("item").Number);
+                            res.item = FarlandsItems.Manager.DB.GetInventoryItem(res.itemID);
+                            res.probabilityList = [new()
+                            {
+                                amountToSpawn = Convert.ToInt32(t.Table.Get("amount").Number),
+                                probability = Convert.ToInt32(t.Table.Get("prob").Number)
+                            }];
+                            _resources.Add(res);
+                        }
+                        else 
+                        {
+                            var rpl = res.probabilityList.ToList();
+                            rpl.Add(new()
+                            {
+                                amountToSpawn = Convert.ToInt32(t.Table.Get("amount").Number),
+                                probability = Convert.ToInt32(t.Table.Get("prob").Number)
+                            });
+
+                            res.probabilityList = rpl.ToArray();
+                        }
+
+                        
+                    }
                 }
 
                 plant.resourcesList = _resources.ToArray();
