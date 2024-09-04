@@ -16,19 +16,135 @@
 
 
   <ItemGroup>
+    <None Include="lib\0Harmony.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
     <None Include="lib\Assembly-CSharp.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
     <None Include="lib\Assembly-CSharp-firstpass.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\BepInEx.Core.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\BepInEx.Preloader.Core.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\BepInEx.Preloader.Unity.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\BepInEx.Unity.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
     <None Include="lib\Cinemachine.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
     <None Include="lib\FMODUnity.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\FMODUnityResonance.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Mono.Cecil.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Mono.Cecil.Mdb.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Mono.Cecil.Pdb.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Mono.Cecil.Rocks.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\MonoMod.RuntimeDetour.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\MonoMod.Utils.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\MoonSharp.Interpreter.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
     <None Include="lib\NavMeshPlus.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
     <None Include="lib\Newtonsoft.Json.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
     <None Include="lib\Rewired_Core.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
     <None Include="lib\Rewired_Windows.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
     <None Include="lib\Rewired_Windows_Functions.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\SemanticVersioning.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
     <None Include="lib\SuperTiled2Unity.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Unity.2D.Animation.Runtime.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Unity.2D.Common.Runtime.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Unity.2D.IK.Runtime.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Unity.2D.PixelPerfect.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Unity.2D.SpriteShape.Runtime.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Unity.2D.Tilemap.Extras.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Unity.AI.Navigation.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Unity.Burst.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Unity.Burst.Unsafe.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Unity.InternalAPIEngineBridge.001.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Unity.Mathematics.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Unity.RenderPipeline.Universal.ShaderLibrary.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Unity.RenderPipelines.Core.Runtime.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Unity.RenderPipelines.Core.ShaderLibrary.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Unity.RenderPipelines.Universal.Runtime.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Unity.RenderPipelines.Universal.Shaders.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Unity.Services.Core.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Unity.Services.Core.Analytics.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Unity.Services.Core.Configuration.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Unity.Services.Core.Device.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Unity.Services.Core.Environments.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Unity.Services.Core.Environments.Internal.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Unity.Services.Core.Internal.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Unity.Services.Core.Networking.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Unity.Services.Core.Registration.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Unity.Services.Core.Scheduler.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Unity.Services.Core.Telemetry.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Unity.Services.Core.Threading.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
     <None Include="lib\Unity.TextMeshPro.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
     <None Include="lib\Unity.Timeline.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
-    <None Include="lib\MoonSharp.Interpreter.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Unity.VisualScripting.Antlr3.Runtime.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Unity.VisualScripting.Core.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Unity.VisualScripting.Flow.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\Unity.VisualScripting.State.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.AccessibilityModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.AIModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.AndroidJNIModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.AnimationModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.ARModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.AssetBundleModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.AudioModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.ClothModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.ClusterInputModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.ClusterRendererModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.CoreModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.CrashReportingModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.DirectorModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.DSPGraphModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.GameCenterModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.GridModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.HotReloadModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.ImageConversionModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.IMGUIModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.InputLegacyModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.InputModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.JSONSerializeModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.LocalizationModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.NVIDIAModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.ParticleSystemModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.PerformanceReportingModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.Physics2DModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.PhysicsModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.ProfilerModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.RuntimeInitializeOnLoadManagerInitializerModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.ScreenCaptureModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.SharedInternalsModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.SpriteMaskModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.SpriteShapeModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.StreamingModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.SubstanceModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.SubsystemsModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.TerrainModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.TerrainPhysicsModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.TextCoreFontEngineModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.TextCoreTextEngineModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.TextRenderingModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.TilemapModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.TLSModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.UI.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.UIElementsModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.UIElementsNativeModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.UIModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.UmbraModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.UNETModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.UnityAnalyticsCommonModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.UnityAnalyticsModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.UnityConnectModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.UnityCurlModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.UnityTestProtocolModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.UnityWebRequestAssetBundleModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.UnityWebRequestAudioModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.UnityWebRequestModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.UnityWebRequestTextureModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.UnityWebRequestWWWModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.VehiclesModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.VFXModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.VideoModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.VirtualTexturingModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.VRModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.WindModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+    <None Include="lib\UnityEngine.XRModule.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
+
+
   </ItemGroup>
 
 
@@ -83,12 +199,6 @@
     </Reference>
     <Reference Include="MoonSharp.Interpreter">
       <HintPath>lib\MoonSharp.Interpreter.dll</HintPath>
-    </Reference>
-    <Reference Include="MoonSharp.RemoteDebugger">
-      <HintPath>lib\MoonSharp.RemoteDebugger.dll</HintPath>
-    </Reference>
-    <Reference Include="MoonSharp.VsCodeDebugger">
-      <HintPath>lib\MoonSharp.VsCodeDebugger.dll</HintPath>
     </Reference>
     <Reference Include="NavMeshPlus">
       <HintPath>lib\NavMeshPlus.dll</HintPath>
