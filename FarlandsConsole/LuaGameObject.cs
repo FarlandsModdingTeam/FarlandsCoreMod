@@ -24,6 +24,7 @@ namespace FarlandsCoreMod.FarlandsConsole
         // private static DynValue updateFunction;
         // private static DynValue startFunction;
 
+        
 
         public static DynValue FromGameObject(GameObject gameObject)
         {
@@ -40,37 +41,39 @@ namespace FarlandsCoreMod.FarlandsConsole
                 if (args == null || args.Count < 1)
                     return DynValue.Void;
 
-                string componentName = args[0].String;
-                DynValue properties = args.Count > 1 ? args[1] : null;
+                string _nombreComponente = args[0].String;
+                DynValue _propiedades = args.Count > 1 ? args[1] : null;
 
 
-                Type componentType = null;
+                Type _componentType = null;
 
                 foreach (var t in AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetTypes()))
                 {
-                    if (t.Name == componentName)
+                    if (t.Name == _nombreComponente)
                     {
-                        componentType = t;
+                        _componentType = t;
                         break;
                     }
                 }
 
-                if (componentType == null || !typeof(Component).IsAssignableFrom(componentType))
+                // Comrpobacion y añadir componente
+                if (_componentType == null || !typeof(Component).IsAssignableFrom(_componentType))
                 {
-                    Debug.LogError("El tipo especificado no es un componente válido: " + componentName);
+                    Debug.LogError("El tipo especificado no es un componente válido: " + _nombreComponente);
                     return DynValue.Void;
                 }
+                Component component = gameObject.AddComponent(_componentType);
 
-                Component component = gameObject.AddComponent(componentType);
 
-                if (properties != null && properties.Type == DataType.Table)
+                // Añadir propiedades
+                if (_propiedades != null && _propiedades.Type == DataType.Table)
                 {
-                    foreach (var pair in properties.Table.Pairs)
+                    foreach (var pair in _propiedades.Table.Pairs)
                     {
                         string propertyName = pair.Key.String;
                         DynValue propertyValue = pair.Value;
 
-                        PropertyInfo propertyInfo = componentType.GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance);
+                        PropertyInfo propertyInfo = _componentType.GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance);
                         if (propertyInfo != null && propertyInfo.CanWrite)
                         {
                             object value = null;
