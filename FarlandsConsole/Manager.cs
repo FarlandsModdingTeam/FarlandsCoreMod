@@ -345,7 +345,7 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
             });
 
 
-            LUA.Globals["add_item"] = (int _id, int _cantidad) =>
+            LUA.Globals["add_item"] = (int _id, int _cantidad = 1) =>
             {
                 UnityEngine.Object.FindObjectOfType<InventorySystem>().AddItemByID(_id, _cantidad);
             };
