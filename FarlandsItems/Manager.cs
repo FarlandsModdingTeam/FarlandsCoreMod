@@ -17,12 +17,12 @@ namespace FarlandsCoreMod.FarlandsItems
     public class Manager : IManager
     {
         public static ScriptableObjectsDB DB => Singleton<ScriptableObjectsDB>.Instance;
-        public static int GetLastInventoryItemId() => DB.inventoryItems.Count;
-        public static int GetLastPlantId() => DB.plants.Count;
+        public static int GetNewItemID() => Math.Max(DB.inventoryItems.Select(x=>x.itemID).Max() + 1, 0x10000);
+        public static int GetNewPlantId() => Math.Max(DB.plants.Select(x => x.ID).Max() + 1, 0x10000);
 
         public static int AddInventoryItem(InventoryItem item)
         {
-            var id = GetLastInventoryItemId() + 1;
+            var id = GetNewItemID();
 
             item.itemID = id;
 
@@ -32,7 +32,7 @@ namespace FarlandsCoreMod.FarlandsItems
         }
         public static int AddPlant(PlantScriptableObject item)
         {
-            var id = GetLastInventoryItemId() + 1;
+            var id = GetNewPlantId();
 
             item.ID = id;
 
