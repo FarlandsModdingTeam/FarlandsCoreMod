@@ -55,22 +55,31 @@ namespace FarlandsCoreMod.FarlandsConsole
         public static void ExecuteEvent(params string[] ev)
         {
             Debug.Log(string.Join('.', ev));
-            foreach (var mod in EasyMods.Values)
-            {
-                var dyn = mod.Mod.Table.Get("event");
-                foreach (var single in ev)
-                {
-                    Debug.Log("mondngo");
-                    dyn = dyn.Table.Get(single);
-                    if (dyn.Type == DataType.Nil) break;
-                }
 
-                if (dyn.Type != DataType.Nil)
+            try
+            {
+                foreach (var mod in EasyMods.Values)
                 {
-                    MOD = mod.Mod; // TODO revisar si funciona
-                    LUA.Call(dyn);
+                    var dyn = mod.Mod.Table.Get("event");
+                    foreach (var single in ev)
+                    {
+                        Debug.Log("mondngo");
+                        dyn = dyn.Table.Get(single);
+                        if (dyn.Type == DataType.Nil) break;
+                    }
+
+                    if (dyn.Type != DataType.Nil)
+                    {
+                        MOD = mod.Mod; // TODO revisar si funciona
+                        LUA.Call(dyn);
+                    }
                 }
             }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
+            
         }
 
         // Método para inicializar el Manager
@@ -369,6 +378,7 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 });
             };
 
+            
             //TODO agregar múltiple
             LUA.Globals["create_plant"] = (string name, int daysForDeath, int daysForStage, int growSeason,
                  DynValue resources, string seedSprite, string s1Sprite, 
@@ -508,13 +518,23 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
 
         public static DynValue Execute(string codes, FarlandsEasyMod fem)
         {
-            if (fem != null && fem.Tag != null)
+
+            try
             {
-                CURRENT_MOD = fem;
-                MOD = DynValue.NewString(fem.Tag);
+                if (fem != null && fem.Tag != null)
+                {
+                    CURRENT_MOD = fem;
+                    MOD = DynValue.NewString(fem.Tag);
+                }
+
+                return LUA.DoString(codes);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+                return DynValue.Nil;
             }
 
-            return LUA.DoString(codes);
         }
 
         private static string currentEvent = null;
