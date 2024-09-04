@@ -82,7 +82,10 @@ namespace FarlandsCoreMod.FarlandsConsole
 
                 return DynValue.Void;
             }));
-
+            result.Table.Set("get_name", DynValue.NewCallback((ctx, args) =>
+            {
+                return DynValue.NewString(gameObject.name);
+            }));
             // X, Y , Z
             result.Table.Set("set_position", DynValue.NewCallback((ctx, args) =>
             {

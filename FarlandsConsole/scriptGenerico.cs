@@ -24,7 +24,6 @@ namespace FarlandsCoreMod.FarlandsConsole
         void Start()
         {
             StartFunction = _result.Table.Get("Start");
-            Debug.Log("StartFunction: " + StartFunction);
 
             //LuaGameObject.FromGameObject(this.gameObject);
             if (StartFunction != null && StartFunction.Type == DataType.Function)
@@ -37,7 +36,6 @@ namespace FarlandsCoreMod.FarlandsConsole
         void Update()
         {
             UpdateFunction = _result.Table.Get("Update");
-            Debug.Log("UpdateFunction: " + UpdateFunction);
 
             if (UpdateFunction != null && UpdateFunction.Type == DataType.Function)
             {
