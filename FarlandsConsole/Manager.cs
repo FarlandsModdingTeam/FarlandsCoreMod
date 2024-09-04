@@ -1,5 +1,6 @@
 using BepInEx.Configuration;
 using CommandTerminal;
+using Farlands;
 using Farlands.DataBase;
 using Farlands.Dev;
 using Farlands.Inventory;
@@ -20,6 +21,7 @@ using System.Linq;
 using System.Text; 
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Object = UnityEngine.Object;
 
 namespace FarlandsCoreMod.FarlandsConsole
 {
@@ -124,6 +126,7 @@ namespace FarlandsCoreMod.FarlandsConsole
 {tag}.event.language.change = {{}}
 {tag}.event.dialogue = {{}}
 {tag}.event.dialogue.portrait = {{}}
+{tag}.event.inventory = {{}}
 
 _mod_ = {tag}";
 
@@ -150,6 +153,12 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                         .Table.Set(key, DynValue.NewCallback((ctx, args) => DynValue.NewBoolean(entry.Value)));
                 }
 
+            };
+
+            LUA.Globals["get_input"] = (string action) =>
+            {
+                var player = GameObject.FindObjectOfType<PlayerController>();
+                return player.player.GetButtonDown(action) && player.inputEnabled;
             };
 
             // ----------------------- COMANDO DE COMANDOS ----------------------- //
@@ -286,9 +295,14 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
 
                 var scene = SceneManager.GetActiveScene();
                 GameObject previous = null;
-
+                var notFound = false;
                 foreach (var go in nameObjects)
                 {
+                    if (previous == null && !scene.GetRootGameObjects().Any(x => x.name == go))
+                    {
+                        notFound = true;
+                        break;
+                    }
                     if (previous == null) previous = scene.GetRootGameObjects().First(x => x.name == go);
                     else
                     {
@@ -303,6 +317,7 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                         }
                     }
                 }
+                if(notFound) return DynValue.Nil;
                 return LuaGameObject.FromGameObject(previous);
             });
 
@@ -558,6 +573,30 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
         {
             if(__instance.equippedClass != null)
             __instance.equippedClass.SetActive(true);
+        }
+
+        [HarmonyPatch(typeof(SeedSelector), "EquipSeed", [typeof(int), typeof(PlayerController), typeof(InventorySystem)])]
+        [HarmonyPrefix]
+        public static bool EquipPatcher(InventorySystem __instance, int itemID, PlayerController playerRef, InventorySystem inventorySystem)
+        {
+            foreach (EquippableData seedInstance in Private.GetFieldValue<List<EquippableData>>(__instance, "seedInstances"))
+            {
+                if (itemID == seedInstance.itemID)
+                {
+                    GameObject gameObject = Object.Instantiate(seedInstance.instance);
+                    gameObject.transform.parent = playerRef.transform;
+                    gameObject.transform.position = playerRef.transform.TransformPoint(new Vector3(0f, -15f, 0f));
+                    
+                    if (seedInstance.instance.TryGetComponent<scriptGenerico>(out var sg))
+                    { 
+                       gameObject.GetComponent<scriptGenerico>().Result = sg.Result;
+                    }
+                    
+                    inventorySystem.equippedClass = gameObject;
+                }
+            }
+
+            return false;
         }
 
     }

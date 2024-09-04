@@ -1,6 +1,9 @@
-﻿using FarlandsCoreMod.Utiles.Loaders;
+﻿using Farlands.Inventory;
+using FarlandsCoreMod.Utiles;
+using FarlandsCoreMod.Utiles.Loaders;
 using MoonSharp.Interpreter;
 using PixelCrushers.DialogueSystem;
+using PixelCrushers.DialogueSystem.ChatMapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +27,9 @@ namespace FarlandsCoreMod.FarlandsConsole
 
         public static DynValue FromGameObject(GameObject gameObject)
         {
+            if (gameObject == null)
+                return DynValue.Nil;
+
             DynValue result = DynValue.NewTable(new Table(Manager.LUA));
 
             //TODO hacer que se agreguen al luaGo los componentes que ya tenga
@@ -189,11 +195,33 @@ namespace FarlandsCoreMod.FarlandsConsole
                     return DynValue.Void;
                 }));
             }
+            if (gameObject.TryGetComponent<SeedSelector>(out var seedSelector))
+            {
+                result.Table.Set("seed_selector", DynValue.NewTable(new Table(Manager.LUA)));
+                var _seedSelector = result.Table.Get("seed_selector");
+
+                _seedSelector.Table.Set("get_instance", DynValue.NewCallback((ctx, args) =>
+                {
+                    if (args.Count > 0 && args[0].Type == DataType.Number)
+                    {
+                        var list = Private.GetFieldValue<List<EquippableData>>(seedSelector, "seedInstances");
+                        foreach (EquippableData seedInstance in list)
+                        {
+                            if (Convert.ToInt32(args[0].Number) == seedInstance.itemID)
+                                return LuaGameObject.FromGameObject(seedInstance.instance);
+                            
+                        }
+                    }
+
+                    return DynValue.Nil;
+                }));
+            }
+
             if (!gameObject.TryGetComponent<scriptGenerico>(out var _Ficha))
             {
                 _Ficha = gameObject.AddComponent<scriptGenerico>();
             }
-
+            _Ficha.Result = result;
             result.Table.Set("set_update", DynValue.NewCallback((ctx, args) =>
             {
                 result.Table.Set("Update", args[0]);
@@ -205,7 +233,7 @@ namespace FarlandsCoreMod.FarlandsConsole
                 return DynValue.Void;
             }));
 
-            _Ficha.Result = result;
+            
 
             return result;
         }

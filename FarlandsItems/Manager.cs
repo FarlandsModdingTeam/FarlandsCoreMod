@@ -64,7 +64,6 @@ namespace FarlandsCoreMod.FarlandsItems
 
             foreach (var s in seeds)
             {
-
                 var seeds = Private.GetFieldValue<List<EquippableData>>(GameObject.FindObjectOfType<SeedSelector>(), "seedInstances");
                 var instance = GameObject.Instantiate(seeds.First().instance);
                 instance.SetActive(false);
@@ -80,6 +79,8 @@ namespace FarlandsCoreMod.FarlandsItems
                     instance = instance,
                 });
             }
+
+            FarlandsConsole.Manager.ExecuteEvent("inventory", "start");
         }
     }
 }
