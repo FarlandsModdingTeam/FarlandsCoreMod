@@ -1,7 +1,9 @@
 using BepInEx.Configuration;
 using CommandTerminal;
+using Farlands.DataBase;
 using Farlands.Dev;
 using Farlands.Inventory;
+using Farlands.PlantSystem;
 using FarlandsCoreMod.Attributes;
 using FarlandsCoreMod.Utiles;
 using FarlandsCoreMod.Utiles.Loaders;
@@ -354,7 +356,7 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 else if (itemType.ToUpper() == "PLACEABLE") type = InventoryItem.ItemType.Placeable;
                 else type = InventoryItem.ItemType.TreeSeed;
 
-                return FarlandsItems.AddInventoryItem(new()
+                return FarlandsItems.Manager.AddInventoryItem(new()
                 {
                     itemName = name,
                     itemType = type,

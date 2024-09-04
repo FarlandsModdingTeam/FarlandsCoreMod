@@ -29,7 +29,7 @@ namespace FarlandsCoreMod.FarlandsConsole
             //LuaGameObject.FromGameObject(this.gameObject);
             if (StartFunction != null && StartFunction.Type == DataType.Function)
             {
-                StartFunction.Function.Call();
+                StartFunction.Function.Call(Result);
             }
         }
 
@@ -41,7 +41,7 @@ namespace FarlandsCoreMod.FarlandsConsole
 
             if (UpdateFunction != null && UpdateFunction.Type == DataType.Function)
             {
-                UpdateFunction.Function.Call();
+                UpdateFunction.Function.Call(Result);
             }
         }
 

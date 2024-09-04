@@ -193,12 +193,12 @@ namespace FarlandsCoreMod.FarlandsConsole
 
             result.Table.Set("set_update", DynValue.NewCallback((ctx, args) =>
             {
-                _Ficha.UpdateFunction = args[0];
+                result.Table.Set("Update", args[0]);
                 return DynValue.Void;
             }));
             result.Table.Set("set_start", DynValue.NewCallback((ctx, args) =>
             {
-                _Ficha.StartFunction = args[0];
+                result.Table.Set("Start", args[0]);
                 return DynValue.Void;
             }));
 
