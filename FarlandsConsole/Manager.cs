@@ -345,9 +345,29 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
             });
 
 
-            LUA.Globals["add_item"] = (int _id, int _cantidad = 1) =>
+            LUA.Globals["add_item"] = (DynValue _id, int _cantidad = 1) =>
             {
-                UnityEngine.Object.FindObjectOfType<InventorySystem>().AddItemByID(_id, _cantidad);
+                if (_id.Type == DataType.Number)
+                    UnityEngine.Object.FindObjectOfType<InventorySystem>().AddItemByID(Convert.ToInt32(_id.Number), _cantidad);
+                else 
+                {
+                    if (_id.String.StartsWith("0x"))
+                    {
+                        UnityEngine.Object.FindObjectOfType<InventorySystem>().AddItemByID(
+                            Convert.ToInt32(_id.String.Replace("0x",""), 16), _cantidad);
+                    }
+                    else
+                    {
+                        foreach (var item in FarlandsItems.Manager.DB.inventoryItems)
+                        {
+                            if (item.itemName == _id.String)
+                            {
+                                UnityEngine.Object.FindObjectOfType<InventorySystem>().AddItemByID(item.itemID, _cantidad);
+                                break;
+                            }
+                        }
+                    }
+                }
             };
 
             LUA.Globals["add_credits"] = (int _cantidad) =>
