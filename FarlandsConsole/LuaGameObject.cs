@@ -24,8 +24,12 @@ namespace FarlandsCoreMod.FarlandsConsole
         // private static DynValue updateFunction;
         // private static DynValue startFunction;
 
-        
 
+        /* Componentes y/o propiedades que se pueden acceder
+         * Escribir/Editar
+         * Leer
+         * Eliminar
+        */
         public static DynValue FromGameObject(GameObject gameObject)
         {
             if (gameObject == null)
@@ -38,14 +42,31 @@ namespace FarlandsCoreMod.FarlandsConsole
             // añadir componente
             result.Table.Set("add_component", DynValue.NewCallback((ctx, args) =>
             {
-                if (args == null || args.Count < 1)
+                foreach (DynValue arg in args.GetArray())
+                {
+                    if (arg.Type == DataType.String)
+                        Debug.Log(arg.String);
+
+                    if (arg.Type == DataType.Table)
+                    {
+                        foreach (var _Pares in arg.Table.Pairs)
+                        {
+                            string propertyName = _Pares.Key.String;
+                            DynValue propertyValue = _Pares.Value;
+
+                            Debug.Log("Propiedad: " + propertyName + " Valor: " + propertyValue);
+                        }
+                    }
+                }
+
+
+                if (args == null)
                     return DynValue.Void;
 
                 string _nombreComponente = args[0].String;
                 DynValue _propiedades = args.Count > 1 ? args[1] : null;
-
-
                 Type _componentType = null;
+
 
                 foreach (var t in AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetTypes()))
                 {
@@ -62,17 +83,22 @@ namespace FarlandsCoreMod.FarlandsConsole
                     Debug.LogError("El tipo especificado no es un componente válido: " + _nombreComponente);
                     return DynValue.Void;
                 }
-                Component component = gameObject.AddComponent(_componentType);
 
+                Component _componente = gameObject.GetComponent(_componentType);
+                if (_componente == null)
+                   _componente = gameObject.AddComponent(_componentType);
 
                 // Añadir propiedades
                 if (_propiedades != null && _propiedades.Type == DataType.Table)
                 {
-                    foreach (var pair in _propiedades.Table.Pairs)
+                    foreach (var _Pares in _propiedades.Table.Pairs)
                     {
-                        string propertyName = pair.Key.String;
-                        DynValue propertyValue = pair.Value;
+                        string propertyName = _Pares.Key.String;
+                        DynValue propertyValue = _Pares.Value;
 
+                        // Debug.Log("Propiedad: " + propertyName + " Valor: " + propertyValue);
+
+                        // Busca una propiedad con propertyName en el componente (Saca la pripiedad)
                         PropertyInfo propertyInfo = _componentType.GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance);
                         if (propertyInfo != null && propertyInfo.CanWrite)
                         {
@@ -84,7 +110,7 @@ namespace FarlandsCoreMod.FarlandsConsole
                             else if (propertyValue.Type == DataType.String)
                                 value = propertyValue.String;
 
-                            propertyInfo.SetValue(component, value);
+                            propertyInfo.SetValue(_componente, value);
                         }
                     }
                 }
