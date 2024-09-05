@@ -46,9 +46,11 @@ namespace FarlandsCoreMod.FarlandsConsole
                 if (args == null)
                     return DynValue.Void;
 
+
+                Debug.Log("Usted ah ejecutado 'add_component' sin plomo 95");
+
                 string _nombreComponente = ""; // = args[0].String;
                 DynValue _propiedades = null; // = args.Count > 1 ? args[1] : null;
-                DynValue _compo_devolver = null;
                 Type _componentType = null;
 
                 // tu dices que es inicesario, yo digo que me la pela
@@ -59,9 +61,6 @@ namespace FarlandsCoreMod.FarlandsConsole
 
                     if (arg.Type == DataType.Table)
                         _propiedades = arg;
-                    
-                    if (arg.Type == DataType.Tuple)
-                        _compo_devolver = arg;
                 }
 
 
@@ -74,7 +73,7 @@ namespace FarlandsCoreMod.FarlandsConsole
                     }
                 }
 
-                // Comrpobacion y añadir componente
+                
                 if (_componentType == null || !typeof(Component).IsAssignableFrom(_componentType))
                 {
                     Debug.LogError("El tipo especificado no es un componente válido: " + _nombreComponente);
@@ -97,53 +96,47 @@ namespace FarlandsCoreMod.FarlandsConsole
 
                         // Busca una propiedad con propertyName en el componente (Saca la pripiedad)
                         PropertyInfo propertyInfo = _componentType.GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance);
-                        if (propertyInfo != null && propertyInfo.CanWrite)
+                        if (propertyInfo != null && propertyInfo.CanWrite && propertyValue != null)
                         {
-                            Debug.Log("Propiedad encontrada: " + propertyName);
                             object value = null;
 
 
                             if (propertyInfo.PropertyType == typeof(int))
                                 value = (int)propertyValue.Number;
-                            
+
                             else if (propertyInfo.PropertyType == typeof(float))
                                 value = (float)propertyValue.Number;
-                            
+
                             else if (propertyInfo.PropertyType == typeof(bool))
                                 value = propertyValue.Boolean;
-                            
+
                             else if (propertyInfo.PropertyType == typeof(string))
                                 value = propertyValue.String;
-                            
+
                             else if (propertyInfo.PropertyType == typeof(Sprite))
-                            {
-                                var path = propertyValue.String;
-                                var raw = Manager.GetFromMod(path);
-                                var texture = new Texture2D(1, 1);
-                                texture.LoadImage(raw);
-                                texture.filterMode = FilterMode.Point;
-                                value = SpriteLoader.FromTexture(texture);
-                            }
+                                value = SpriteLoader.FromRaw(Manager.GetFromMod(propertyValue.String));
+                            
                             else
                                 value = Convert.ChangeType(propertyValue.ToObject(), propertyInfo.PropertyType);
                             
-
                             propertyInfo.SetValue(_componente, value);
                         }
                     }
                 }
 
 
-                
-                if (_compo_devolver != null)
+                // Funciona (se supone)
+                if (_propiedades != null)
                 {
+                    Debug.Log("Devolviendo propiedades");
+
                     Table _resultado = new Table(Manager.LUA);
-                    foreach (var _i in _compo_devolver.Tuple)
+                    foreach (var _i in _propiedades.Table.Pairs)
                     {
-                        PropertyInfo propertyInfo = _componentType.GetProperty(_i.String, BindingFlags.Public | BindingFlags.Instance);
+                        PropertyInfo propertyInfo = _componentType.GetProperty(_i.Key.String, BindingFlags.Public | BindingFlags.Instance);
                         if (propertyInfo != null)
                         {
-                            _resultado.Set(_i.String, DynValue.NewString(propertyInfo.GetValue(_componente).ToString()));
+                            _resultado.Set(_i.Key.String, DynValue.NewString(propertyInfo.GetValue(_componente).ToString()));
                         }
                     }
                     return DynValue.NewTable(_resultado);
@@ -152,6 +145,8 @@ namespace FarlandsCoreMod.FarlandsConsole
                     return DynValue.Void;
 
             }));
+
+
             result.Table.Set("get_name", DynValue.NewCallback((ctx, args) =>
             {
                 return DynValue.NewString(gameObject.name);
@@ -174,6 +169,18 @@ namespace FarlandsCoreMod.FarlandsConsole
 
                 return DynValue.Void;
             }));
+            result.Table.Set("get_position", DynValue.NewCallback((ctx, args) =>
+            {
+                var position = gameObject.transform.position;
+
+                DynValue _r = DynValue.NewTable(new Table(Manager.LUA));
+                _r.Table.Set("x", DynValue.NewNumber(position.x));
+                _r.Table.Set("y", DynValue.NewNumber(position.y));
+                _r.Table.Set("z", DynValue.NewNumber(position.z));
+
+                return _r;
+            }));
+
             // X, Y , Z
             result.Table.Set("add_position", DynValue.NewCallback((ctx, args) =>
             {
