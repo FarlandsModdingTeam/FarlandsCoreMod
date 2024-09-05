@@ -36,6 +36,7 @@ namespace FarlandsCoreMod.FarlandsConsole
         public static Script LUA = new();
         public static GameObject _o; // public static, Odio mi vida
 
+        public int Index => 1;
 
         /// <summary>
         /// name: MOD
@@ -46,8 +47,6 @@ namespace FarlandsCoreMod.FarlandsConsole
             get => LUA.Globals.Get("_mod_");
             set => LUA.Globals.Set("_mod_", value);
         }
-
-        public int Index => 1;
 
         /// <summary>
         ///     name: ExecuteEvent
@@ -281,7 +280,7 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
             /// </summary>
             LUA.Globals["add_language"] = (string path) =>
             {
-                FarlandsDialogueMod.Manager.AddSourceFromBytes(GetFromMod(path));
+                FarlandsDialogue.Manager.AddSourceFromBytes(GetFromMod(path));
             };
             LUA.Globals["get_language"] = () =>
             {
@@ -360,7 +359,7 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                     {
                         foreach (var item in FarlandsItems.Manager.DB.inventoryItems)
                         {
-                            if (item.itemName == _id.String)
+                            if (item.itemName.ToUpper() == _id.String.ToUpper())
                             {
                                 UnityEngine.Object.FindObjectOfType<InventorySystem>().AddItemByID(item.itemID, _cantidad);
                                 break;
@@ -498,7 +497,7 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
 
             LUA.Globals["translate_inventory_item"] = (int id, List<string> name , List<string> description) =>
             {
-                FarlandsDialogueMod.Manager.AddInventoryTranslation(id, name, description);
+                FarlandsDialogue.Manager.AddInventoryTranslation(id, name, description);
             };
 
             LUA.Globals["create_scene"] = (string name) =>

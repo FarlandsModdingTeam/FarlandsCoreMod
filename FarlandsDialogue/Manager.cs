@@ -14,7 +14,7 @@ using System.Security.Cryptography;
 using System.Text;
 using UnityEngine;
 
-namespace FarlandsCoreMod.FarlandsDialogueMod
+namespace FarlandsCoreMod.FarlandsDialogue
 {
     [Patcher]
     public class Manager: IManager

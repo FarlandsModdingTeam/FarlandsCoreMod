@@ -18,7 +18,7 @@ using Unity.Profiling.LowLevel.Unsafe;
 using Rewired.Demos;
 using System.IO;
 
-namespace FarlandsCoreMod.FarlandsDialogueMod
+namespace FarlandsCoreMod.FarlandsDialogue
 {
     public class SourceJSON
     {

@@ -1,4 +1,5 @@
-﻿using Farlands.DataBase;
+﻿using BepInEx.Configuration;
+using Farlands.DataBase;
 using Farlands.Inventory;
 using Farlands.PlantSystem;
 using FarlandsCoreMod.Attributes;
@@ -16,9 +17,18 @@ namespace FarlandsCoreMod.FarlandsItems
     [Patcher]
     public class Manager : IManager
     {
+        public int Index => 0;
+        public static List<SeedData> seeds = new();
+        public static ConfigEntry<int> FirstID;
+
         public static ScriptableObjectsDB DB => Singleton<ScriptableObjectsDB>.Instance;
-        public static int GetNewItemID() => Math.Max(DB.inventoryItems.Select(x=>x.itemID).Max() + 1, 0x10000);
-        public static int GetNewPlantId() => Math.Max(DB.plants.Select(x => x.ID).Max() + 1, 0x10000);
+        private static int GetNewItemID() => Math.Max(DB.inventoryItems.Select(x => x.itemID).Max() + 1, FirstID.Value);
+        private static int GetNewPlantId() => Math.Max(DB.plants.Select(x => x.ID).Max() + 1, FirstID.Value);
+
+        public void Init()
+        {
+            FirstID = FarlandsCoreMod.AddConfig("FarlandsItems", "FirstID", "The first id for mod objects", 2000);
+        }
 
         public static int AddInventoryItem(InventoryItem item)
         {
@@ -47,13 +57,6 @@ namespace FarlandsCoreMod.FarlandsItems
             public List<int> PlantsId;
         }
 
-        public int Index => 0;
-        public static List<SeedData> seeds = new();
-
-        public void Init()
-        {
-
-        }
 
         [HarmonyPatch(typeof(InventorySystem), "Start")]
         [HarmonyPostfix]
