@@ -5,6 +5,7 @@ using MoonSharp.Interpreter;
 using PixelCrushers.DialogueSystem;
 using PixelCrushers.DialogueSystem.ChatMapper;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -42,30 +43,26 @@ namespace FarlandsCoreMod.FarlandsConsole
             // añadir componente
             result.Table.Set("add_component", DynValue.NewCallback((ctx, args) =>
             {
-                foreach (DynValue arg in args.GetArray())
-                {
-                    if (arg.Type == DataType.String)
-                        Debug.Log(arg.String);
-
-                    if (arg.Type == DataType.Table)
-                    {
-                        foreach (var _Pares in arg.Table.Pairs)
-                        {
-                            string propertyName = _Pares.Key.String;
-                            DynValue propertyValue = _Pares.Value;
-
-                            Debug.Log("Propiedad: " + propertyName + " Valor: " + propertyValue);
-                        }
-                    }
-                }
-
-
                 if (args == null)
                     return DynValue.Void;
 
-                string _nombreComponente = args[0].String;
-                DynValue _propiedades = args.Count > 1 ? args[1] : null;
+                string _nombreComponente = ""; // = args[0].String;
+                DynValue _propiedades = null; // = args.Count > 1 ? args[1] : null;
+                DynValue _compo_devolver = null;
                 Type _componentType = null;
+
+                // tu dices que es inicesario, yo digo que me la pela
+                foreach (DynValue arg in args.GetArray())
+                {
+                    if (arg.Type == DataType.String)
+                        _nombreComponente = arg.String;
+
+                    if (arg.Type == DataType.Table)
+                        _propiedades = arg;
+                    
+                    if (arg.Type == DataType.Tuple)
+                        _compo_devolver = arg;
+                }
 
 
                 foreach (var t in AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetTypes()))
@@ -88,34 +85,72 @@ namespace FarlandsCoreMod.FarlandsConsole
                 if (_componente == null)
                    _componente = gameObject.AddComponent(_componentType);
 
+
                 // Añadir propiedades
-                if (_propiedades != null && _propiedades.Type == DataType.Table)
+                if (_propiedades != null)
                 {
                     foreach (var _Pares in _propiedades.Table.Pairs)
                     {
                         string propertyName = _Pares.Key.String;
                         DynValue propertyValue = _Pares.Value;
 
-                        // Debug.Log("Propiedad: " + propertyName + " Valor: " + propertyValue);
 
                         // Busca una propiedad con propertyName en el componente (Saca la pripiedad)
                         PropertyInfo propertyInfo = _componentType.GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance);
                         if (propertyInfo != null && propertyInfo.CanWrite)
                         {
+                            Debug.Log("Propiedad encontrada: " + propertyName);
                             object value = null;
-                            if (propertyValue.Type == DataType.Boolean)
+
+
+                            if (propertyInfo.PropertyType == typeof(int))
+                                value = (int)propertyValue.Number;
+                            
+                            else if (propertyInfo.PropertyType == typeof(float))
+                                value = (float)propertyValue.Number;
+                            
+                            else if (propertyInfo.PropertyType == typeof(bool))
                                 value = propertyValue.Boolean;
-                            else if (propertyValue.Type == DataType.Number)
-                                value = propertyValue.Number;
-                            else if (propertyValue.Type == DataType.String)
+                            
+                            else if (propertyInfo.PropertyType == typeof(string))
                                 value = propertyValue.String;
+                            
+                            else if (propertyInfo.PropertyType == typeof(Sprite))
+                            {
+                                var path = propertyValue.String;
+                                var raw = Manager.GetFromMod(path);
+                                var texture = new Texture2D(1, 1);
+                                texture.LoadImage(raw);
+                                texture.filterMode = FilterMode.Point;
+                                value = SpriteLoader.FromTexture(texture);
+                            }
+                            else
+                                value = Convert.ChangeType(propertyValue.ToObject(), propertyInfo.PropertyType);
+                            
 
                             propertyInfo.SetValue(_componente, value);
                         }
                     }
                 }
 
-                return DynValue.Void;
+
+                
+                if (_compo_devolver != null)
+                {
+                    Table _resultado = new Table(Manager.LUA);
+                    foreach (var _i in _compo_devolver.Tuple)
+                    {
+                        PropertyInfo propertyInfo = _componentType.GetProperty(_i.String, BindingFlags.Public | BindingFlags.Instance);
+                        if (propertyInfo != null)
+                        {
+                            _resultado.Set(_i.String, DynValue.NewString(propertyInfo.GetValue(_componente).ToString()));
+                        }
+                    }
+                    return DynValue.NewTable(_resultado);
+                }
+                else
+                    return DynValue.Void;
+
             }));
             result.Table.Set("get_name", DynValue.NewCallback((ctx, args) =>
             {
