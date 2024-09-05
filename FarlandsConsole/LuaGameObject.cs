@@ -161,9 +161,9 @@ namespace FarlandsCoreMod.FarlandsConsole
                 // Modificar el transform
 
                 var addition = new Vector3(
-                    args.Count < 1 ? (float)args[0].Number : 0f,
-                    args.Count < 2 ? (float)args[1].Number : 0f,
-                    args.Count < 3 ? (float)args[2].Number : 0f);
+                    args.Count >= 1 ? (float)args[0].Number : 0f,
+                    args.Count >= 2 ? (float)args[1].Number : 0f,
+                    args.Count >= 3 ? (float)args[2].Number : 0f);
 
                 gameObject.transform.position = addition;
 
