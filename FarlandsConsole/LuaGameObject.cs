@@ -127,7 +127,7 @@ namespace FarlandsCoreMod.FarlandsConsole
                 // Funciona (se supone)
                 if (_propiedades != null)
                 {
-                    Debug.Log("Devolviendo propiedades");
+                    // Debug.Log("Devolviendo propiedades");
 
                     Table _resultado = new Table(Manager.LUA);
                     foreach (var _i in _propiedades.Table.Pairs)
@@ -142,7 +142,7 @@ namespace FarlandsCoreMod.FarlandsConsole
                         if (fieldInfo != null)
                         {
                             // cambiar DynValue.NewString(fieldInfo.GetValue(_componente).ToString()) por la función que debes hacer
-                            _resultado.Set(_i.Key.String, DynValue.NewString(fieldInfo.GetValue(_componente).ToString()));
+                            _resultado.Set(_i.Key.String, ConvertToLua(fieldInfo.GetValue(_componente))); 
                         }
                     }
                     return DynValue.NewTable(_resultado);
@@ -351,17 +351,23 @@ namespace FarlandsCoreMod.FarlandsConsole
             return result;
         }
 
-        //TODO hacer función contraria
+
+
+        // ConvertLuaArgumentToCSharp
         private static object ConvertLuaArgumentToCSharp(DynValue luaArg, Type targetType)
         {
             if (targetType == typeof(int))
                 return (int)luaArg.Number;
+
             else if (targetType == typeof(float))
                 return (float)luaArg.Number;
+
             else if (targetType == typeof(bool))
                 return luaArg.Boolean;
+
             else if (targetType == typeof(string))
                 return luaArg.String;
+
             else if (targetType == typeof(Vector2))
             {
                 var table = luaArg.Table;
@@ -369,8 +375,53 @@ namespace FarlandsCoreMod.FarlandsConsole
                 float y = table.Get("y").Type == DataType.Number ? (float)table.Get("y").Number : 0f;
                 return new Vector2(x, y);
             }
+
             else
                 return Convert.ChangeType(luaArg.ToObject(), targetType);
         }
+
+        // ConvertCSharpArgumentToLua
+        private static DynValue ConvertToLua(object csharpArg)
+        {
+            if (csharpArg == null)
+                return DynValue.Nil;
+
+            Type type = csharpArg.GetType();
+
+            if (type == typeof(int))
+                return DynValue.NewNumber((int)csharpArg);
+
+            else if (type == typeof(float))
+                return DynValue.NewNumber((float)csharpArg);
+
+            else if (type == typeof(bool))
+                return DynValue.NewBoolean((bool)csharpArg);
+
+            else if (type == typeof(string))
+                return DynValue.NewString((string)csharpArg);
+
+            else if (type == typeof(Vector2))
+            {
+                Vector2 vector = (Vector2)csharpArg;
+                Table table = new Table(Manager.LUA);
+                table.Set("x", DynValue.NewNumber(vector.x));
+                table.Set("y", DynValue.NewNumber(vector.y));
+                return DynValue.NewTable(table);
+            }
+            else if (type == typeof(Vector3))
+            {
+                Vector3 vector = (Vector3)csharpArg;
+                Table table = new Table(Manager.LUA);
+                table.Set("x", DynValue.NewNumber(vector.x));
+                table.Set("y", DynValue.NewNumber(vector.y));
+                table.Set("z", DynValue.NewNumber(vector.z));
+                return DynValue.NewTable(table);
+            }
+            else
+            {
+                return DynValue.FromObject(Manager.LUA, csharpArg);
+            }
+        }
+
     }
 }
