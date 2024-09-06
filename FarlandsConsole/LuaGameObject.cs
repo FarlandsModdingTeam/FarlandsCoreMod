@@ -72,7 +72,6 @@ namespace FarlandsCoreMod.FarlandsConsole
                         break;
                     }
                 }
-
                 
                 if (_componentType == null || !typeof(Component).IsAssignableFrom(_componentType))
                 {
@@ -93,7 +92,7 @@ namespace FarlandsCoreMod.FarlandsConsole
                         string propertyName = _Pares.Key.String;
                         DynValue propertyValue = _Pares.Value;
 
-
+                        // Agregar los fields
                         // Busca una propiedad con propertyName en el componente (Saca la pripiedad)
                         PropertyInfo propertyInfo = _componentType.GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance);
                         if (propertyInfo != null && propertyInfo.CanWrite && propertyValue != null)
@@ -133,10 +132,17 @@ namespace FarlandsCoreMod.FarlandsConsole
                     Table _resultado = new Table(Manager.LUA);
                     foreach (var _i in _propiedades.Table.Pairs)
                     {
-                        PropertyInfo propertyInfo = _componentType.GetProperty(_i.Key.String, BindingFlags.Public | BindingFlags.Instance);
+                        var propertyInfo = _componentType.GetProperty(_i.Key.String, BindingFlags.Public | BindingFlags.Instance);
                         if (propertyInfo != null)
                         {
                             _resultado.Set(_i.Key.String, DynValue.NewString(propertyInfo.GetValue(_componente).ToString()));
+                        }
+
+                        var fieldInfo = _componentType.GetField(_i.Key.String, BindingFlags.Public | BindingFlags.Instance);
+                        if (fieldInfo != null)
+                        {
+                            // cambiar DynValue.NewString(fieldInfo.GetValue(_componente).ToString()) por la función que debes hacer
+                            _resultado.Set(_i.Key.String, DynValue.NewString(fieldInfo.GetValue(_componente).ToString()));
                         }
                     }
                     return DynValue.NewTable(_resultado);
@@ -145,7 +151,43 @@ namespace FarlandsCoreMod.FarlandsConsole
                     return DynValue.Void;
 
             }));
+            result.Table.Set("call", DynValue.NewCallback((ctx, args) =>
+            {
+                string componentName = args[0].String;
+                string methodName = args[1].String;
+                DynValue[] methodArgs = args.GetArray().Skip(2).ToArray();
 
+                var comp = gameObject.GetComponent(componentName);
+
+                MethodInfo methodInfo = null;
+
+                foreach (var meth in comp.GetType().GetMethods())
+                {
+                    if (meth.Name == methodName && meth.GetParameters().Length == methodArgs.Length)
+                    { 
+                        methodInfo = meth;
+                        break;
+                    }
+                }
+
+                ParameterInfo[] parameters = methodInfo.GetParameters();
+                object[] invokeArgs = new object[parameters.Length];
+                for (int i = 0; i < parameters.Length; i++)
+                {
+                    if (i < methodArgs.Length)
+                    {
+                        invokeArgs[i] = ConvertLuaArgumentToCSharp(methodArgs[i], parameters[i].ParameterType);
+                    }
+                    else
+                    {
+                        invokeArgs[i] = Type.Missing; // Valores por defecto si no hay suficientes argumentos
+                    }
+                }
+
+                object returnValue = methodInfo.Invoke(comp, invokeArgs);
+
+                return DynValue.FromObject(Manager.LUA, returnValue);
+            }));
 
             result.Table.Set("get_name", DynValue.NewCallback((ctx, args) =>
             {
@@ -309,6 +351,26 @@ namespace FarlandsCoreMod.FarlandsConsole
             return result;
         }
 
-
+        //TODO hacer función contraria
+        private static object ConvertLuaArgumentToCSharp(DynValue luaArg, Type targetType)
+        {
+            if (targetType == typeof(int))
+                return (int)luaArg.Number;
+            else if (targetType == typeof(float))
+                return (float)luaArg.Number;
+            else if (targetType == typeof(bool))
+                return luaArg.Boolean;
+            else if (targetType == typeof(string))
+                return luaArg.String;
+            else if (targetType == typeof(Vector2))
+            {
+                var table = luaArg.Table;
+                float x = table.Get("x").Type == DataType.Number ? (float)table.Get("x").Number : 0f;
+                float y = table.Get("y").Type == DataType.Number ? (float)table.Get("y").Number : 0f;
+                return new Vector2(x, y);
+            }
+            else
+                return Convert.ChangeType(luaArg.ToObject(), targetType);
+        }
     }
 }
