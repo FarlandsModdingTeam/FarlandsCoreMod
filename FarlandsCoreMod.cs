@@ -72,11 +72,11 @@ namespace FarlandsCoreMod
         private IEnumerator allLoaded()
         {
             yield return new WaitForEndOfFrame();
+            OnAllModsLoaded();
 
             Source.Init();
 
             LoadManagers();
-            OnAllModsLoaded();
 
             isLoaded = true;
         }
