@@ -1,0 +1,96 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:130.0) Gecko/20100101 Firefox/130.0" version="24.7.16">
+  <diagram name="Página-1" id="QGQbhhF2IKWuarHCyqoY">
+    <mxGraphModel dx="1393" dy="789" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="ss1cUzSr6EaidTX44ejw-4" value="FarlandsCoreMod" style="swimlane;horizontal=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry y="50" width="690" height="1410" as="geometry">
+            <mxRectangle y="50" width="40" height="130" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ss1cUzSr6EaidTX44ejw-9" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="ss1cUzSr6EaidTX44ejw-4" source="ss1cUzSr6EaidTX44ejw-5" target="ss1cUzSr6EaidTX44ejw-8" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ss1cUzSr6EaidTX44ejw-5" value="Awake" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;strokeWidth=3;" parent="ss1cUzSr6EaidTX44ejw-4" vertex="1">
+          <mxGeometry x="140" y="20" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ss1cUzSr6EaidTX44ejw-11" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="ss1cUzSr6EaidTX44ejw-4" source="ss1cUzSr6EaidTX44ejw-8" target="ss1cUzSr6EaidTX44ejw-10" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ss1cUzSr6EaidTX44ejw-35" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;dashed=1;" parent="ss1cUzSr6EaidTX44ejw-4" source="ss1cUzSr6EaidTX44ejw-8" target="ss1cUzSr6EaidTX44ejw-34" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ss1cUzSr6EaidTX44ejw-8" value="Asignar la instancia" style="whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;strokeWidth=1;" parent="ss1cUzSr6EaidTX44ejw-4" vertex="1">
+          <mxGeometry x="130" y="120" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ss1cUzSr6EaidTX44ejw-13" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="ss1cUzSr6EaidTX44ejw-4" source="ss1cUzSr6EaidTX44ejw-10" target="ss1cUzSr6EaidTX44ejw-12" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ss1cUzSr6EaidTX44ejw-10" value="&lt;div&gt;Configurar&amp;nbsp;&lt;/div&gt;&lt;div&gt;&lt;b&gt;&lt;i&gt;SkipIntro&lt;/i&gt;&lt;/b&gt;&lt;/div&gt;" style="whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;strokeWidth=1;" parent="ss1cUzSr6EaidTX44ejw-4" vertex="1">
+          <mxGeometry x="130" y="220" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ss1cUzSr6EaidTX44ejw-20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;" parent="ss1cUzSr6EaidTX44ejw-4" source="ss1cUzSr6EaidTX44ejw-12" target="ss1cUzSr6EaidTX44ejw-19" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ss1cUzSr6EaidTX44ejw-29" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="ss1cUzSr6EaidTX44ejw-4" source="ss1cUzSr6EaidTX44ejw-12" target="ss1cUzSr6EaidTX44ejw-28" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ss1cUzSr6EaidTX44ejw-12" value="&lt;div&gt;Configurar&amp;nbsp;&lt;/div&gt;&lt;div&gt;Debug-QuitEarlyAccessScreen&lt;br&gt;&lt;/div&gt;" style="whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;strokeWidth=1;" parent="ss1cUzSr6EaidTX44ejw-4" vertex="1">
+          <mxGeometry x="115" y="320" width="150" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ss1cUzSr6EaidTX44ejw-19" value="&lt;div&gt;DEBUG&lt;/div&gt;&lt;div&gt;SKIPEASCREEN&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="ss1cUzSr6EaidTX44ejw-4" vertex="1">
+          <mxGeometry x="330" y="320" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ss1cUzSr6EaidTX44ejw-16" value="&lt;div&gt;DEBUG&lt;/div&gt;&lt;div&gt;SKIPINTRO&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="ss1cUzSr6EaidTX44ejw-4" vertex="1">
+          <mxGeometry x="330" y="220" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ss1cUzSr6EaidTX44ejw-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;" parent="ss1cUzSr6EaidTX44ejw-4" source="ss1cUzSr6EaidTX44ejw-10" target="ss1cUzSr6EaidTX44ejw-16" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ss1cUzSr6EaidTX44ejw-31" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="ss1cUzSr6EaidTX44ejw-4" source="ss1cUzSr6EaidTX44ejw-28" target="ss1cUzSr6EaidTX44ejw-30" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ss1cUzSr6EaidTX44ejw-28" value="Cargar Parches" style="whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;strokeWidth=1;" parent="ss1cUzSr6EaidTX44ejw-4" vertex="1">
+          <mxGeometry x="115" y="460" width="150" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ss1cUzSr6EaidTX44ejw-42" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="ss1cUzSr6EaidTX44ejw-4" source="ss1cUzSr6EaidTX44ejw-30" target="ss1cUzSr6EaidTX44ejw-41" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ss1cUzSr6EaidTX44ejw-30" value="Registrar funciones que se ejecuten al cargar una escena" style="whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;strokeWidth=1;" parent="ss1cUzSr6EaidTX44ejw-4" vertex="1">
+          <mxGeometry x="115" y="600" width="150" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ss1cUzSr6EaidTX44ejw-34" value="INSTANCIA" style="rounded=1;whiteSpace=wrap;html=1;" parent="ss1cUzSr6EaidTX44ejw-4" vertex="1">
+          <mxGeometry x="330" y="120" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ss1cUzSr6EaidTX44ejw-41" value="AllLoaded" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=3;" parent="ss1cUzSr6EaidTX44ejw-4" vertex="1">
+          <mxGeometry x="140" y="760" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ss1cUzSr6EaidTX44ejw-46" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;endArrow=none;endFill=0;startArrow=classic;startFill=1;" parent="ss1cUzSr6EaidTX44ejw-4" source="ss1cUzSr6EaidTX44ejw-45" target="ss1cUzSr6EaidTX44ejw-41" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ss1cUzSr6EaidTX44ejw-45" value="&lt;div&gt;Espera al primer&lt;/div&gt;&lt;div&gt;frame&lt;br&gt;&lt;/div&gt;" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="ss1cUzSr6EaidTX44ejw-4" vertex="1">
+          <mxGeometry x="112.5" y="880" width="155" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ss1cUzSr6EaidTX44ejw-52" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="ss1cUzSr6EaidTX44ejw-4" source="ss1cUzSr6EaidTX44ejw-49" target="ss1cUzSr6EaidTX44ejw-51" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ss1cUzSr6EaidTX44ejw-49" value="Inicia los Managers" style="whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="ss1cUzSr6EaidTX44ejw-4" vertex="1">
+          <mxGeometry x="130" y="1119" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ss1cUzSr6EaidTX44ejw-51" value="Pone en verdadero la variable de control &lt;b&gt;&lt;i&gt;&lt;u&gt;isLoaded&lt;/u&gt;&lt;/i&gt;&lt;/b&gt;" style="whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="ss1cUzSr6EaidTX44ejw-4" vertex="1">
+          <mxGeometry x="130" y="1240" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ss1cUzSr6EaidTX44ejw-50" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="ss1cUzSr6EaidTX44ejw-47" target="ss1cUzSr6EaidTX44ejw-49" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ss1cUzSr6EaidTX44ejw-47" value="Ejecuta cuando todos los mods han sido cargados" style="whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+          <mxGeometry x="130" y="1050" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ss1cUzSr6EaidTX44ejw-48" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="ss1cUzSr6EaidTX44ejw-45" target="ss1cUzSr6EaidTX44ejw-47" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
