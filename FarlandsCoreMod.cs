@@ -73,9 +73,6 @@ namespace FarlandsCoreMod
         {
             yield return new WaitForEndOfFrame();
             OnAllModsLoaded();
-
-            Source.Init();
-
             LoadManagers();
 
             isLoaded = true;

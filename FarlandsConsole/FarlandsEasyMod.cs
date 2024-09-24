@@ -10,7 +10,7 @@ using System.Linq;
 using BepInEx.Configuration;
 using UnityEngine.UIElements;
 
-namespace FarlandsCoreMod.FarlandsConsole
+namespace FarlandsCoreMod.FarlandsLua
 {
 
     /// <summary>
@@ -101,7 +101,7 @@ namespace FarlandsCoreMod.FarlandsConsole
         public static void LoadAndAddZip(string zipPath)
         {
             var fem = FromZip(zipPath);
-            Manager.CURRENT_MOD = fem;
+            LuaManager.CURRENT_MOD = fem;
             fem.ExecuteMain();
         }
 
@@ -124,8 +124,8 @@ namespace FarlandsCoreMod.FarlandsConsole
         /// </summary>
         public void ExecuteMain()
         {
-            Manager.Execute(this["main.lua"], this);
-            Mod = Manager.MOD;
+            LuaManager.Execute(this["main.lua"], this);
+            Mod = LuaManager.MOD;
             Tag = Mod.Table.Get("tag").String;
         }
     }

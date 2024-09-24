@@ -5,7 +5,7 @@ using UnityEngine.Assertions;
 using System.Linq;
 using Rewired;
 using Farlands.Dev;
-using FarlandsCoreMod.FarlandsConsole;
+using FarlandsCoreMod.FarlandsLua;
 
 namespace CommandTerminal
 {
@@ -398,7 +398,7 @@ namespace CommandTerminal
 
 
         void HandleUnityLog(string message, string stack_trace, LogType type) {
-            if(Manager.UnityDebug.Value) Buffer.HandleLog(message, stack_trace, (TerminalLogType)type);
+            if(LuaManager.UnityDebug.Value) Buffer.HandleLog(message, stack_trace, (TerminalLogType)type);
             scroll_position.y = int.MaxValue;
         }
 

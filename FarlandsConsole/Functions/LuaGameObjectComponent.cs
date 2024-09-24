@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
-namespace FarlandsCoreMod.FarlandsConsole
+namespace FarlandsCoreMod.FarlandsConsole.Functions
 {
-    public class scriptGenerico : MonoBehaviour
+    public class LuaGameObjectComponent : MonoBehaviour
     {
         // ------------------- Declaraciones ------------------- //
         // private Script LUA = new();

@@ -1,4 +1,5 @@
 ﻿using Farlands.Inventory;
+using FarlandsCoreMod.FarlandsLua;
 using FarlandsCoreMod.Utiles;
 using FarlandsCoreMod.Utiles.Loaders;
 using MoonSharp.Interpreter;
@@ -17,9 +18,9 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 
-namespace FarlandsCoreMod.FarlandsConsole
+namespace FarlandsCoreMod.FarlandsConsole.Functions
 {
-    public static class LuaGameObject
+    public static class LuaGameObjectFactory
     {
         // ------------------- Variables ------------------- //
         // private static DynValue updateFunction;
@@ -36,7 +37,7 @@ namespace FarlandsCoreMod.FarlandsConsole
             if (gameObject == null)
                 return DynValue.Nil;
 
-            DynValue result = DynValue.NewTable(new Table(Manager.LUA));
+            DynValue result = DynValue.NewTable(new Table(LuaManager.LUA));
 
             //TODO hacer que se agreguen al luaGo los componentes que ya tenga
 
@@ -72,7 +73,7 @@ namespace FarlandsCoreMod.FarlandsConsole
                         break;
                     }
                 }
-                
+
                 if (_componentType == null || !typeof(Component).IsAssignableFrom(_componentType))
                 {
                     Debug.LogError("El tipo especificado no es un componente válido: " + _nombreComponente);
@@ -81,7 +82,7 @@ namespace FarlandsCoreMod.FarlandsConsole
 
                 Component _componente = gameObject.GetComponent(_componentType);
                 if (_componente == null)
-                   _componente = gameObject.AddComponent(_componentType);
+                    _componente = gameObject.AddComponent(_componentType);
 
 
                 // Añadir propiedades
@@ -113,11 +114,11 @@ namespace FarlandsCoreMod.FarlandsConsole
                                 value = propertyValue.String;
 
                             else if (propertyInfo.PropertyType == typeof(Sprite))
-                                value = SpriteLoader.FromRaw(Manager.GetFromMod(propertyValue.String));
-                            
+                                value = SpriteLoader.FromRaw(LuaManager.GetFromMod(propertyValue.String));
+
                             else
                                 value = Convert.ChangeType(propertyValue.ToObject(), propertyInfo.PropertyType);
-                            
+
                             propertyInfo.SetValue(_componente, value);
                         }
                     }
@@ -129,7 +130,7 @@ namespace FarlandsCoreMod.FarlandsConsole
                 {
                     // Debug.Log("Devolviendo propiedades");
 
-                    Table _resultado = new Table(Manager.LUA);
+                    Table _resultado = new Table(LuaManager.LUA);
                     foreach (var _i in _propiedades.Table.Pairs)
                     {
                         var propertyInfo = _componentType.GetProperty(_i.Key.String, BindingFlags.Public | BindingFlags.Instance);
@@ -142,7 +143,7 @@ namespace FarlandsCoreMod.FarlandsConsole
                         if (fieldInfo != null)
                         {
                             // cambiar DynValue.NewString(fieldInfo.GetValue(_componente).ToString()) por la función que debes hacer
-                            _resultado.Set(_i.Key.String, ConvertToLua(fieldInfo.GetValue(_componente))); 
+                            _resultado.Set(_i.Key.String, ConvertToLua(fieldInfo.GetValue(_componente)));
                         }
                     }
                     return DynValue.NewTable(_resultado);
@@ -164,7 +165,7 @@ namespace FarlandsCoreMod.FarlandsConsole
                 foreach (var meth in comp.GetType().GetMethods())
                 {
                     if (meth.Name == methodName && meth.GetParameters().Length == methodArgs.Length)
-                    { 
+                    {
                         methodInfo = meth;
                         break;
                     }
@@ -186,7 +187,7 @@ namespace FarlandsCoreMod.FarlandsConsole
 
                 object returnValue = methodInfo.Invoke(comp, invokeArgs);
 
-                return DynValue.FromObject(Manager.LUA, returnValue);
+                return DynValue.FromObject(LuaManager.LUA, returnValue);
             }));
 
             result.Table.Set("get_name", DynValue.NewCallback((ctx, args) =>
@@ -215,7 +216,7 @@ namespace FarlandsCoreMod.FarlandsConsole
             {
                 var position = gameObject.transform.position;
 
-                DynValue _r = DynValue.NewTable(new Table(Manager.LUA));
+                DynValue _r = DynValue.NewTable(new Table(LuaManager.LUA));
                 _r.Table.Set("x", DynValue.NewNumber(position.x));
                 _r.Table.Set("y", DynValue.NewNumber(position.y));
                 _r.Table.Set("z", DynValue.NewNumber(position.z));
@@ -280,7 +281,7 @@ namespace FarlandsCoreMod.FarlandsConsole
                 {
                     var path = args[0].String;
 
-                    var raw = Manager.GetFromMod(path);
+                    var raw = LuaManager.GetFromMod(path);
                     var texture = new Texture2D(1, 1);
 
                     texture.LoadImage(raw);
@@ -297,7 +298,7 @@ namespace FarlandsCoreMod.FarlandsConsole
                 {
                     var path = args[0].String;
 
-                    var raw = Manager.GetFromMod(path);
+                    var raw = LuaManager.GetFromMod(path);
                     var texture = new Texture2D(1, 1);
 
                     texture.LoadImage(raw);
@@ -310,7 +311,7 @@ namespace FarlandsCoreMod.FarlandsConsole
             }
             if (gameObject.TryGetComponent<SeedSelector>(out var seedSelector))
             {
-                result.Table.Set("seed_selector", DynValue.NewTable(new Table(Manager.LUA)));
+                result.Table.Set("seed_selector", DynValue.NewTable(new Table(LuaManager.LUA)));
                 var _seedSelector = result.Table.Get("seed_selector");
 
                 _seedSelector.Table.Set("get_instance", DynValue.NewCallback((ctx, args) =>
@@ -321,8 +322,8 @@ namespace FarlandsCoreMod.FarlandsConsole
                         foreach (EquippableData seedInstance in list)
                         {
                             if (Convert.ToInt32(args[0].Number) == seedInstance.itemID)
-                                return LuaGameObject.FromGameObject(seedInstance.instance);
-                            
+                                return FromGameObject(seedInstance.instance);
+
                         }
                     }
 
@@ -330,9 +331,9 @@ namespace FarlandsCoreMod.FarlandsConsole
                 }));
             }
 
-            if (!gameObject.TryGetComponent<scriptGenerico>(out var _Ficha))
+            if (!gameObject.TryGetComponent<LuaGameObjectComponent>(out var _Ficha))
             {
-                _Ficha = gameObject.AddComponent<scriptGenerico>();
+                _Ficha = gameObject.AddComponent<LuaGameObjectComponent>();
             }
             _Ficha.Result = result;
             result.Table.Set("set_update", DynValue.NewCallback((ctx, args) =>
@@ -346,7 +347,7 @@ namespace FarlandsCoreMod.FarlandsConsole
                 return DynValue.Void;
             }));
 
-            
+
 
             return result;
         }
@@ -403,7 +404,7 @@ namespace FarlandsCoreMod.FarlandsConsole
             else if (type == typeof(Vector2))
             {
                 Vector2 vector = (Vector2)csharpArg;
-                Table table = new Table(Manager.LUA);
+                Table table = new Table(LuaManager.LUA);
                 table.Set("x", DynValue.NewNumber(vector.x));
                 table.Set("y", DynValue.NewNumber(vector.y));
                 return DynValue.NewTable(table);
@@ -411,7 +412,7 @@ namespace FarlandsCoreMod.FarlandsConsole
             else if (type == typeof(Vector3))
             {
                 Vector3 vector = (Vector3)csharpArg;
-                Table table = new Table(Manager.LUA);
+                Table table = new Table(LuaManager.LUA);
                 table.Set("x", DynValue.NewNumber(vector.x));
                 table.Set("y", DynValue.NewNumber(vector.y));
                 table.Set("z", DynValue.NewNumber(vector.z));
@@ -419,7 +420,7 @@ namespace FarlandsCoreMod.FarlandsConsole
             }
             else
             {
-                return DynValue.FromObject(Manager.LUA, csharpArg);
+                return DynValue.FromObject(LuaManager.LUA, csharpArg);
             }
         }
 

@@ -1,7 +1,9 @@
 ﻿using BepInEx.Configuration;
 using Farlands.DataBase;
 using Farlands.Inventory;
+using Farlands.PlaceableObjectsSystem;
 using Farlands.PlantSystem;
+using Farlands.WorldResources;
 using FarlandsCoreMod.Attributes;
 using FarlandsCoreMod.Utiles;
 using HarmonyLib;
@@ -15,7 +17,7 @@ using UnityEngine;
 namespace FarlandsCoreMod.FarlandsItems
 {
     [Patcher]
-    public class Manager : IManager
+    public class FarlandsItemsManager : IManager
     {
         public int Index => 0;
         public static List<SeedData> seeds = new();
@@ -30,6 +32,18 @@ namespace FarlandsCoreMod.FarlandsItems
             FirstID = FarlandsCoreMod.AddConfig("FarlandsItems", "FirstID", "The first id for mod objects", 2000);
         }
 
+
+        #region Inventory Items
+        public static InventoryItem GetInventory(int id) => DB.GetInventoryItem(id);
+        public static InventoryItem GetInventory(string name)
+        {
+            foreach (var i in DB.inventoryItems)
+            {
+                if (i.itemIcon.texture.name == name) return i;
+            }
+
+            return null;
+        }
         public static int AddInventoryItem(InventoryItem item)
         {
             var id = GetNewItemID();
@@ -39,6 +53,33 @@ namespace FarlandsCoreMod.FarlandsItems
             DB.inventoryItems.Add(item);
 
             return id;
+        }
+        #endregion
+
+        #region Placeables
+        public static PlaceableScriptableObject GetPlaceable(int id) => DB.getPlaceablesData(id);
+        public static PlaceableScriptableObject GetPlaceable(string name)
+        {
+            foreach (var i in DB.placeables)
+            {
+                if (i.worldSprite.texture.name == name) return i;
+            }
+
+            return null;
+        }
+        #endregion
+
+        #region Plants
+        public static PlantScriptableObject GetPlant(int id) => DB.getPlantData(id);
+        // TODO cambiar a que vea el nombre de la textura
+        public static PlantScriptableObject GetPlant(string name)
+        {
+            foreach (var i in DB.plants)
+            {
+                if (i.name == name) return i;
+            }
+
+            return null;
         }
         public static int AddPlant(PlantScriptableObject item)
         {
@@ -50,6 +91,21 @@ namespace FarlandsCoreMod.FarlandsItems
 
             return id;
         }
+
+        #endregion
+
+        #region WoldResources
+        public static WorldResource GetWorldResource(int id) => DB.getWorldResourceData(id);
+        public static WorldResource GetWorldResource(string name)
+        {
+            foreach (var i in DB.worldResources)
+            {
+                if (i.resourceSprite.texture.name == name) return i;
+            }
+
+            return null;
+        }
+        #endregion
 
         public class SeedData
         { 
@@ -83,7 +139,7 @@ namespace FarlandsCoreMod.FarlandsItems
                 });
             }
 
-            FarlandsConsole.Manager.ExecuteEvent("inventory", "start");
+            FarlandsLua.LuaManager.ExecuteEvent("inventory", "start");
         }
     }
 }
