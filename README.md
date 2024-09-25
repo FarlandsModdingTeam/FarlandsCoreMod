@@ -35,6 +35,7 @@ SkipIntro = false
 # Default value: false
 QuitEarlyAccessScreen = false
 
+## If enable Unity logs will be visible in terminal
 # Setting type: Boolean
 # Default value: false
 UnityDebug = false
