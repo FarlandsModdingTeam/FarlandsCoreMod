@@ -17,7 +17,7 @@ using UnityEngine;
 namespace FarlandsCoreMod.FarlandsDialogue
 {
     [Patcher]
-    public class Manager: IManager
+    public class FarlandsDialogueManager: IManager
     {
         public static bool isSourcesLoaded = false;
         public static bool isDialoguesLoaded = false;
@@ -28,8 +28,12 @@ namespace FarlandsCoreMod.FarlandsDialogue
 
         public int Index => 0;
 
-        public static void AddSource(SourceJSON source) => addedSources.Add(source);
+        public static void AddSourcePreStart(SourceJSON source) => addedSources.Add(source);
+        public static void AddSourcePreStartFromBytes(byte[] raw) => AddSourcePreStart(SourceJSON.FromBytes(raw));
+
+        public static void AddSource(SourceJSON source) => source.LoadInMain();
         public static void AddSourceFromBytes(byte[] raw) => AddSource(SourceJSON.FromBytes(raw));
+
         private static void GetSources() => sources = [.. addedSources];
 
         public static void LoadSourceFromBytes(byte[] raw)

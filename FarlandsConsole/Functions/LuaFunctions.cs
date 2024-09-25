@@ -188,7 +188,7 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
             /// </summary>
             LuaManager.LUA.Globals["add_language"] = (string path) =>
             {
-                FarlandsDialogue.Manager.AddSourceFromBytes(LuaManager.GetFromMod(path));
+                FarlandsDialogue.FarlandsDialogueManager.AddSourcePreStartFromBytes(LuaManager.GetFromMod(path));
             };
             LuaManager.LUA.Globals["get_language"] = () =>
             {
@@ -405,7 +405,7 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
 
             LuaManager.LUA.Globals["translate_inventory_item"] = (int id, List<string> name, List<string> description) =>
             {
-                FarlandsDialogue.Manager.AddInventoryTranslation(id, name, description);
+                FarlandsDialogue.FarlandsDialogueManager.AddInventoryTranslation(id, name, description);
             };
 
             LuaManager.LUA.Globals["create_scene"] = (string name) =>

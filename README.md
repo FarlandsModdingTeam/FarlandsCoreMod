@@ -12,32 +12,45 @@ Estos son los pasos que debes hacer para instalar un mod
 4. Poner los mods en la carpeta *BepInEx/plugins* dela raíz del juego.
 5. Al volver a ejecutar la demo de Farlands el mod ya estará instalado.
    
-## FarlandsTextureMod
-FarlandsCoreMod permite la modificación de texturas procedentes de los objetos.
-Para ello lee los archivos .zip que se encuentran en la carpeta `BepInEx/plugins/FarlandsTextureMod`
-
-Para reemplazar una textura por otra debe crear un zip con las siguientes carpetas:
-- **Inventory**, aquellos que se muestran en el inventario
-- **Placeable**, aquellos que se sirven como decoración
-- `bajo revisión` **Plant**, las plantas
-- **World** , los recursos del mundo
-- **Other** , cualquier cosa que no cuadre con el resto. **ES MÁS LENTO QUE EL RESTO**
-
-dentro de estas carpetas estarán los archivos .png con el nombre de la textura que se quiere cambiar. Es importante que sea el nombre de la textura y no el del objeto
-
-## FarlandsDialogueMod
-FarlandsCoreMod  permite al usuario editar los diálogos que tiene el juego.
-Para ello lee los archivos .source.json que se encuentran en la carpeta `BepInEx/plugins/FarlandsDialogueMod`.
-[Repositorio de Traducciones]([https://github.com/MagincyanGames/FarlandsCoreMod/tree/ExampleMod](https://github.com/MagincyanGames/FarlandsDialogueMod/tree/Translation))
+## FarlandsLua
+Para simplificar varios aspectos a la hora de desarrollar mods simples, se está trabajando en agregar soporte para lua.
+[Documentación Lua](./Docs/Lua.md)
 
 ## Configuraciones
-Para configurar el mod, debes modificar el archivo `BepInEx/config/top.magincian.fcm.cfg`
+Para configurar el mod, debes modificar el archivo `BepInEx/config/top.magincian.fcm.cfg`.
+Aquí mostramos el archivo de configuración por defecto
+```ini
+## Settings file was created by plugin FarlandsCoreMod v0.1.3
+## Plugin GUID: top.magincian.fcm
 
-### General/Debug
-- SkipIntro `Boolean`: Si está activado no se reproducirá la introducción del juego
-- QuitEarlyAccessScreen `Boolean`: Si está activado se saltará la pantalla del EarlyAccess
+[Debug]
 
-### FarlandsDialogueMod
-- ExportDialogues `Boolean`: Si está activado se generará el archivo `BepInEx/plugins/FarlandsDialogueMod/export.json` que contiene todos los textos traducibles de Farlands
+## If true the intro will be skipped
+# Setting type: Boolean
+# Default value: false
+SkipIntro = true
 
-*Proyecto y documentación en desarrollo*
+## If true the Early Access Screen will be removed
+# Setting type: Boolean
+# Default value: false
+QuitEarlyAccessScreen = true
+
+# Setting type: Boolean
+# Default value: false
+UnityDebug = false
+
+[FarlandsDialogueMod]
+
+## If true, a export file will be created and will save all the dialogues
+# Setting type: Boolean
+# Default value: false
+ExportDialogues = false
+
+[FarlandsItems]
+
+## The first id for mod objects
+# Setting type: Int32
+# Default value: 2000
+FirstID = 2000
+
+```
