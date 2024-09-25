@@ -87,7 +87,7 @@ namespace FarlandsCoreMod.FarlandsLua
         // Método para inicializar el Manager
         public void Init()
         {
-            UnityDebug = FarlandsCoreMod.AddConfig("Debug", "UnityDebug", "", false);
+            UnityDebug = FarlandsCoreMod.AddConfig("Debug", "UnityDebug", "If enable Unity logs will be visible in terminal", false);
 
             FarlandsConsole.Functions.LuaFunctions.AddToLua();
 
