@@ -39,9 +39,11 @@ namespace FarlandsCoreMod.FarlandsConsole.Functions
 
             DynValue result = DynValue.NewTable(new Table(LuaManager.LUA));
 
-            //TODO hacer que se agreguen al luaGo los componentes que ya tenga
+            //TODO hacer que para acceder a los componentes se utilicen las funciones get y set
 
             // añadir componente
+
+            //TODO: Modificación completa de la lógica
             result.Table.Set("add_component", DynValue.NewCallback((ctx, args) =>
             {
                 if (args == null)
@@ -152,28 +154,58 @@ namespace FarlandsCoreMod.FarlandsConsole.Functions
                     return DynValue.Void;
 
             }));
+
+            result.Table.Set("get_field", DynValue.NewCallback((ctx, args) =>
+            {
+                // TODO
+
+                return DynValue.Nil;
+            }));
+            result.Table.Set("set_field", DynValue.NewCallback((ctx, args) =>
+            {
+               // TODO
+
+                return DynValue.Nil;
+            }));
+            result.Table.Set("set_property", DynValue.NewCallback((ctx, args) =>
+            {
+                // TODO
+
+                return DynValue.Nil;
+            }));
+            result.Table.Set("get_property", DynValue.NewCallback((ctx, args) =>
+            {
+                // TODO
+
+                return DynValue.Nil;
+            }));
+            /*
+             * Llama a una función de un componente
+             */
             result.Table.Set("call", DynValue.NewCallback((ctx, args) =>
             {
-                string componentName = args[0].String;
-                string methodName = args[1].String;
-                DynValue[] methodArgs = args.GetArray().Skip(2).ToArray();
+                string componentName = args[0].String; // Obtiene el nombre del componente
+                string methodName = args[1].String; // Obtiene el nombre del método
+                DynValue[] methodArgs = args.GetArray().Skip(2).ToArray(); // Obtiene el resto de argumentos de la función
 
-                var comp = gameObject.GetComponent(componentName);
+                var comp = gameObject.GetComponent(componentName); // Obtiene el componente
 
                 MethodInfo methodInfo = null;
 
-                foreach (var meth in comp.GetType().GetMethods())
+                foreach (var meth in comp.GetType().GetMethods()) // Obtiene el método dado su nombre
                 {
-                    if (meth.Name == methodName && meth.GetParameters().Length == methodArgs.Length)
+                    if (meth.Name == methodName && meth.GetParameters().Length == methodArgs.Length) //TODO: hay problemas si hay 2 funciones de mismo nombre y misma cantidad de parámetros
                     {
                         methodInfo = meth;
                         break;
                     }
                 }
 
+                if(methodInfo == null) return DynValue.Nil; // Si no se ha encontrado el método entonces devuelve NIL
+
                 ParameterInfo[] parameters = methodInfo.GetParameters();
                 object[] invokeArgs = new object[parameters.Length];
-                for (int i = 0; i < parameters.Length; i++)
+                for (int i = 0; i < parameters.Length; i++) // Carga todos los argumentos
                 {
                     if (i < methodArgs.Length)
                     {
@@ -185,7 +217,7 @@ namespace FarlandsCoreMod.FarlandsConsole.Functions
                     }
                 }
 
-                object returnValue = methodInfo.Invoke(comp, invokeArgs);
+                object returnValue = methodInfo.Invoke(comp, invokeArgs); // Llama a la función
 
                 return DynValue.FromObject(LuaManager.LUA, returnValue);
             }));
@@ -259,21 +291,6 @@ namespace FarlandsCoreMod.FarlandsConsole.Functions
                 gameObject.SetActive(!gameObject.activeSelf);
                 return DynValue.Void;
             }));
-
-            //result.Table.Set("add_component", DynValue.NewCallback((ctx, args) =>
-            //{
-            //    if (args != null || args.Count < 1)
-            //        return DynValue.Void;
-
-            //    foreach (DynValue arg in args.GetArray())
-            //    { 
-            //        if(arg.String == "image") gameObject.AddComponent<Image>();
-            //        if(arg.String == "sprite") gameObject.AddComponent<SpriteRenderer>();
-            //        if (arg.String == "camera") gameObject.AddComponent<Camera>();
-            //    }
-
-            //    return DynValue.Void;
-            //}));
 
             if (gameObject.TryGetComponent<SpriteRenderer>(out var spriteRenderer))
             {
