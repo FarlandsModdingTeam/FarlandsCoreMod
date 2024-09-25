@@ -28,12 +28,12 @@ Aquí mostramos el archivo de configuración por defecto
 ## If true the intro will be skipped
 # Setting type: Boolean
 # Default value: false
-SkipIntro = true
+SkipIntro = false
 
 ## If true the Early Access Screen will be removed
 # Setting type: Boolean
 # Default value: false
-QuitEarlyAccessScreen = true
+QuitEarlyAccessScreen = false
 
 # Setting type: Boolean
 # Default value: false
