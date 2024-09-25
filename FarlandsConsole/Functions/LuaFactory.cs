@@ -20,7 +20,7 @@ using UnityEngine.UI;
 
 namespace FarlandsCoreMod.FarlandsConsole.Functions
 {
-    public static class LuaGameObjectFactory
+    public static class LuaFactory
     {
         // ------------------- Variables ------------------- //
         // private static DynValue updateFunction;
@@ -32,6 +32,58 @@ namespace FarlandsCoreMod.FarlandsConsole.Functions
          * Leer
          * Eliminar
         */
+        public static DynValue FromObject(object @object)
+        {
+            DynValue result = DynValue.NewTable(new Table(LuaManager.LUA));
+
+            result.Table.Set("get_field", DynValue.NewCallback((ctx, args) =>
+            {
+                // TODO
+
+                return DynValue.Nil;
+            }));
+            result.Table.Set("set_field", DynValue.NewCallback((ctx, args) =>
+            {
+                // TODO
+
+                return DynValue.Nil;
+            }));
+            result.Table.Set("set_property", DynValue.NewCallback((ctx, args) =>
+            {
+                // TODO
+
+                return DynValue.Nil;
+            }));
+            result.Table.Set("get_property", DynValue.NewCallback((ctx, args) =>
+            {
+                // TODO
+
+                return DynValue.Nil;
+            }));
+            result.Table.Set("call", DynValue.NewCallback((ctx, args) =>
+            {
+                // TODO
+
+                return DynValue.Nil;
+            }));
+
+            return result;
+        }
+
+        public static DynValue FromComponent(Component component)
+        {
+            DynValue result = DynValue.NewTable(new Table(LuaManager.LUA));
+            result = FromObject(result);
+
+            // Devuelve el gameObject de este componente
+            result.Table.Set("game_object", DynValue.NewCallback((ctx, args) =>
+            {
+                return FromGameObject(component.gameObject);
+            }));
+
+            return result;
+        }
+
         public static DynValue FromGameObject(GameObject gameObject)
         {
             if (gameObject == null)
@@ -39,18 +91,89 @@ namespace FarlandsCoreMod.FarlandsConsole.Functions
 
             DynValue result = DynValue.NewTable(new Table(LuaManager.LUA));
 
-            //TODO hacer que para acceder a los componentes se utilicen las funciones get y set
+            // Sirve para obtener el nombre del GameObject
+            result.Table.Set("get_name", DynValue.NewCallback((ctx, args) =>
+            {
+                return DynValue.NewString(gameObject.name);
+            }));
 
-            // añadir componente
+            // Sirve para obtener la posición del GameObject
+            result.Table.Set("get_position", DynValue.NewCallback((ctx, args) =>
+            {
+                var position = gameObject.transform.position;
+
+                DynValue _r = DynValue.NewTable(new Table(LuaManager.LUA));
+                _r.Table.Set("x", DynValue.NewNumber(position.x));
+                _r.Table.Set("y", DynValue.NewNumber(position.y));
+                _r.Table.Set("z", DynValue.NewNumber(position.z));
+
+                return _r;
+            }));
+
+            // Sirve para modificar la posición del GameObject (x, y, z)
+            result.Table.Set("set_position", DynValue.NewCallback((ctx, args) =>
+            {
+                if (args.Count < 1) return DynValue.Void;
+                var nameObjects = args.GetArray().Select(x => x.String);
+
+                var position = gameObject.transform.position;
+                // Modificar el transform
+
+                var addition = new Vector3(
+                    args.Count >= 1 ? (float)args[0].Number : 0f, // x
+                    args.Count >= 2 ? (float)args[1].Number : 0f, // y
+                    args.Count >= 3 ? (float)args[2].Number : 0f); // z
+
+                gameObject.transform.position = addition;
+
+                return DynValue.Void;
+            }));
+
+            // Sirve para agregar posición al GameObject (x, y, z)
+            result.Table.Set("add_position", DynValue.NewCallback((ctx, args) =>
+            {
+                if (args.Count < 1) return DynValue.Void;
+                var nameObjects = args.GetArray().Select(x => x.String);
+
+                var position = gameObject.transform.position;
+                // Modificar el transform
+
+                var addition = new Vector3(
+                    args.Count >= 1 ? (float)args[0].Number : 0f,
+                    args.Count >= 2 ? (float)args[1].Number : 0f,
+                    args.Count >= 3 ? (float)args[2].Number : 0f);
+
+                Debug.Log(gameObject.transform.position);
+                gameObject.transform.position += addition;
+                Debug.Log(gameObject.transform.position);
+                return DynValue.Void;
+            }));
+
+            // Cambia el tamaño de un GameObject (x,y,z)
+            result.Table.Set("set_scale", DynValue.NewCallback((ctx, args) =>
+            {
+
+                if (args.Count == 1) gameObject.transform.localScale = new((float)args[0].Number, (float)args[0].Number, 1);
+                else if (args.Count == 2) gameObject.transform.localScale = new((float)args[0].Number, (float)args[1].Number, 1);
+                else if (args.Count == 3) gameObject.transform.localScale = new((float)args[0].Number, (float)args[1].Number, (float)args[2].Number);
+
+                return DynValue.Void;
+            }));
+
+            // Hace que el estado de activación de un GameObject cambie de valor
+            result.Table.Set("toggle_active", DynValue.NewCallback((ctx, args) =>
+            {
+                gameObject.SetActive(!gameObject.activeSelf);
+                return DynValue.Void;
+            }));
 
             //TODO: Modificación completa de la lógica
-            result.Table.Set("add_component", DynValue.NewCallback((ctx, args) =>
+            result.Table.Set("get_component", DynValue.NewCallback((ctx, args) =>
             {
                 if (args == null)
                     return DynValue.Void;
 
-
-                Debug.Log("Usted ah ejecutado 'add_component' sin plomo 95");
+                Debug.Log("Usted ah ejecutado 'get_component' sin plomo 95");
 
                 string _nombreComponente = ""; // = args[0].String;
                 DynValue _propiedades = null; // = args.Count > 1 ? args[1] : null;
@@ -65,7 +188,6 @@ namespace FarlandsCoreMod.FarlandsConsole.Functions
                     if (arg.Type == DataType.Table)
                         _propiedades = arg;
                 }
-
 
                 foreach (var t in AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetTypes()))
                 {
@@ -86,211 +208,12 @@ namespace FarlandsCoreMod.FarlandsConsole.Functions
                 if (_componente == null)
                     _componente = gameObject.AddComponent(_componentType);
 
-
-                // Añadir propiedades
-                if (_propiedades != null)
-                {
-                    foreach (var _Pares in _propiedades.Table.Pairs)
-                    {
-                        string propertyName = _Pares.Key.String;
-                        DynValue propertyValue = _Pares.Value;
-
-                        // Agregar los fields
-                        // Busca una propiedad con propertyName en el componente (Saca la pripiedad)
-                        PropertyInfo propertyInfo = _componentType.GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance);
-                        if (propertyInfo != null && propertyInfo.CanWrite && propertyValue != null)
-                        {
-                            object value = null;
-
-
-                            if (propertyInfo.PropertyType == typeof(int))
-                                value = (int)propertyValue.Number;
-
-                            else if (propertyInfo.PropertyType == typeof(float))
-                                value = (float)propertyValue.Number;
-
-                            else if (propertyInfo.PropertyType == typeof(bool))
-                                value = propertyValue.Boolean;
-
-                            else if (propertyInfo.PropertyType == typeof(string))
-                                value = propertyValue.String;
-
-                            else if (propertyInfo.PropertyType == typeof(Sprite))
-                                value = SpriteLoader.FromRaw(LuaManager.GetFromMod(propertyValue.String));
-
-                            else
-                                value = Convert.ChangeType(propertyValue.ToObject(), propertyInfo.PropertyType);
-
-                            propertyInfo.SetValue(_componente, value);
-                        }
-                    }
-                }
-
-
-                // Funciona (se supone)
-                if (_propiedades != null)
-                {
-                    // Debug.Log("Devolviendo propiedades");
-
-                    Table _resultado = new Table(LuaManager.LUA);
-                    foreach (var _i in _propiedades.Table.Pairs)
-                    {
-                        var propertyInfo = _componentType.GetProperty(_i.Key.String, BindingFlags.Public | BindingFlags.Instance);
-                        if (propertyInfo != null)
-                        {
-                            _resultado.Set(_i.Key.String, DynValue.NewString(propertyInfo.GetValue(_componente).ToString()));
-                        }
-
-                        var fieldInfo = _componentType.GetField(_i.Key.String, BindingFlags.Public | BindingFlags.Instance);
-                        if (fieldInfo != null)
-                        {
-                            // cambiar DynValue.NewString(fieldInfo.GetValue(_componente).ToString()) por la función que debes hacer
-                            _resultado.Set(_i.Key.String, ConvertToLua(fieldInfo.GetValue(_componente)));
-                        }
-                    }
-                    return DynValue.NewTable(_resultado);
-                }
-                else
-                    return DynValue.Void;
+                return FromComponent(_componente);
 
             }));
 
-            result.Table.Set("get_field", DynValue.NewCallback((ctx, args) =>
-            {
-                // TODO
 
-                return DynValue.Nil;
-            }));
-            result.Table.Set("set_field", DynValue.NewCallback((ctx, args) =>
-            {
-               // TODO
-
-                return DynValue.Nil;
-            }));
-            result.Table.Set("set_property", DynValue.NewCallback((ctx, args) =>
-            {
-                // TODO
-
-                return DynValue.Nil;
-            }));
-            result.Table.Set("get_property", DynValue.NewCallback((ctx, args) =>
-            {
-                // TODO
-
-                return DynValue.Nil;
-            }));
-            /*
-             * Llama a una función de un componente
-             */
-            result.Table.Set("call", DynValue.NewCallback((ctx, args) =>
-            {
-                string componentName = args[0].String; // Obtiene el nombre del componente
-                string methodName = args[1].String; // Obtiene el nombre del método
-                DynValue[] methodArgs = args.GetArray().Skip(2).ToArray(); // Obtiene el resto de argumentos de la función
-
-                var comp = gameObject.GetComponent(componentName); // Obtiene el componente
-
-                MethodInfo methodInfo = null;
-
-                foreach (var meth in comp.GetType().GetMethods()) // Obtiene el método dado su nombre
-                {
-                    if (meth.Name == methodName && meth.GetParameters().Length == methodArgs.Length) //TODO: hay problemas si hay 2 funciones de mismo nombre y misma cantidad de parámetros
-                    {
-                        methodInfo = meth;
-                        break;
-                    }
-                }
-
-                if(methodInfo == null) return DynValue.Nil; // Si no se ha encontrado el método entonces devuelve NIL
-
-                ParameterInfo[] parameters = methodInfo.GetParameters();
-                object[] invokeArgs = new object[parameters.Length];
-                for (int i = 0; i < parameters.Length; i++) // Carga todos los argumentos
-                {
-                    if (i < methodArgs.Length)
-                    {
-                        invokeArgs[i] = ConvertLuaArgumentToCSharp(methodArgs[i], parameters[i].ParameterType);
-                    }
-                    else
-                    {
-                        invokeArgs[i] = Type.Missing; // Valores por defecto si no hay suficientes argumentos
-                    }
-                }
-
-                object returnValue = methodInfo.Invoke(comp, invokeArgs); // Llama a la función
-
-                return DynValue.FromObject(LuaManager.LUA, returnValue);
-            }));
-
-            result.Table.Set("get_name", DynValue.NewCallback((ctx, args) =>
-            {
-                return DynValue.NewString(gameObject.name);
-            }));
-            // X, Y , Z
-            result.Table.Set("set_position", DynValue.NewCallback((ctx, args) =>
-            {
-                if (args.Count < 1) return DynValue.Void;
-                var nameObjects = args.GetArray().Select(x => x.String);
-
-                var position = gameObject.transform.position;
-                // Modificar el transform
-
-                var addition = new Vector3(
-                    args.Count >= 1 ? (float)args[0].Number : 0f,
-                    args.Count >= 2 ? (float)args[1].Number : 0f,
-                    args.Count >= 3 ? (float)args[2].Number : 0f);
-
-                gameObject.transform.position = addition;
-
-                return DynValue.Void;
-            }));
-            result.Table.Set("get_position", DynValue.NewCallback((ctx, args) =>
-            {
-                var position = gameObject.transform.position;
-
-                DynValue _r = DynValue.NewTable(new Table(LuaManager.LUA));
-                _r.Table.Set("x", DynValue.NewNumber(position.x));
-                _r.Table.Set("y", DynValue.NewNumber(position.y));
-                _r.Table.Set("z", DynValue.NewNumber(position.z));
-
-                return _r;
-            }));
-
-            // X, Y , Z
-            result.Table.Set("add_position", DynValue.NewCallback((ctx, args) =>
-            {
-                if (args.Count < 1) return DynValue.Void;
-                var nameObjects = args.GetArray().Select(x => x.String);
-
-                var position = gameObject.transform.position;
-                // Modificar el transform
-
-                var addition = new Vector3(
-                    args.Count >= 1 ? (float)args[0].Number : 0f,
-                    args.Count >= 2 ? (float)args[1].Number : 0f,
-                    args.Count >= 3 ? (float)args[2].Number : 0f);
-
-                Debug.Log(gameObject.transform.position);
-                gameObject.transform.position += addition;
-                Debug.Log(gameObject.transform.position);
-                return DynValue.Void;
-            }));
-
-            result.Table.Set("set_scale", DynValue.NewCallback((ctx, args) =>
-            {
-
-                if (args.Count == 1) gameObject.transform.localScale = new((float)args[0].Number, (float)args[0].Number, 1);
-                else if (args.Count == 2) gameObject.transform.localScale = new((float)args[0].Number, (float)args[1].Number, 1);
-                else if (args.Count == 3) gameObject.transform.localScale = new((float)args[0].Number, (float)args[1].Number, (float)args[2].Number);
-
-                return DynValue.Void;
-            }));
-
-            result.Table.Set("toggle_active", DynValue.NewCallback((ctx, args) =>
-            {
-                gameObject.SetActive(!gameObject.activeSelf);
-                return DynValue.Void;
-            }));
+            // Funciones específicas
 
             if (gameObject.TryGetComponent<SpriteRenderer>(out var spriteRenderer))
             {
@@ -348,6 +271,8 @@ namespace FarlandsCoreMod.FarlandsConsole.Functions
                 }));
             }
 
+            // Definicion para start y update
+
             if (!gameObject.TryGetComponent<LuaGameObjectComponent>(out var _Ficha))
             {
                 _Ficha = gameObject.AddComponent<LuaGameObjectComponent>();
@@ -364,12 +289,8 @@ namespace FarlandsCoreMod.FarlandsConsole.Functions
                 return DynValue.Void;
             }));
 
-
-
             return result;
         }
-
-
 
         // ConvertLuaArgumentToCSharp
         private static object ConvertLuaArgumentToCSharp(DynValue luaArg, Type targetType)

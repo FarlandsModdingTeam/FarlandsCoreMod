@@ -234,7 +234,7 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                     }
                 }
                 if (notFound) return DynValue.Nil;
-                return LuaGameObjectFactory.FromGameObject(previous);
+                return LuaFactory.FromGameObject(previous);
             });
 
             LuaManager.LUA.Globals["find_object"] = DynValue.NewCallback((ctx, args) =>
@@ -244,11 +244,11 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 if (args.Count == 1)
                 {
                     var go = GetAllGameObjectsInScene(SceneManager.GetActiveScene()).First(x => x.name == args[0].String);
-                    return LuaGameObjectFactory.FromGameObject(go);
+                    return LuaFactory.FromGameObject(go);
                 }
 
                 var gameObject = GetAllGameObjectsInScene(SceneManager.GetSceneByName(args[1].String)).First(x => x.name == args[0].String);
-                return LuaGameObjectFactory.FromGameObject(gameObject);
+                return LuaFactory.FromGameObject(gameObject);
             });
 
 
@@ -288,7 +288,7 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
             {
                 var go = new GameObject(name);
                 go.AddComponent<LuaGameObjectComponent>();
-                return LuaGameObjectFactory.FromGameObject(go);
+                return LuaFactory.FromGameObject(go);
             };
 
             LuaManager.LUA.Globals["create_inventory_item"] = (string name, string itemType, string spritePath, int buyPrice, int sellPrice, bool canBeStacked, bool canBeDestroyed, float matterPercent) =>
