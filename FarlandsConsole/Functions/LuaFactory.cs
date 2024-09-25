@@ -90,6 +90,7 @@ namespace FarlandsCoreMod.FarlandsConsole.Functions
                 return DynValue.Nil;
 
             DynValue result = DynValue.NewTable(new Table(LuaManager.LUA));
+            result = FromObject(result);
 
             // Sirve para obtener el nombre del GameObject
             result.Table.Set("get_name", DynValue.NewCallback((ctx, args) =>
