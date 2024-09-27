@@ -24,10 +24,23 @@ Crea y devuelve un nuevo objeto con el nombre indicado
 ### config(section, key, default, description)
 Agrega una configuración
 
-### create_inventory_item
+### create_inventory_item(item)
 Crea un nuevo item para inventarios
-Parametros: (name, itemType, spritePath, buyPrice, sellPrice, canBeStacked, canBeDestroyed, matterPercent)
-
+Parametros: {name, itemType, spritePath, buyPrice, sellPrice, canBeStacked, canBeDestroyed, matterPercent}
+```lua
+item = {
+	name = , -- nombre 
+	
+	-- puede tomar los siguientes valores 'RESOURCE', 'TOOL', 'SEED', 'CRAFTING', 'FISH', 'INSECT', 'PLACEABLE'
+	type = , -- tipo
+	sprite = , -- ruta del sprite
+	buy_price = , -- precio de compra
+	sell_price = , -- precio de venta
+	stackable = , -- si puede acumularse en un único slot de inventario
+	destroyable = , -- si puede ser destruido
+	matter_percent = , cantidad de combustible que le da a la nave
+}
+```
 ### create_plant
 Crea un nuevo item para inventarios
 Parametros: (name, daysForDeath, daysForStage, growSeason, resources, seedSprite, s1Sprite, s2Sprite, s3Sprite, s4Sprite, s5Sprite)

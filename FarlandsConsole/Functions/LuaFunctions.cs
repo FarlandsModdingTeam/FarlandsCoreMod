@@ -291,20 +291,30 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 return LuaFactory.FromGameObject(go);
             };
 
-            LuaManager.LUA.Globals["create_inventory_item"] = (string name, string itemType, string spritePath, int buyPrice, int sellPrice, bool canBeStacked, bool canBeDestroyed, float matterPercent) =>
+            LuaManager.LUA.Globals["create_inventory_item"] = (DynValue args) =>
             {
+                // string name, string itemType, string spritePath, int buyPrice, int sellPrice, bool canBeStacked, bool canBeDestroyed, float matterPercent
+
+                string name = args.Table.Get("name").String;
+                string itemType = args.Table.Get("type").String.ToUpper();
+                string spritePath = args.Table.Get("sprite").String;
+                int buyPrice = Convert.ToInt32(args.Table.Get("buy_price").Number);
+                int sellPrice = Convert.ToInt32(args.Table.Get("sell_price").Number);
+                bool canBeStacked = args.Table.Get("stackeable").Boolean;
+                bool canBeDestroyed = args.Table.Get("destroyable").Boolean;
+                float matterPercent = Convert.ToSingle(args.Table.Get("matter_percent").Number);
 
                 var sprite = SpriteLoader.FromRaw(LuaManager.GetFromMod(spritePath));
 
                 var type = InventoryItem.ItemType.Resource;
 
-                if (itemType.ToUpper() == "RESOURCE") type = InventoryItem.ItemType.Resource;
-                else if (itemType.ToUpper() == "TOOL") type = InventoryItem.ItemType.Tool;
-                else if (itemType.ToUpper() == "SEED") type = InventoryItem.ItemType.Seed;
-                else if (itemType.ToUpper() == "CRAFTING") type = InventoryItem.ItemType.Crafting;
-                else if (itemType.ToUpper() == "FISH") type = InventoryItem.ItemType.Fish;
-                else if (itemType.ToUpper() == "INSECT") type = InventoryItem.ItemType.Insect;
-                else if (itemType.ToUpper() == "PLACEABLE") type = InventoryItem.ItemType.Placeable;
+                if (itemType == "RESOURCE") type = InventoryItem.ItemType.Resource;
+                else if (itemType == "TOOL") type = InventoryItem.ItemType.Tool;
+                else if (itemType == "SEED") type = InventoryItem.ItemType.Seed;
+                else if (itemType == "CRAFTING") type = InventoryItem.ItemType.Crafting;
+                else if (itemType == "FISH") type = InventoryItem.ItemType.Fish;
+                else if (itemType == "INSECT") type = InventoryItem.ItemType.Insect;
+                else if (itemType == "PLACEABLE") type = InventoryItem.ItemType.Placeable;
                 else type = InventoryItem.ItemType.TreeSeed;
 
                 return FarlandsItems.FarlandsItemsManager.AddInventoryItem(new()
