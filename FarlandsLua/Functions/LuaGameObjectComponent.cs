@@ -6,7 +6,7 @@ using System.Text;
 using UnityEngine;
 using static UnityEngine.LightProbeProxyVolume;
 
-namespace FarlandsCoreMod.FarlandsConsole.Functions
+namespace FarlandsCoreMod.FarlandsLua.Functions
 {
     public class LuaGameObjectComponent : MonoBehaviour
     {

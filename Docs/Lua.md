@@ -43,8 +43,18 @@ item = {
 ```
 ### create_plant
 Crea un nuevo item para inventarios
-Parametros: (name, daysForDeath, daysForStage, growSeason, resources, seedSprite, s1Sprite, s2Sprite, s3Sprite, s4Sprite, s5Sprite)
-
+Parametros: {name, days_for_death, days_for_stage, grow_season, resources, seed, stage_1, stage_2, stage_3, stage_4, stage_5}
+```lua
+item = {
+	name = , -- nombre 
+	days_for_death = , -- dias que puede sobrevivir sin regar
+	days_for_stage= , -- dias para cambio de estado
+	grow_season = , -- temporada en la que crece (tenemos que comprobar los valores)
+	resources = , -- recursos que puede dar
+	seed = , -- sprite para la semilla
+	stage_n = , -- donde n es un número del 1 al 5, sprite para el estado correspondiente
+}
+```
 ### create_seed(inventoryId, plantsId)
 Crea una semilla asignando un objeto de inventario a una lista de plantas
 

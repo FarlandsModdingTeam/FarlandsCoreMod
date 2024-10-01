@@ -22,7 +22,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Debug = UnityEngine.Debug;
 
-namespace FarlandsCoreMod.FarlandsConsole.Functions
+namespace FarlandsCoreMod.FarlandsLua.Functions
 {
     public static class LuaFunctions
     {
@@ -129,7 +129,7 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 if (scene.Type == DataType.String)
                     SceneManager.LoadScene(scene.String);
                 else if (scene.Type == DataType.Number)
-                    SceneManager.LoadScene(Convert.ToInt32(scene.Number));
+                    SceneManager.LoadScene(scene.Integer());
             };
 
             LuaManager.LUA.Globals["print_scene"] = () =>
@@ -256,13 +256,14 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
             LuaManager.LUA.Globals["add_item"] = (DynValue _id, int _cantidad = 1) =>
             {
                 if (_id.Type == DataType.Number)
-                    UnityEngine.Object.FindObjectOfType<InventorySystem>().AddItemByID(Convert.ToInt32(_id.Number), _cantidad);
+                    UnityEngine.Object.FindObjectOfType<InventorySystem>().AddItemByID(_id.Integer(), _cantidad);
                 else
                 {
                     if (_id.String.StartsWith("0x"))
                     {
                         UnityEngine.Object.FindObjectOfType<InventorySystem>().AddItemByID(
-                            Convert.ToInt32(_id.String.Replace("0x", ""), 16), _cantidad);
+                            Convert.ToInt32(_id.String.Replace("0x", ""), 16),
+                            _cantidad);
                     }
                     else
                     {
@@ -294,16 +295,16 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
 
             LuaManager.LUA.Globals["create_inventory_item"] = (DynValue args) =>
             {
-                // string name, string itemType, string spritePath, int buyPrice, int sellPrice, bool canBeStacked, bool canBeDestroyed, float matterPercent
+                //TODO Este método puede considerarse como un ToCsharp
 
                 string name = args.Table.Get("name").String;
                 string itemType = args.Table.Get("type").String.ToUpper();
                 string spritePath = args.Table.Get("sprite").String;
-                int buyPrice = Convert.ToInt32(args.Table.Get("buy_price").Number);
-                int sellPrice = Convert.ToInt32(args.Table.Get("sell_price").Number);
+                int buyPrice = args.Table.Get("buy_price").Integer();
+                int sellPrice = args.Table.Get("sell_price").Integer();
                 bool canBeStacked = args.Table.Get("stackeable").Boolean;
                 bool canBeDestroyed = args.Table.Get("destroyable").Boolean;
-                float matterPercent = Convert.ToSingle(args.Table.Get("matter_percent").Number);
+                float matterPercent = args.Table.Get("matter_percent").Float();
 
                 var sprite = SpriteLoader.FromRaw(LuaManager.GetFromMod(spritePath));
 
@@ -333,10 +334,20 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
 
 
             //TODO agregar múltiple
-            LuaManager.LUA.Globals["create_plant"] = (string name, int daysForDeath, int daysForStage, int growSeason,
-                 DynValue resources, string seedSprite, string s1Sprite,
-                 string s2Sprite, string s3Sprite, string s4Sprite, string s5Sprite) =>
+            LuaManager.LUA.Globals["create_plant"] = (DynValue args) =>
             {
+                //TODO Este método puede considerarse como un ToCsharp
+                string name = args.Table.Get("name").String;
+                int daysForDeath = args.Table.Get("days_for_death").Integer();
+                int daysForStage = args.Table.Get("days_for_stage").Integer(); 
+                int growSeason = args.Table.Get("grow_season").Integer();
+                DynValue resources = args.Table.Get("resources"); 
+                string seedSprite = args.Table.Get("seed").String;
+                string s1Sprite = args.Table.Get("stage_1").String;
+                string s2Sprite = args.Table.Get("stage_2").String;
+                string s3Sprite = args.Table.Get("stage_3").String;
+                string s4Sprite = args.Table.Get("stage_4").String;
+                string s5Sprite = args.Table.Get("stage_5").String;
 
                 var plant = new PlantScriptableObject();
                 plant.plantName = name;
@@ -350,7 +361,7 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 if (resources.Type == DataType.Number)
                 {
                     var res = new DBResourceProbability();
-                    res.itemID = Convert.ToInt32(resources.Number);
+                    res.itemID = resources.Integer();
                     res.item = FarlandsItems.FarlandsItemsManager.DB.GetInventoryItem(res.itemID);
                     res.probabilityList = [new() { amountToSpawn = 1, probability = 100 }];
                     _resources.Add(res);
