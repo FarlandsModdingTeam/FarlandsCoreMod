@@ -490,7 +490,7 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 if (v.Get("z") != DynValue.Nil) z = Convert.ToSingle(v.Get("z").Number);
 
                 var vector = new Vector3(x, y, z).normalized;
-                return LuaFactory.ConvertToLua(vector);
+                return LuaConverter.ToLua(vector);
             }));
         }
         static List<GameObject> GetAllGameObjectsInScene(Scene scene)
