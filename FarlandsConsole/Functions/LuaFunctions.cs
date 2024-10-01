@@ -9,6 +9,7 @@ using FarlandsCoreMod.Utiles;
 using FarlandsCoreMod.Utiles.Loaders;
 using I2.Loc;
 using JanduSoft;
+using Language.Lua;
 using MoonSharp.Interpreter;
 using PixelCrushers.DialogueSystem;
 using System;
@@ -27,7 +28,7 @@ namespace FarlandsCoreMod.FarlandsConsole.Functions
     {
         public static void AddToLua()
         {
-            //TODO agergar forma para ampliar la cámara
+            mathsFuncions();
 
             LuaManager.LUA.Globals["MOD"] = (string tag) =>
             {
@@ -463,7 +464,24 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
             };
 
         }
+        private static void mathsFuncions()
+        {
+            var math = LuaManager.LUA.Globals.Get("math").Table;
+            math.Set("normalize", DynValue.NewCallback((ctx, args) =>
+            {
+                if(args.Count < 0) return DynValue.Nil;
+                var v = args[0].Table;
+                float x = 0f;
+                float y = 0f;
+                float z = 0f;
+                if (v.Get("x") != DynValue.Nil) x = Convert.ToSingle(v.Get("x").Number);
+                if (v.Get("y") != DynValue.Nil) y = Convert.ToSingle(v.Get("y").Number);
+                if (v.Get("z") != DynValue.Nil) z = Convert.ToSingle(v.Get("z").Number);
 
+                var vector = new Vector3(x, y, z).normalized;
+                return LuaFactory.ConvertToLua(vector);
+            }));
+        }
         static List<GameObject> GetAllGameObjectsInScene(Scene scene)
         {
             // Obtén todos los objetos raíz de la escena

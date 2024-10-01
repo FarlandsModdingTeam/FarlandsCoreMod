@@ -1,4 +1,4 @@
-## Funciones LUA
+## Funciones Principales
 
 ### MOD(name)
 Inicia el mod con el nombre indicado, debe ser ejecutado en la primera línea
@@ -86,6 +86,12 @@ Desactiva la interfaz de usuario **OCASIONA ERRORES**
 
 ### translate_inventory_item(id, names, descriptions)
 Agrega traducciones a un inventory items
+
+## Funciones matemáticas
+Funciones que tienen que ver con matemáticas, estas funciones se encuentran detro de math, por ejemplo
+`math.normalize(vector)`
+### normalize(vector)
+Normaliza un vector
 
 ## Lua GameObject
 

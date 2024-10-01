@@ -2,6 +2,7 @@
 using FarlandsCoreMod.FarlandsLua;
 using FarlandsCoreMod.Utiles;
 using FarlandsCoreMod.Utiles.Loaders;
+using Language.Lua;
 using MoonSharp.Interpreter;
 using PixelCrushers.DialogueSystem;
 using PixelCrushers.DialogueSystem.ChatMapper;
@@ -43,14 +44,15 @@ namespace FarlandsCoreMod.FarlandsConsole.Functions
 
                 Type type = @object.GetType();
                 string fieldName = args[0].String;
+                bool isPublic = args.Count > 1 ? args[1].Boolean : true;
 
                 if (fieldName == null) return DynValue.Nil;
 
-                var field = type.GetField(fieldName);
+                var field = type.GetField(fieldName, BindingFlags.Instance | (isPublic ? BindingFlags.Public : BindingFlags.NonPublic));
                 
                 if(field != null) return ConvertToLua(field.GetValue(@object));
 
-                var property = type.GetProperty(fieldName);
+                var property = type.GetProperty(fieldName, BindingFlags.Instance | (isPublic ? BindingFlags.Public : BindingFlags.NonPublic));
 
                 if(property != null) return ConvertToLua(property.GetValue(@object));
 
@@ -61,11 +63,12 @@ namespace FarlandsCoreMod.FarlandsConsole.Functions
                 Type type = @object.GetType();
                 string fieldName = args[0].String;
                 var val = ConvertLuaToCSharp(args[1]);
+                bool isPublic = args.Count > 2 ? args[2].Boolean : true;
 
                 if (fieldName == null) 
                     return DynValue.Void;
 
-                var field = type.GetField(fieldName);
+                var field = type.GetField(fieldName, BindingFlags.Instance | (isPublic ? BindingFlags.Public : BindingFlags.NonPublic));
 
                 if (field != null)
                 {
@@ -73,13 +76,13 @@ namespace FarlandsCoreMod.FarlandsConsole.Functions
                 }
                 else 
                 {
-                    var property = type.GetProperty(fieldName);
+                    var property = type.GetProperty(fieldName, BindingFlags.Instance | (isPublic ? BindingFlags.Public : BindingFlags.NonPublic));
 
                     if (property != null)
                     {
                         property.SetValue(@object, val);
                     } 
-                }
+                } 
 
                 return DynValue.Void;
             }));
@@ -188,12 +191,7 @@ namespace FarlandsCoreMod.FarlandsConsole.Functions
             {
                 var position = gameObject.transform.position;
 
-                DynValue _r = DynValue.NewTable(new Table(LuaManager.LUA));
-                _r.Table.Set("x", DynValue.NewNumber(position.x));
-                _r.Table.Set("y", DynValue.NewNumber(position.y));
-                _r.Table.Set("z", DynValue.NewNumber(position.z));
-
-                return _r;
+                return ConvertToLua(position);
             }));
 
             // Sirve para modificar la posición del GameObject (x, y, z)
@@ -326,7 +324,9 @@ namespace FarlandsCoreMod.FarlandsConsole.Functions
             {
                 _Ficha = gameObject.AddComponent<LuaGameObjectComponent>();
             }
+
             _Ficha.Result = result;
+            result.Table.Set("_mod_", LuaManager.MOD);
             result.Table.Set("set_update", DynValue.NewCallback((ctx, args) =>
             {
                 result.Table.Set("Update", args[0]);
@@ -359,7 +359,7 @@ namespace FarlandsCoreMod.FarlandsConsole.Functions
         }
 
         // ConvertLuaArgumentToCSharp
-        private static object ConvertLuaToCSharp(DynValue luaArg, Type targetType)
+        public static object ConvertLuaToCSharp(DynValue luaArg, Type targetType)
         {
             if (targetType == typeof(int))
                 return (int)luaArg.Number;
@@ -387,41 +387,50 @@ namespace FarlandsCoreMod.FarlandsConsole.Functions
         }
 
         // ConvertCSharpArgumentToLua
-        private static DynValue ConvertToLua(object csharpArg)
+        public static DynValue ConvertToLua(object csharpArg)
         {
             if (csharpArg == null)
                 return DynValue.Nil;
 
-            Type type = csharpArg.GetType();
+            if (csharpArg is int @int)
+                return DynValue.NewNumber(@int);
 
-            if (type == typeof(int))
-                return DynValue.NewNumber((int)csharpArg);
+            else if (csharpArg is float @float)
+                return DynValue.NewNumber(@float);
 
-            else if (type == typeof(float))
-                return DynValue.NewNumber((float)csharpArg);
+            else if (csharpArg is bool @bool)
+                return DynValue.NewBoolean(@bool);
 
-            else if (type == typeof(bool))
-                return DynValue.NewBoolean((bool)csharpArg);
+            else if (csharpArg is string @string)
+                return DynValue.NewString(@string);
 
-            else if (type == typeof(string))
-                return DynValue.NewString((string)csharpArg);
-
-            else if (type == typeof(Vector2))
+            else if (csharpArg is Vector2 @Vector2)
             {
-                Vector2 vector = (Vector2)csharpArg;
-                Table table = new Table(LuaManager.LUA);
-                table.Set("x", DynValue.NewNumber(vector.x));
-                table.Set("y", DynValue.NewNumber(vector.y));
+                Table table = FromObject(csharpArg).Table;
+
+                table.Set("x", DynValue.NewNumber(@Vector2.x));
+                table.Set("y", DynValue.NewNumber(@Vector2.y));
+
                 return DynValue.NewTable(table);
             }
-            else if (type == typeof(Vector3))
+            else if (csharpArg is Vector3 @Vector3)
             {
-                Vector3 vector = (Vector3)csharpArg;
-                Table table = new Table(LuaManager.LUA);
-                table.Set("x", DynValue.NewNumber(vector.x));
-                table.Set("y", DynValue.NewNumber(vector.y));
-                table.Set("z", DynValue.NewNumber(vector.z));
+
+                Table table = FromObject(csharpArg).Table;
+
+                table.Set("x", DynValue.NewNumber(@Vector3.x));
+                table.Set("y", DynValue.NewNumber(@Vector3.y));
+                table.Set("z", DynValue.NewNumber(@Vector3.z));
+                
                 return DynValue.NewTable(table);
+            }
+            else if (csharpArg is GameObject gameObject)
+            {
+                return FromGameObject(gameObject);
+            }
+            else if (csharpArg is Component component)
+            {
+                return FromComponent(component);
             }
             else
             {

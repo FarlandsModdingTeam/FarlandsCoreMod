@@ -1,8 +1,10 @@
-﻿using MoonSharp.Interpreter;
+﻿using FarlandsCoreMod.FarlandsLua;
+using MoonSharp.Interpreter;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using static UnityEngine.LightProbeProxyVolume;
 
 namespace FarlandsCoreMod.FarlandsConsole.Functions
 {
@@ -14,7 +16,7 @@ namespace FarlandsCoreMod.FarlandsConsole.Functions
         [SerializeField] private DynValue updateFunction;
         [SerializeField] private DynValue startFunction;
         [SerializeField] private DynValue _result;
-
+        private DynValue _mod;
         public DynValue StartFunction { get => startFunction; set => startFunction = value; }
         public DynValue UpdateFunction { get => updateFunction; set => updateFunction = value; }
         public DynValue Result { get => _result; set => _result = value; }
@@ -27,6 +29,7 @@ namespace FarlandsCoreMod.FarlandsConsole.Functions
             //LuaGameObject.FromGameObject(this.gameObject);
             if (StartFunction != null && StartFunction.Type == DataType.Function)
             {
+                RefreshMod();
                 StartFunction.Function.Call(Result);
             }
         }
@@ -38,9 +41,11 @@ namespace FarlandsCoreMod.FarlandsConsole.Functions
 
             if (UpdateFunction != null && UpdateFunction.Type == DataType.Function)
             {
+                RefreshMod();
                 UpdateFunction.Function.Call(Result);
             }
         }
 
+        void RefreshMod() => LuaManager.MOD = Result.Table.Get("_mod_");
     }
 }
