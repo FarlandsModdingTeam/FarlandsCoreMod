@@ -474,6 +474,47 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 Terminal.Autocomplete.Register(name);
             };
 
+            LuaManager.LUA.Globals["rayCast"] = DynValue.NewCallback((ctx, args) =>
+            {
+                if (args.Count < 2) return DynValue.Nil;
+
+                // Obtener el origen y la dirección del Raycast desde los argumentos de Lua
+                var _OrigenTable = args[0].Table;
+                var _DireccionTable = args[1].Table;
+
+                Vector3 _ori = new Vector3(
+                    (float)_OrigenTable.Get("x").Number,
+                    (float)_OrigenTable.Get("y").Number,
+                    (float)_OrigenTable.Get("z").Number
+                );
+
+                Vector3 _dire = new Vector3(
+                    (float)_DireccionTable.Get("x").Number,
+                    (float)_DireccionTable.Get("y").Number,
+                    (float)_DireccionTable.Get("z").Number
+                );
+
+                // Distancia máxima del Raycast (opcional, por defecto 100 unidades)
+                float _max = args.Count > 2 ? (float)args[2].Number : 100f;
+
+                // Información sobre el objeto con el que colisiona el Raycast
+                RaycastHit hit;
+
+                // Lanzar el Raycast
+                if (Physics.Raycast(_ori, _dire, out hit, _max))
+                {
+                    // Si el Raycast colisiona con un objeto, devolver información sobre el objeto
+                    var hitInfo = new Table(LuaManager.LUA);
+                    hitInfo["collider"] = LuaFactory.FromGameObject(hit.collider.gameObject);
+                    hitInfo["point"] = LuaConverter.ToLua(hit.point);
+                    hitInfo["normal"] = LuaConverter.ToLua(hit.normal);
+                    hitInfo["distance"] = DynValue.NewNumber(hit.distance);
+
+                    return DynValue.NewTable(hitInfo);
+                }
+
+                return DynValue.Nil;
+            });
         }
         private static void mathsFuncions()
         {
