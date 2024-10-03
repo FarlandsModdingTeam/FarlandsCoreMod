@@ -61,30 +61,26 @@ namespace FarlandsCoreMod.FarlandsLua.Functions
             result.Table.Set("set", DynValue.NewCallback((ctx, args) =>
             {
                 Type type = @object.GetType();
-                string fieldName = args[0].String;
-                var val = LuaConverter.ToCS(args[1]);
-                bool isPublic = args.Count > 2 ? args[2].Boolean : true;
 
-                if (fieldName == null) 
+                if (args[0].Type == DataType.String)
+                {
+                    string fieldName = args[0].String;
+                    if (!ObjectSet(@object, fieldName, args[1], true))
+                        ObjectSet(@object, fieldName, args[1], false);
+
                     return DynValue.Void;
-
-                var field = type.GetField(fieldName, BindingFlags.Instance | (isPublic ? BindingFlags.Public : BindingFlags.NonPublic));
-
-                if (field != null)
-                {
-                    field.SetValue(@object, val);
                 }
-                else 
-                {
-                    var property = type.GetProperty(fieldName, BindingFlags.Instance | (isPublic ? BindingFlags.Public : BindingFlags.NonPublic));
 
-                    if (property != null)
-                    {
-                        property.SetValue(@object, val);
-                    } 
-                } 
+                Table table = args[0].Table;
+                foreach (var pair in table.Pairs)
+                { 
+                    string name = pair.Key.String;
+                    if (!ObjectSet(@object, name, pair.Value, true))
+                        ObjectSet(@object, name, pair.Value, false);
+                }
 
                 return DynValue.Void;
+                
             }));
             result.Table.Set("call", DynValue.NewCallback((ctx, args) =>
             {
@@ -173,6 +169,29 @@ namespace FarlandsCoreMod.FarlandsLua.Functions
             return result;
         }
 
+        private static bool ObjectSet(object obj, string name, DynValue value, bool isPublic)
+        {
+            var field = obj.GetType().GetField(name, BindingFlags.Instance | (isPublic ? BindingFlags.Public : BindingFlags.NonPublic));
+            object val = LuaConverter.ToCS(value);
+
+            if (field != null)
+            {
+                field.SetValue(obj, val);
+                return true;
+            }
+            else
+            {
+                var property = obj.GetType().GetProperty(name, BindingFlags.Instance | (isPublic ? BindingFlags.Public : BindingFlags.NonPublic));
+
+                if (property != null)
+                {
+                    property.SetValue(obj, val);
+                    return true;
+                }
+            }
+
+            return false;
+        }
         public static DynValue FromGameObject(GameObject gameObject)
         {
             if (gameObject == null)
@@ -260,7 +279,7 @@ namespace FarlandsCoreMod.FarlandsLua.Functions
                 Debug.Log("Usted ah ejecutado 'get_component' sin plomo 95");
 
                 string _nombreComponente = ""; // = args[0].String;
-                DynValue _propiedades = null; // = args.Count > 1 ? args[1] : null;
+                Table _properties = null; // = args.Count > 1 ? args[1] : null;
                 Type _componentType = null;
 
                 // tu dices que es inicesario, yo digo que me la pela
@@ -270,7 +289,7 @@ namespace FarlandsCoreMod.FarlandsLua.Functions
                         _nombreComponente = arg.String;
 
                     if (arg.Type == DataType.Table)
-                        _propiedades = arg;
+                        _properties = arg.Table;
                 }
 
                 foreach (var t in AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetTypes()))
@@ -291,6 +310,14 @@ namespace FarlandsCoreMod.FarlandsLua.Functions
                 Component _componente = gameObject.GetComponent(_componentType);
                 if (_componente == null)
                     _componente = gameObject.AddComponent(_componentType);
+
+                if(_properties != null) 
+                    foreach (var pair in _properties.Pairs)
+                    {
+                        string name = pair.Key.String;
+                        if (!ObjectSet(gameObject, name, pair.Value, true))
+                            ObjectSet(gameObject, name, pair.Value, false);
+                    }
 
                 return FromComponent(_componente);
 

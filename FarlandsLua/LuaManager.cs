@@ -6,7 +6,7 @@ using Farlands.Dev;
 using Farlands.Inventory;
 using Farlands.PlantSystem;
 using FarlandsCoreMod.Attributes;
-using FarlandsCoreMod.FarlandsConsole.Functions;
+using FarlandsCoreMod.FarlandsLua.Functions;
 using FarlandsCoreMod.Utiles;
 using FarlandsCoreMod.Utiles.Loaders;
 using HarmonyLib;
@@ -89,7 +89,7 @@ namespace FarlandsCoreMod.FarlandsLua
         {
             UnityDebug = FarlandsCoreMod.AddConfig("Debug", "UnityDebug", "If enable Unity logs will be visible in terminal", false);
 
-            FarlandsConsole.Functions.LuaFunctions.AddToLua();
+            FarlandsLua.Functions.LuaFunctions.AddToLua();
 
             if (!Directory.Exists(Paths.Plugin))
                 Directory.CreateDirectory(Paths.Plugin);
