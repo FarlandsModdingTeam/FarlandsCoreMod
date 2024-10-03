@@ -26,6 +26,8 @@ namespace FarlandsCoreMod.FarlandsLua.Functions
         {
             StartFunction = Result.Table.Get("Start");
 
+            //Result.Table.Set("gameObject", LuaFactory.FromGameObject(this.gameObject)); //UserData.Create(this.gameObject));
+
             //LuaGameObject.FromGameObject(this.gameObject);
             if (StartFunction != null && StartFunction.Type == DataType.Function)
             {
