@@ -488,7 +488,7 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                     (float)_OrigenTable.Get("z").Number
                 );
 
-                Vector3 _dire = new Vector3(
+                Vector3 direction = new Vector3(
                     (float)_DireccionTable.Get("x").Number,
                     (float)_DireccionTable.Get("y").Number,
                     (float)_DireccionTable.Get("z").Number
@@ -501,7 +501,7 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 RaycastHit hit;
 
                 // Lanzar el Raycast
-                if (Physics.Raycast(_ori, _dire, out hit, _max))
+                if (Physics.Raycast(_ori, direction, out hit, _max))
                 {
                     // Si el Raycast colisiona con un objeto, devolver información sobre el objeto
                     var hitInfo = new Table(LuaManager.LUA);
