@@ -270,6 +270,18 @@ namespace FarlandsCoreMod.FarlandsLua.Functions
                 return DynValue.Void;
             }));
 
+            result.Table.Set("get_layer", DynValue.NewCallback((ctx, args) =>
+            {
+                return DynValue.NewNumber(gameObject.layer);
+            }));
+
+            result.Table.Set("set_layer", DynValue.NewCallback((ctx, args) =>
+            {
+                if (args.Count > 1) return DynValue.Void;
+                gameObject.layer = (int)args[0].Number;
+                return DynValue.Void;
+            }));
+
             //TODO: Modificación completa de la lógica
             result.Table.Set("get_component", DynValue.NewCallback((ctx, args) =>
             {
