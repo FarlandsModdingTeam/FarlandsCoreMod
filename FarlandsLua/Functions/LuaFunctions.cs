@@ -4,6 +4,7 @@ using Farlands.DataBase;
 using Farlands.Dev;
 using Farlands.Inventory;
 using Farlands.PlantSystem;
+using Farlands.UsableItems;
 using FarlandsCoreMod.FarlandsLua;
 using FarlandsCoreMod.Utiles;
 using FarlandsCoreMod.Utiles.Loaders;
@@ -474,6 +475,72 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 Terminal.Autocomplete.Register(name);
             };
 
+            LuaManager.LUA.Globals["rayCast"] = DynValue.NewCallback((ctx, args) =>
+            {
+                Debug.Log("Usted ah ejecutado 'rayCast' sin plomo 95");
+                // for (int i=0; i < args.Count; i++)
+                // {
+                //     var _t = args[i].Table;
+                //     Debug.Log($"Iterador_{i} Tipo: {args[i].Type} Valor: {args[i].ToPrintString()}");
+                // }
+
+                if (args.Count < 2)
+                {
+                    Debug.LogWarning("rayCast: Número insuficiente de argumentos.");
+                    return DynValue.Nil;
+                }
+
+                // Obtener el origen y la dirección del Raycast desde los argumentos de Lua
+                var _OrigenTable = args[0].Table;
+                var _DireccionTable = args[1].Table;
+
+                Vector3 _ori = new Vector3(
+                    (float)_OrigenTable.Get("x").Number,
+                    (float)_OrigenTable.Get("y").Number,
+                    (float)_OrigenTable.Get("z").Number
+                );
+
+                Vector3 direction = new Vector3(
+                    (float)_DireccionTable.Get("x").Number,
+                    (float)_DireccionTable.Get("y").Number,
+                    (float)_DireccionTable.Get("z").Number
+                );
+
+                float _max = args.Count > 2 ? (float)args[2].Number : 100f;
+
+                int _mascara = args.Count > 3 ? (int)args[3].Number : -1;
+
+
+                RaycastHit2D hit = Physics2D.Raycast(_ori, direction, _max); //, _mascara
+                IToolInteraction component = hit.collider.GetComponent<IToolInteraction>();
+                if (hit.collider != null)
+                {
+                    Debug.Log($"rayCast: Colisión detectada con {hit.collider.gameObject.name} a una distancia de {hit.distance} unidades.");
+
+                    // Si el Raycast colisiona con un objeto, devolver información sobre el objeto
+                    var hitInfo = new Table(LuaManager.LUA);
+                    hitInfo["collider"] = LuaFactory.FromGameObject(hit.collider.gameObject);
+                    hitInfo["point"] = LuaConverter.ToLua(hit.point);
+                    hitInfo["normal"] = LuaConverter.ToLua(hit.normal);
+                    hitInfo["distance"] = DynValue.NewNumber(hit.distance);
+
+                    component.ToolHit(5, PlayerTool.PICKAXE, 5, (PlayerController)args[4].UserData.Object);
+
+                    return DynValue.NewTable(hitInfo);
+                }
+
+                Debug.Log("rayCast: No se detectó ninguna colisión.");
+                return DynValue.Nil;
+            });
+            LuaManager.LUA.Globals["get_layer_number"] = (string layerName) =>
+            {
+                int layerNumber = LayerMask.NameToLayer(layerName);
+                if (layerNumber == -1)
+                {
+                    Debug.LogWarning($"Layer '{layerName}' no encontrado.");
+                }
+                return layerNumber;
+            };
         }
         private static void mathsFuncions()
         {
