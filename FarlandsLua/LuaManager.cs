@@ -50,6 +50,10 @@ namespace FarlandsCoreMod.FarlandsLua
         /// </summary>
         public static Dictionary<string, List<Action>> OnEvents = new();
         public static FarlandsEasyMod CURRENT_MOD;
+
+        /// <summary>
+        /// LUA es un script que se encarga de ejecutar el codigo LUA
+        /// </summary>
         public static Script LUA = new();
         public static GameObject _o; // public static, Odio mi vida
 
