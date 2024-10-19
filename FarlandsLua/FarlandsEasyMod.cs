@@ -41,13 +41,14 @@ namespace FarlandsCoreMod.FarlandsLua
         ///    Configuracion del mod
         /// </summary>
         public ConfigFile ConfigFile;
-      
+
 
         //TODO que se puedan leer carpetas
         /// <summary>
         ///     carga un archivo zip y lo guarda en el diccionario
+        ///     Abertencias: CIUDADO
         /// </summary>
-        /// <param name="zipPath">La direccion del zip</param> CIUDADO
+        /// <param name="zipPath">La direccion del zip</param> 
         public void LoadZip(string zipPath)
         {
             using (FileStream zipToOpen = new FileStream(zipPath, FileMode.Open))
@@ -110,7 +111,7 @@ namespace FarlandsCoreMod.FarlandsLua
         ///     Carga un archivo ZIP, crea una instancia de <see cref="FarlandsEasyMod"/> y ejecuta el archivo main.lua.
         ///     Abvertencias: CIUDADO
         /// </summary>
-        /// <param name="zipPath"></param>
+        /// <param name="zipPath">Direccion donde eta el zip</param>
         public static void LoadAndAddZip(string zipPath)
         {
             var fem = FromZip(zipPath);
@@ -118,18 +119,29 @@ namespace FarlandsCoreMod.FarlandsLua
             fem.ExecuteMain();
         }
 
+
         /// <summary>
         ///     Getters y Setters de PathValue
         /// </summary>
-        /// <param name="path"></param>
+        /// <param name="path">Es una direccion, ¿De que? Ni puta idea</param>
         public byte[] this[string path]
         {
             get => PathValue[path];
             set => PathValue[path] = value;
         }
 
+
+        /// <summary>
+        ///     Obtiene una lista de archivos en una carpeta específica dentro del diccionario PathValue.
+        /// </summary>
+        /// <param name="t">Un prefijo que se añadirá a cada ruta de archivo en el resultado.</param>
+        /// <param name="folder">La carpeta dentro de PathValue de la cual se quieren obtener los archivos.</param>
+        /// <returns>
+        /// Un array de strings que contiene las rutas de los archivos en la carpeta especificada, con el prefijo t añadido a cada ruta.
+        /// </returns>
         public string[] GetFilesInFolder(string t, string folder) =>
             PathValue.Where(x => x.Key.StartsWith(folder) && !x.Key.EndsWith("/")).Select(x=> t + "/" + x.Key).ToArray();
+
 
         /// <summary>
         ///    Ejecuta el archivo main.lua
