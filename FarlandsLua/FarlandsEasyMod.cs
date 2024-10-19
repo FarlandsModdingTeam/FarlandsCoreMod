@@ -25,24 +25,25 @@ namespace FarlandsCoreMod.FarlandsLua
         public DynValue Mod;
       
 
-
         /// <summary>
         ///     Ni puta idea
         /// </summary>
         public string Tag;
+
 
         /// <summary>
         ///     Diccionario que contiene la ruta y el contenido de los archivos del mod
         /// </summary>
         public Dictionary<string, byte[]> PathValue = new();
 
+
         /// <summary>
         ///    Configuracion del mod
         /// </summary>
         public ConfigFile ConfigFile;
       
-        //TODO que se puedan leer carpetas
 
+        //TODO que se puedan leer carpetas
         /// <summary>
         ///     carga un archivo zip y lo guarda en el diccionario
         /// </summary>
@@ -92,8 +93,8 @@ namespace FarlandsCoreMod.FarlandsLua
 
 
         /// <summary>
-        /// 
-        /// Abvertencias: CIUDADO
+        ///     me quiero morir no se pa que coño sirve
+        ///     Abvertencias: CIUDADO
         /// </summary>
         /// <param name="zipPath">Direccion donde esta el zip</param>
         /// <returns>Desvuelve un el mod en FarlandsEasyMod</returns>
