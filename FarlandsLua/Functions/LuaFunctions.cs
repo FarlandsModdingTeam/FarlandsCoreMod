@@ -732,8 +732,8 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
         /// <summary>
         ///  MATENME
         /// </summary>
-        /// <param name="scene"></param>
-        /// <returns></returns>
+        /// <param name="scene">la escena necesaria</param>
+        /// <returns>allObjects</returns>
         static List<GameObject> GetAllGameObjectsInScene(Scene scene)
         {
             // Obtén todos los objetos raíz de la escena
