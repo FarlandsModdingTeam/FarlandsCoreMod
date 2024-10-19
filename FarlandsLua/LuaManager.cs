@@ -38,6 +38,9 @@ namespace FarlandsCoreMod.FarlandsLua
         public static GameObject _o; // public static, Odio mi vida
 
         public int Index => 1;
+        /*--- FIN DECLARACIONES ---*/
+        // ahora el cometario de arriba te parecera una tonteria pero espera a la documentacion XD
+
 
         /// <summary>
         /// name: MOD

@@ -1,0 +1,193 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title> | Documentacion_FCM </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content=" | Documentacion_FCM ">
+      
+      
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/FarlandsModdingTeam/FarlandsCoreMod/blob/MQM/Docs/Lua.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../logo.svg" alt="Documentacion_FCM">
+            Documentacion_FCM
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled="" placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+<h2 id="funciones-principales">Funciones Principales</h2>
+<h3 id="modname">MOD(name)</h3>
+<p>Inicia el mod con el nombre indicado, debe ser ejecutado en la primera l�nea</p>
+<h3 id="add_languagepath">**add_language(path)</h3>
+<p>Agrega un idioma dada la ruta a su archivo <code>.json</code></p>
+<h3 id="add_commandname-luafunc-help">add_command(name, luaFunc, help)</h3>
+<p>Agrega un comando de consola</p>
+<h3 id="add_creditsquantity">add_credits(quantity)</h3>
+<p>Agrega una cantidad de cr�ditos</p>
+<h3 id="add_item_id-quantity">add_item(_id, quantity)</h3>
+<p>Agrega un item a tu inventario</p>
+<h3 id="create_scenename">create_scene(name)</h3>
+<p>Crea una nueva escena</p>
+<h3 id="create_objectname">create_object(name)</h3>
+<p>Crea y devuelve un nuevo objeto con el nombre indicado</p>
+<h3 id="configsection-key-default-description">config(section, key, default, description)</h3>
+<p>Agrega una configuraci�n</p>
+<h3 id="create_inventory_itemitem">create_inventory_item(item)</h3>
+<p>Crea un nuevo item para inventarios
+Parametros: {name, itemType, spritePath, buyPrice, sellPrice, canBeStacked, canBeDestroyed, matterPercent}</p>
+<pre><code class="lang-lua">item = {
+	name = , -- nombre 
+	
+	-- puede tomar los siguientes valores 'RESOURCE', 'TOOL', 'SEED', 'CRAFTING', 'FISH', 'INSECT', 'PLACEABLE'
+	type = , -- tipo
+	sprite = , -- ruta del sprite
+	buy_price = , -- precio de compra
+	sell_price = , -- precio de venta
+	stackable = , -- si puede acumularse en un �nico slot de inventario
+	destroyable = , -- si puede ser destruido
+	matter_percent = , cantidad de combustible que le da a la nave
+}
+</code></pre>
+<h3 id="create_plant">create_plant</h3>
+<p>Crea un nuevo item para inventarios
+Parametros: {name, days_for_death, days_for_stage, grow_season, resources, seed, stage_1, stage_2, stage_3, stage_4, stage_5}</p>
+<pre><code class="lang-lua">item = {
+	name = , -- nombre 
+	days_for_death = , -- dias que puede sobrevivir sin regar
+	days_for_stage= , -- dias para cambio de estado
+	grow_season = , -- temporada en la que crece (tenemos que comprobar los valores)
+	resources = , -- recursos que puede dar
+	seed = , -- sprite para la semilla
+	stage_n = , -- donde n es un n�mero del 1 al 5, sprite para el estado correspondiente
+}
+</code></pre>
+<h3 id="create_seedinventoryid-plantsid">create_seed(inventoryId, plantsId)</h3>
+<p>Crea una semilla asignando un objeto de inventario a una lista de plantas</p>
+<h3 id="execute_commandcommand">execute_command(command)</h3>
+<p>Ejecuta un comando</p>
+<h3 id="find_objectname">find_object(name)</h3>
+<p>Devuelve un objeto de la escena con nuevas funciones</p>
+<h3 id="get_inputaction">get_input(action)</h3>
+<p>Obtiene si un input se est� pulsando</p>
+<h3 id="get_objectpath">get_object(path)</h3>
+<p>Obtiene un objeto especificando la ruta de objetos</p>
+<h3 id="load_scenescene">load_scene(scene)</h3>
+<p>Carga una escena indicada</p>
+<h3 id="potrait_overrideorigin-path">potrait_override(origin, path)</h3>
+<p>Cambia la textura de un portrait por la textura indicada con el <code>path</code></p>
+<h3 id="printtext">print(text)</h3>
+<p>Muesta por terminal el mensaje indicado</p>
+<h3 id="print_scene">print_scene()</h3>
+<p>Muesta por terminal la escena actual</p>
+<h3 id="texture_overridepath">texture_override(path)</h3>
+<p>Cambia la textura indicada con el nombre del archivo <code>path</code></p>
+<h3 id="texture_overrideorigin-path">texture_override(origin, path)</h3>
+<p>Cambia la textura origin por la textura indicada con el <code>path</code></p>
+<h3 id="texture_override_inpath">texture_override_in(path)</h3>
+<p>Cambia todas las texturas de una carpeta indicadas con el nombre de cada archivo</p>
+<h3 id="toggle_ui">toggle_ui()</h3>
+<p>Desactiva la interfaz de usuario <strong>OCASIONA ERRORES</strong></p>
+<h3 id="translate_inventory_itemid-names-descriptions">translate_inventory_item(id, names, descriptions)</h3>
+<p>Agrega traducciones a un inventory items</p>
+<h2 id="funciones-matemticas">Funciones matem�ticas</h2>
+<p>Funciones que tienen que ver con matem�ticas, estas funciones se encuentran detro de math, por ejemplo
+<code>math.normalize(vector)</code></p>
+<h3 id="normalizevector">normalize(vector)</h3>
+<p>Normaliza un vector</p>
+<h2 id="lua-gameobject">Lua GameObject</h2>
+<h3 id="add_componentcomponent">add_component(component)</h3>
+<p>Agrega el componente indicado al objeto</p>
+<h3 id="add_positionx-y-z">add_position(x, y, z)</h3>
+<p>Agrega posici�n al objeto</p>
+<h3 id="get_language">get_language()</h3>
+<p>Devuelve el idioma actual</p>
+<h3 id="get_position">get_position()</h3>
+<p>Devuelve la posici�n del objeto</p>
+<h3 id="set_positionx-y-z">set_position(x, y, z)</h3>
+<p>Cambia la posici�n del objeto</p>
+<h3 id="toggle_active">toggle_active()</h3>
+<p>Cambia su estado activo</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/FarlandsModdingTeam/FarlandsCoreMod/blob/MQM/Docs/Lua.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
