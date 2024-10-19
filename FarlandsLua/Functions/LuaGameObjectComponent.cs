@@ -1,4 +1,5 @@
 ﻿using FarlandsCoreMod.FarlandsLua;
+using FarlandsCoreMod.FarlandsLua.Functions;
 using MoonSharp.Interpreter;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,9 @@ using static UnityEngine.LightProbeProxyVolume;
 
 namespace FarlandsCoreMod.FarlandsLua.Functions
 {
+    /// <summary>
+    ///     Clase de C# que la gracia es permitir ejecutar LUA en un GameObject como si fuera nativo
+    /// </summary>
     public class LuaGameObjectComponent : MonoBehaviour
     {
         // ------------------- Declaraciones ------------------- //
@@ -17,11 +21,25 @@ namespace FarlandsCoreMod.FarlandsLua.Functions
         [SerializeField] private DynValue startFunction;
         [SerializeField] private DynValue _result;
         private DynValue _mod;
+
+        /// <summary>
+        ///   Metodo donde guarda el codigo LUA que se ejecutara con Start de Unity 
+        /// </summary>
         public DynValue StartFunction { get => startFunction; set => startFunction = value; }
+
+        /// <summary>
+        ///  Metodo donde guarda el codigo LUA que se ejecutara con Update de Unity
+        /// </summary>
         public DynValue UpdateFunction { get => updateFunction; set => updateFunction = value; }
+
+        /// <summary>
+        ///     Resultado de la ejecucion del script LUA : SUPONGO
+        /// </summary>
         public DynValue Result { get => _result; set => _result = value; }
 
-        // Start
+        /// <summary>
+        ///     Metodo Start de Unity, 
+        /// </summary>
         void Start()
         {
             StartFunction = Result.Table.Get("Start");

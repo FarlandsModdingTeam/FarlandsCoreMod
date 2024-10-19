@@ -53,7 +53,7 @@ namespace FarlandsCoreMod.FarlandsLua
         ///     name: ExecuteEvent
         ///     Ejecuta un evento en todos los mods cargados
         /// </summary>
-        /// <param name="ev"></param>
+        /// <param name="ev"> No se que es </param>
         public static void ExecuteEvent(params string[] ev)
         {
             Debug.Log(string.Join('.', ev));
@@ -84,7 +84,11 @@ namespace FarlandsCoreMod.FarlandsLua
             
         }
 
-        // Método para inicializar el Manager
+
+        /// <summary>
+        ///     Método para inicializar el Manager
+        ///     Se inicia al iniciar el juego
+        /// </summary>
         public void Init()
         {
             UnityDebug = FarlandsCoreMod.AddConfig("Debug", "UnityDebug", "If enable Unity logs will be visible in terminal", false);
@@ -99,6 +103,11 @@ namespace FarlandsCoreMod.FarlandsLua
             src.ToList().ForEach(FarlandsEasyMod.LoadAndAddZip);
         }
 
+        /// <summary>
+        ///    Método para obtener los archivos de un mod
+        /// </summary>
+        /// <param name="path">Direccion del archivo</param>
+        /// <returns></returns>
         public static string[] GetFilesInMod(string path)
         {
             var i = path.IndexOf('/');

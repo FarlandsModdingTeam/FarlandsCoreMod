@@ -20,21 +20,20 @@ namespace FarlandsCoreMod.FarlandsLua
     {
         // ----------------------- DECLARACIONES ----------------------- //
         /// <summary>
-        ///     Informacion del mod en lua
+        ///     Informacion del mod en DynValue -> LUA
         /// </summary>
         public DynValue Mod;
       
 
 
         /// <summary>
-        ///     a inventar
+        ///     Ni puta idea
         /// </summary>
         public string Tag;
 
         /// <summary>
         ///     Diccionario que contiene la ruta y el contenido de los archivos del mod
         /// </summary>
-        // P_PCero
         public Dictionary<string, byte[]> PathValue = new();
         public ConfigFile ConfigFile;
       
