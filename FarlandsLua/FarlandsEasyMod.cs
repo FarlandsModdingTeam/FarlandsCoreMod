@@ -35,6 +35,10 @@ namespace FarlandsCoreMod.FarlandsLua
         ///     Diccionario que contiene la ruta y el contenido de los archivos del mod
         /// </summary>
         public Dictionary<string, byte[]> PathValue = new();
+
+        /// <summary>
+        ///    Configuracion del mod
+        /// </summary>
         public ConfigFile ConfigFile;
       
         //TODO que se puedan leer carpetas
@@ -42,8 +46,7 @@ namespace FarlandsCoreMod.FarlandsLua
         /// <summary>
         ///     carga un archivo zip y lo guarda en el diccionario
         /// </summary>
-        /// <param name="zipPath"></param>
-        // CIUDADO
+        /// <param name="zipPath">La direccion del zip</param> CIUDADO
         public void LoadZip(string zipPath)
         {
             using (FileStream zipToOpen = new FileStream(zipPath, FileMode.Open))
@@ -70,8 +73,13 @@ namespace FarlandsCoreMod.FarlandsLua
             }
         }
 
-      
-        //TODO comprobar
+
+        /// <summary>
+        ///     Cargar mod desde carpeta en vez dedde zip
+        ///     TODO: comprobar
+        /// </summary>
+        /// <param name="path">Direccin donde esta</param>
+        /// <param name="acumPath">Direccion de lo que tengo ni idea</param>
         public void LoadFolder(string path, string acumPath = "")
         {
             foreach (var file in Directory.EnumerateFiles(path))
@@ -82,13 +90,13 @@ namespace FarlandsCoreMod.FarlandsLua
 
         }
 
-      
+
         /// <summary>
-        ///     
+        /// 
+        /// Abvertencias: CIUDADO
         /// </summary>
-        /// <param name="zipPath"></param>
-        /// <returns>fem</returns> 
-        // CIUDADO
+        /// <param name="zipPath">Direccion donde esta el zip</param>
+        /// <returns>Desvuelve un el mod en FarlandsEasyMod</returns>
         public static FarlandsEasyMod FromZip(string zipPath)
         { 
             var fem = new FarlandsEasyMod();
