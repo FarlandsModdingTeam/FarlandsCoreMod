@@ -35,18 +35,18 @@ namespace FarlandsCoreMod.FarlandsLua
     {
         // ----------------------- DECLARACIONES ----------------------- //
         /// <summary>
-        /// - clase de BepInEx que se encarga de cargar los mods
-        /// - Configuracion que se agrega al BepInEx
+        /// - clase de BepInEx que se encarga de cargar los mods  
+        /// - Configuracion que se agrega al BepInEx  
         /// </summary>
         public static ConfigEntry<bool> UnityDebug;
 
         /// <summary>
-        /// Lista de mods cargados
+        /// Lista de mods cargados  
         /// </summary>
         public static Dictionary<string, FarlandsEasyMod> EasyMods = new();
 
         /// <summary>
-        /// > TODO: ser menos gilipollas
+        /// > TODO: ser menos gilipollas  
         /// </summary>
         public static Dictionary<string, List<Action>> OnEvents = new();
         public static FarlandsEasyMod CURRENT_MOD;
