@@ -23,10 +23,10 @@ namespace FarlandsCoreMod.FarlandsLua
         ///     Informacion del mod en DynValue -> LUA
         /// </summary>
         public DynValue Mod;
-
+      
 
         /// <summary>
-        ///     Texto identificador del mod, ejemplo: MOD("francoPea")
+        ///     Ni puta idea
         /// </summary>
         public string Tag;
 
@@ -43,7 +43,7 @@ namespace FarlandsCoreMod.FarlandsLua
         public ConfigFile ConfigFile;
 
 
-        //TODO: que se puedan leer carpetas
+        //TODO que se puedan leer carpetas
         /// <summary>
         ///     carga un archivo zip y lo guarda en el diccionario
         ///     Abertencias: CIUDADO
