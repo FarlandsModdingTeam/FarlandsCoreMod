@@ -27,11 +27,26 @@ using Object = UnityEngine.Object;
 namespace FarlandsCoreMod.FarlandsLua
 {
     [Patcher]
+    /// <summary>
+    /// **LuaManager** es el manager que se encarga de cargar y ejecutar los mods en LUA
+    /// 
+    /// </summary>
     public class LuaManager : IManager
     {
         // ----------------------- DECLARACIONES ----------------------- //
+        /// <summary>
+        ///     Cagarme en Magician por el static
+        /// </summary>
         public static ConfigEntry<bool> UnityDebug;
+
+        /// <summary>
+        ///     Lista de mods cargados
+        /// </summary>
         public static Dictionary<string, FarlandsEasyMod> EasyMods = new();
+
+        /// <summary>
+        /// TODO: SOy gilipollas
+        /// </summary>
         public static Dictionary<string, List<Action>> OnEvents = new();
         public static FarlandsEasyMod CURRENT_MOD;
         public static Script LUA = new();

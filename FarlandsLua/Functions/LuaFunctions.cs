@@ -25,7 +25,9 @@ using Debug = UnityEngine.Debug;
 
 namespace FarlandsCoreMod.FarlandsLua.Functions
 {
-    
+    /// <summary>
+    /// 
+    /// </summary>
     public static class LuaFunctions
     {
         public static void AddToLua()

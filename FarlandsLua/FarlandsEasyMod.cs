@@ -23,10 +23,10 @@ namespace FarlandsCoreMod.FarlandsLua
         ///     Informacion del mod en DynValue -> LUA
         /// </summary>
         public DynValue Mod;
-      
+
 
         /// <summary>
-        ///     Ni puta idea
+        ///     Es el identificador del mod, ejemplo MOD("francoPeta")
         /// </summary>
         public string Tag;
 
