@@ -93,7 +93,7 @@ namespace FarlandsCoreMod.FarlandsLua
 
 
         /// <summary>
-        ///     me quiero morir no se pa que coño sirve
+        ///     Carga el mod del zip en en un FarlandsEasyMod
         ///     Abvertencias: CIUDADO
         /// </summary>
         /// <param name="zipPath">Direccion donde esta el zip</param>
@@ -105,7 +105,12 @@ namespace FarlandsCoreMod.FarlandsLua
             return fem;
         }
 
-        // CIUDADO
+
+        /// <summary>
+        ///     Carga un archivo ZIP, crea una instancia de <see cref="FarlandsEasyMod"/> y ejecuta el archivo main.lua.
+        ///     Abvertencias: CIUDADO
+        /// </summary>
+        /// <param name="zipPath"></param>
         public static void LoadAndAddZip(string zipPath)
         {
             var fem = FromZip(zipPath);
