@@ -22,7 +22,10 @@
   - [LoadFolder(path,acumPath)](#M-FarlandsCoreMod-FarlandsLua-FarlandsEasyMod-LoadFolder-System-String,System-String- 'FarlandsCoreMod.FarlandsLua.FarlandsEasyMod.LoadFolder(System.String,System.String)')
   - [LoadZip(zipPath)](#M-FarlandsCoreMod-FarlandsLua-FarlandsEasyMod-LoadZip-System-String- 'FarlandsCoreMod.FarlandsLua.FarlandsEasyMod.LoadZip(System.String)')
 - [LuaFunctions](#T-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions 'FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions')
+  - [AddChildObjects(parent,allObjects)](#M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-AddChildObjects-UnityEngine-Transform,System-Collections-Generic-List{UnityEngine-GameObject}- 'FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.AddChildObjects(UnityEngine.Transform,System.Collections.Generic.List{UnityEngine.GameObject})')
   - [AddToLua()](#M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-AddToLua 'FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.AddToLua')
+  - [GetAllGameObjectsInScene(scene)](#M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GetAllGameObjectsInScene-UnityEngine-SceneManagement-Scene- 'FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GetAllGameObjectsInScene(UnityEngine.SceneManagement.Scene)')
+  - [mathsFuncions()](#M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-mathsFuncions 'FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.mathsFuncions')
 - [LuaGameObjectComponent](#T-FarlandsCoreMod-FarlandsLua-Functions-LuaGameObjectComponent 'FarlandsCoreMod.FarlandsLua.Functions.LuaGameObjectComponent')
   - [Result](#P-FarlandsCoreMod-FarlandsLua-Functions-LuaGameObjectComponent-Result 'FarlandsCoreMod.FarlandsLua.Functions.LuaGameObjectComponent.Result')
   - [StartFunction](#P-FarlandsCoreMod-FarlandsLua-Functions-LuaGameObjectComponent-StartFunction 'FarlandsCoreMod.FarlandsLua.Functions.LuaGameObjectComponent.StartFunction')
@@ -254,6 +257,20 @@ FarlandsCoreMod.FarlandsLua.Functions
 
 ME CAGO EN MI PUTA VIDA
 
+<a name='M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-AddChildObjects-UnityEngine-Transform,System-Collections-Generic-List{UnityEngine-GameObject}-'></a>
+### AddChildObjects(parent,allObjects) `method`
+
+##### Summary
+
+MATENME
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| parent | [UnityEngine.Transform](#T-UnityEngine-Transform 'UnityEngine.Transform') |  |
+| allObjects | [System.Collections.Generic.List{UnityEngine.GameObject}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Collections.Generic.List 'System.Collections.Generic.List{UnityEngine.GameObject}') |  |
+
 <a name='M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-AddToLua'></a>
 ### AddToLua() `method`
 
@@ -266,6 +283,34 @@ Agrega las funciones a LUA que se van ah necesitar
 > _mod_ = identificador del mod  
 > Crea y Agrega las configuraciones  
 > Agrega a la lista el mod actual
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GetAllGameObjectsInScene-UnityEngine-SceneManagement-Scene-'></a>
+### GetAllGameObjectsInScene(scene) `method`
+
+##### Summary
+
+MATENME
+
+##### Returns
+
+
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| scene | [UnityEngine.SceneManagement.Scene](#T-UnityEngine-SceneManagement-Scene 'UnityEngine.SceneManagement.Scene') |  |
+
+<a name='M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-mathsFuncions'></a>
+### mathsFuncions() `method`
+
+##### Summary
+
+MATENME
 
 ##### Parameters
 
@@ -387,8 +432,8 @@ Método para obtener los archivos de un mod
 
 ##### Summary
 
-Método para obtener datos de un mod
-    ¿cuales datos? Ni puta idea
+Método para obtener datos de un mod  
+¿cuales datos? Ni puta idea
 
 ##### Returns
 

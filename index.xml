@@ -104,6 +104,25 @@
             > Agrega a la lista el mod actual  
             </summary>
         </member>
+        <member name="M:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.mathsFuncions">
+            <summary>
+            MATENME
+            </summary>
+        </member>
+        <member name="M:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GetAllGameObjectsInScene(UnityEngine.SceneManagement.Scene)">
+            <summary>
+             MATENME
+            </summary>
+            <param name="scene"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.AddChildObjects(UnityEngine.Transform,System.Collections.Generic.List{UnityEngine.GameObject})">
+            <summary>
+            MATENME
+            </summary>
+            <param name="parent"></param>
+            <param name="allObjects"></param>
+        </member>
         <member name="T:FarlandsCoreMod.FarlandsLua.Functions.LuaGameObjectComponent">
             <summary>
                 Clase de C# que la gracia es permitir ejecutar LUA en un GameObject como si fuera nativo
@@ -166,15 +185,15 @@
         </member>
         <member name="M:FarlandsCoreMod.FarlandsLua.LuaManager.GetFilesInMod(System.String)">
             <summary>
-               Método para obtener los archivos de un mod
+               Método para obtener los archivos de un mod  
             </summary>
             <param name="path">Direccion del archivo</param>
             <returns></returns>
         </member>
         <member name="M:FarlandsCoreMod.FarlandsLua.LuaManager.GetFromMod(System.String)">
             <summary>
-                Método para obtener datos de un mod
-                ¿cuales datos? Ni puta idea
+            Método para obtener datos de un mod  
+            ¿cuales datos? Ni puta idea  
             </summary>
             <param name="path"></param>
             <returns></returns>

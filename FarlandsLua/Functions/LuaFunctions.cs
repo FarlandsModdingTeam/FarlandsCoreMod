@@ -102,7 +102,7 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
 
 
             /// <summary>
-            /// Consigue si as pulsado el boton de accion
+            /// Consigue si as pulsado el boton de accion  
             /// > Obtiene el player
             /// > Si el imput del palyer activado es igual al boton de accion
             /// </summary>
@@ -117,11 +117,11 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
 
             /// <summary>
             /// 
-            /// > Si no existe el objeto de comandos
-            /// > Obtiene la lista de comandos
-            /// > Divide el comando en palabras
-            /// > Recorre la lista de comandos
-            /// > Si el comando es igual al _comando
+            /// > Si no existe el objeto de comandos  
+            /// > Obtiene la lista de comandos  
+            /// > Divide el comando en palabras  
+            /// > Recorre la lista de comandos  
+            /// > Si el comando es igual al _comando  
             /// > Codigo Original :)
             /// </summary>
             LuaManager.LUA.Globals["execute_command"] = (string _comando) =>
@@ -170,7 +170,7 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
 
             // ----------------------- FUNCIONES DE ESCENA ----------------------- //
             /// <summary>
-            /// Carga la escena especificada por nombre o índice.
+            /// Carga la escena especificada por nombre o índice.  
             /// <param name="scene"">puede ser el nombre o indice</param>
             /// </summary>
             LuaManager.LUA.Globals["load_scene"] = (DynValue scene) =>
@@ -193,9 +193,9 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
 
             /// <summary>
             /// 
-            /// > Si no existe el objeto de comandos
-            /// > si un parametro, el nombre del archivo es la textura que va ah remplazar (no recomendado)
-            /// > si dos parametros, el primero es el nombre de la textura que va ah remplazar y el segundo es la ruta de la textura
+            /// > Si no existe el objeto de comandos  
+            /// > si un parametro, el nombre del archivo es la textura que va ah remplazar (no recomendado)  
+            /// > si dos parametros, el primero es el nombre de la textura que va ah remplazar y el segundo es la ruta de la textura  
             /// </summary>
             /// <param name="args"></param>
             LuaManager.LUA.Globals["texture_override"] = DynValue.NewCallback((ctx, args) =>
@@ -217,8 +217,8 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
 
 
             /// <summary>
-            /// Misma función que texture_override pero con un directorio
-            /// Pero ahora funciona con una carpeta entera
+            /// Misma función que texture_override pero con un directorio  
+            /// Pero ahora funciona con una carpeta entera  
             /// </summary>
             LuaManager.LUA.Globals["texture_override_in"] = DynValue.NewCallback((ctx, args) =>
             {
@@ -233,7 +233,7 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
 
             // TODO: No funciona, cremo
             /// <summary>
-            /// En vez de remplaza una region de la textura
+            /// En vez de remplaza una region de la textura  
             /// </summary>
             /// <param name="origin">textura que se va a remplazar</param>
             /// <param name="position">posicion inicial(abajo -> arriba, izquierda -> derecha)</param>
@@ -246,10 +246,10 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
 
 
             /// <summary>
-            /// Es un **texture_override** pero con un personaje
-            /// > Crea una función en LUA que se ejecuta cuando se llama a la función
-            /// > La función llama a **texture_override** con los parametros que se le pasan
-            /// > **texture_override** remplaza la textura
+            /// Es un **texture_override** pero con un personaje  
+            /// > Crea una función en LUA que se ejecuta cuando se llama a la función  
+            /// > La función llama a **texture_override** con los parametros que se le pasan  
+            /// > **texture_override** remplaza la textura  
             /// </summary>
             /// <param name="origin"></param>
             /// <param name="path"></param>
@@ -265,18 +265,25 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
             };
 
             /// <summary>
-            /// 
+            /// Se llama add_language, ¿Que cres que va hah hacer?    
             /// </summary>
+            /// <param name="path">direccion del json</param>
             LuaManager.LUA.Globals["add_language"] = (string path) =>
             {
                 FarlandsDialogue.FarlandsDialogueManager.AddSourcePreStartFromBytes(LuaManager.GetFromMod(path));
             };
+            /// <summary>
+            /// te da lenguaje actual  
+            /// </summary>
             LuaManager.LUA.Globals["get_language"] = () =>
             {
                 return LocalizationManager.CurrentLanguage;
             };
 
-
+            /// <summary>
+            /// printea el texto  
+            /// </summary>
+            /// <param name="txt">lo que le pases lo dibuja por consola</param>
             LuaManager.LUA.Globals["print"] = (string txt) =>
             {
                 if (!LuaManager.UnityDebug.Value) Debug.Log(txt);
@@ -285,6 +292,10 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
             };
 
             // ----------------------- BUSCAR OBJETOS ----------------------- //
+            /// <summary>
+            /// te da un objeto dada la ruta de los objetos  
+            /// </summary>
+            /// <param name="args">ruta en gameObject</param>
             LuaManager.LUA.Globals["get_object"] = DynValue.NewCallback((ctx, args) =>
             {
                 if (args.Count < 1) return DynValue.Nil;
@@ -318,6 +329,11 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 return LuaFactory.FromGameObject(previous);
             });
 
+
+            /// <summary>
+            /// Te busca un gameObject en la escena por el nombre (cuidado con objeton con el mismo nombre)  
+            /// </summary>
+            /// <param name="args">nombre del objeto</param>
             LuaManager.LUA.Globals["find_object"] = DynValue.NewCallback((ctx, args) =>
             {
                 if (args.Count < 1) return DynValue.Nil;
@@ -332,7 +348,16 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 return LuaFactory.FromGameObject(gameObject);
             });
 
+            // NOTA: aprender sobre extensores
 
+            /// <summary>
+            ///   
+            /// > si el id es un numero da el objeto por el id  
+            /// > si ex 0x es un hexadecimal  
+            /// > si es un string busca el objeto por el nombre  
+            /// </summary>
+            /// <param name="_id"></param>
+            /// <param name="_cantidad"></param>
             LuaManager.LUA.Globals["add_item"] = (DynValue _id, int _cantidad = 1) =>
             {
                 if (_id.Type == DataType.Number)
@@ -359,13 +384,25 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 }
             };
 
+
+            /// <summary>
+            /// Añade los creidtos especificados  
+            /// </summary>
+            /// <param name="_cantidad">Cantidad añadir</param>
             LuaManager.LUA.Globals["add_credits"] = (int _cantidad) =>
             {
                 Singleton<FarlandsGameManager>.Instance.persistentDataScript.credits += _cantidad;
                 UnityEngine.Object.FindObjectOfType<HUDMoneyScript>().UpdateCredits();
             };
 
-            // ----------------------- CREAR OBJETOS ----------------------- //
+            // TODO: añadir para añadir a los creditos del juego nuevos nombres
+
+
+            // ----------------------- CREAR OBJETOS/COSAS ----------------------- //
+            /// <summary>
+            /// Crea un nuevo gameObject con el nombre especificado  
+            /// </summary>
+            /// <param name="name">nombre del gameObject a crear</param>
             LuaManager.LUA.Globals["create_object"] = (string name) =>
             {
                 var go = new GameObject(name);
@@ -373,6 +410,14 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 return LuaFactory.FromGameObject(go);
             };
 
+
+            //TODO agregar múltiple
+            /// <summary>
+            /// Añade a la lista un objeto de inventario  
+            /// > Crea un nuevo objeto de inventario  
+            /// > Si  
+            /// </summary>
+            /// <param name="args">name->string, type->string, sprite->string, buy_price->int, sell_price->int, stackeable->bool, matter_percent->float</param>
             LuaManager.LUA.Globals["create_inventory_item"] = (DynValue args) =>
             {
                 //TODO Este método puede considerarse como un ToCsharp
@@ -414,6 +459,17 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
 
 
             //TODO agregar múltiple
+            /// <summary>
+            /// agrega a una tabla un objeto de planta  
+            /// > algomas  
+            /// > genera la planta  
+            /// >   
+            /// > agrega la planta  
+            /// > devuelve el id  
+            /// </summary>
+            /// <param name="args">
+            /// name->string, days_for_death->int, days_for_stage->int, grow_season->int, resources->table->(item->int, algomas->X, algomas->X), seed->string, stage_1->string, stage_2->string, stage_3->string, stage_4->string, stage_5->string
+            /// </param> 
             LuaManager.LUA.Globals["create_plant"] = (DynValue args) =>
             {
                 //TODO Este método puede considerarse como un ToCsharp
@@ -496,6 +552,12 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 return FarlandsItems.FarlandsItemsManager.AddPlant(plant);
             };
 
+
+            /// <summary>
+            /// Crear una semilla
+            /// </summary>
+            /// <param name="inventoryId">id de la planta</param>
+            /// <param name="plantsId">id del inventory Item</param>
             LuaManager.LUA.Globals["create_seed"] = (int inventoryId, List<int> plantsId) =>
             {
                 FarlandsItems.FarlandsItemsManager.seeds.Add(new FarlandsItems.FarlandsItemsManager.SeedData()
@@ -505,17 +567,36 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 });
             };
 
+            /// <summary>
+            /// Traducion del objeto de inventario
+            /// </summary>
+            /// <param name="id">id del objeto</param>
+            /// <param name="name">nombres</param>
+            /// <param name="description">descripciones</param>
             LuaManager.LUA.Globals["translate_inventory_item"] = (int id, List<string> name, List<string> description) =>
             {
                 FarlandsDialogue.FarlandsDialogueManager.AddInventoryTranslation(id, name, description);
             };
 
+
+            /// <summary>
+            /// Crea una escena con el nombre
+            /// </summary>
+            /// <param name="name">nombre de la escena</param>
             LuaManager.LUA.Globals["create_scene"] = (string name) =>
             {
                 var scene = SceneManager.CreateScene(name);
                 //TODO agergar creación del objeto de la escena para LuaManager.LUA
             };
 
+
+            /// <summary>
+            /// añade un comando a la terminal  
+            /// > sufrimiento TODO  
+            /// </summary>
+            /// <param name="name">nombre del comando</param>
+            /// <param name="LuaFunc">funcion lua</param>
+            /// <param name="help">texto del help de help</param>
             LuaManager.LUA.Globals["add_command"] = (string name, DynValue LuaFunc, string help) =>
             {
                 Action<CommandArg[]> action = (CommandArg[] args) =>
@@ -554,6 +635,10 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 Terminal.Autocomplete.Register(name);
             };
 
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="args"></param>
             LuaManager.LUA.Globals["rayCast"] = DynValue.NewCallback((ctx, args) =>
             {
                 Debug.Log("Usted ah ejecutado 'rayCast' sin plomo 95");
@@ -621,6 +706,10 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 return layerNumber;
             };
         }
+
+        /// <summary>
+        /// MATENME
+        /// </summary>
         private static void mathsFuncions()
         {
             var math = LuaManager.LUA.Globals.Get("math").Table;
@@ -639,6 +728,12 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 return LuaConverter.ToLua(vector);
             }));
         }
+
+        /// <summary>
+        ///  MATENME
+        /// </summary>
+        /// <param name="scene"></param>
+        /// <returns></returns>
         static List<GameObject> GetAllGameObjectsInScene(Scene scene)
         {
             // Obtén todos los objetos raíz de la escena
@@ -654,6 +749,12 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
 
             return allObjects;
         }
+
+        /// <summary>
+        /// MATENME
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="allObjects"></param>
         static void AddChildObjects(Transform parent, System.Collections.Generic.List<GameObject> allObjects)
         {
             foreach (Transform child in parent)

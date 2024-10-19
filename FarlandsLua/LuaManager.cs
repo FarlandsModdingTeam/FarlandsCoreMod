@@ -122,7 +122,7 @@ namespace FarlandsCoreMod.FarlandsLua
         }
 
         /// <summary>
-        ///    Método para obtener los archivos de un mod
+        ///    Método para obtener los archivos de un mod  
         /// </summary>
         /// <param name="path">Direccion del archivo</param>
         /// <returns></returns>
@@ -136,8 +136,8 @@ namespace FarlandsCoreMod.FarlandsLua
 
 
         /// <summary>
-        ///     Método para obtener datos de un mod
-        ///     ¿cuales datos? Ni puta idea
+        /// Método para obtener datos de un mod  
+        /// ¿cuales datos? Ni puta idea  
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
