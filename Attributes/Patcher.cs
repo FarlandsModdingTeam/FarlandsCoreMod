@@ -7,6 +7,7 @@ using UnityEngine;
 
 namespace FarlandsCoreMod.Attributes
 {
+    // TODO: Comentar todo este tema
     [AttributeUsage(AttributeTargets.Method)]
     public class PatcherPreload : Attribute
     {

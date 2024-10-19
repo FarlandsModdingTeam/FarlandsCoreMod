@@ -21,12 +21,16 @@
   - [LoadAndAddZip(zipPath)](#M-FarlandsCoreMod-FarlandsLua-FarlandsEasyMod-LoadAndAddZip-System-String- 'FarlandsCoreMod.FarlandsLua.FarlandsEasyMod.LoadAndAddZip(System.String)')
   - [LoadFolder(path,acumPath)](#M-FarlandsCoreMod-FarlandsLua-FarlandsEasyMod-LoadFolder-System-String,System-String- 'FarlandsCoreMod.FarlandsLua.FarlandsEasyMod.LoadFolder(System.String,System.String)')
   - [LoadZip(zipPath)](#M-FarlandsCoreMod-FarlandsLua-FarlandsEasyMod-LoadZip-System-String- 'FarlandsCoreMod.FarlandsLua.FarlandsEasyMod.LoadZip(System.String)')
+- [LuaFunctions](#T-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions 'FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions')
 - [LuaGameObjectComponent](#T-FarlandsCoreMod-FarlandsLua-Functions-LuaGameObjectComponent 'FarlandsCoreMod.FarlandsLua.Functions.LuaGameObjectComponent')
   - [Result](#P-FarlandsCoreMod-FarlandsLua-Functions-LuaGameObjectComponent-Result 'FarlandsCoreMod.FarlandsLua.Functions.LuaGameObjectComponent.Result')
   - [StartFunction](#P-FarlandsCoreMod-FarlandsLua-Functions-LuaGameObjectComponent-StartFunction 'FarlandsCoreMod.FarlandsLua.Functions.LuaGameObjectComponent.StartFunction')
   - [UpdateFunction](#P-FarlandsCoreMod-FarlandsLua-Functions-LuaGameObjectComponent-UpdateFunction 'FarlandsCoreMod.FarlandsLua.Functions.LuaGameObjectComponent.UpdateFunction')
   - [Start()](#M-FarlandsCoreMod-FarlandsLua-Functions-LuaGameObjectComponent-Start 'FarlandsCoreMod.FarlandsLua.Functions.LuaGameObjectComponent.Start')
 - [LuaManager](#T-FarlandsCoreMod-FarlandsLua-LuaManager 'FarlandsCoreMod.FarlandsLua.LuaManager')
+  - [EasyMods](#F-FarlandsCoreMod-FarlandsLua-LuaManager-EasyMods 'FarlandsCoreMod.FarlandsLua.LuaManager.EasyMods')
+  - [OnEvents](#F-FarlandsCoreMod-FarlandsLua-LuaManager-OnEvents 'FarlandsCoreMod.FarlandsLua.LuaManager.OnEvents')
+  - [UnityDebug](#F-FarlandsCoreMod-FarlandsLua-LuaManager-UnityDebug 'FarlandsCoreMod.FarlandsLua.LuaManager.UnityDebug')
   - [MOD](#P-FarlandsCoreMod-FarlandsLua-LuaManager-MOD 'FarlandsCoreMod.FarlandsLua.LuaManager.MOD')
   - [ExecuteEvent(ev)](#M-FarlandsCoreMod-FarlandsLua-LuaManager-ExecuteEvent-System-String[]- 'FarlandsCoreMod.FarlandsLua.LuaManager.ExecuteEvent(System.String[])')
   - [GetFilesInMod(path)](#M-FarlandsCoreMod-FarlandsLua-LuaManager-GetFilesInMod-System-String- 'FarlandsCoreMod.FarlandsLua.LuaManager.GetFilesInMod(System.String)')
@@ -132,7 +136,7 @@ Diccionario que contiene la ruta y el contenido de los archivos del mod
 
 ##### Summary
 
-Ni puta idea
+Es el identificador del mod, ejemplo MOD("francoPeta")
 
 <a name='P-FarlandsCoreMod-FarlandsLua-FarlandsEasyMod-Item-System-String-'></a>
 ### Item `property`
@@ -238,6 +242,17 @@ carga un archivo zip y lo guarda en el diccionario
 | ---- | ---- | ----------- |
 | zipPath | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | La direccion del zip |
 
+<a name='T-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions'></a>
+## LuaFunctions `type`
+
+##### Namespace
+
+FarlandsCoreMod.FarlandsLua.Functions
+
+##### Summary
+
+
+
 <a name='T-FarlandsCoreMod-FarlandsLua-Functions-LuaGameObjectComponent'></a>
 ## LuaGameObjectComponent `type`
 
@@ -287,6 +302,28 @@ This method has no parameters.
 ##### Namespace
 
 FarlandsCoreMod.FarlandsLua
+
+<a name='F-FarlandsCoreMod-FarlandsLua-LuaManager-EasyMods'></a>
+### EasyMods `constants`
+
+##### Summary
+
+Lista de mods cargados
+
+<a name='F-FarlandsCoreMod-FarlandsLua-LuaManager-OnEvents'></a>
+### OnEvents `constants`
+
+##### Summary
+
+> TODO: ser menos gilipollas
+
+<a name='F-FarlandsCoreMod-FarlandsLua-LuaManager-UnityDebug'></a>
+### UnityDebug `constants`
+
+##### Summary
+
+- clase de BepInEx que se encarga de cargar los mods
+- Configuracion que se agrega al BepInEx
 
 <a name='P-FarlandsCoreMod-FarlandsLua-LuaManager-MOD'></a>
 ### MOD `property`

@@ -35,17 +35,18 @@ namespace FarlandsCoreMod.FarlandsLua
     {
         // ----------------------- DECLARACIONES ----------------------- //
         /// <summary>
-        ///     Cagarme en Magician por el static
+        /// - clase de BepInEx que se encarga de cargar los mods
+        /// - Configuracion que se agrega al BepInEx
         /// </summary>
         public static ConfigEntry<bool> UnityDebug;
 
         /// <summary>
-        ///     Lista de mods cargados
+        /// Lista de mods cargados
         /// </summary>
         public static Dictionary<string, FarlandsEasyMod> EasyMods = new();
 
         /// <summary>
-        /// TODO: SOy gilipollas
+        /// > TODO: ser menos gilipollas
         /// </summary>
         public static Dictionary<string, List<Action>> OnEvents = new();
         public static FarlandsEasyMod CURRENT_MOD;
@@ -54,7 +55,6 @@ namespace FarlandsCoreMod.FarlandsLua
 
         public int Index => 1;
         /*--- FIN DECLARACIONES ---*/
-        // ahora el cometario de arriba te parecera una tonteria pero espera a la documentacion XD
 
 
         /// <summary>

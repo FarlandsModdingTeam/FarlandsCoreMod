@@ -23,7 +23,7 @@
         </member>
         <member name="F:FarlandsCoreMod.FarlandsLua.FarlandsEasyMod.Tag">
             <summary>
-                Ni puta idea
+                Es el identificador del mod, ejemplo MOD("francoPeta")
             </summary>
         </member>
         <member name="F:FarlandsCoreMod.FarlandsLua.FarlandsEasyMod.PathValue">
@@ -88,6 +88,11 @@
                y guarda la informacion del mod
             </summary>
         </member>
+        <member name="T:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="T:FarlandsCoreMod.FarlandsLua.Functions.LuaGameObjectComponent">
             <summary>
                 Clase de C# que la gracia es permitir ejecutar LUA en un GameObject como si fuera nativo
@@ -111,6 +116,22 @@
         <member name="M:FarlandsCoreMod.FarlandsLua.Functions.LuaGameObjectComponent.Start">
             <summary>
                 Metodo Start de Unity, 
+            </summary>
+        </member>
+        <member name="F:FarlandsCoreMod.FarlandsLua.LuaManager.UnityDebug">
+            <summary>
+            - clase de BepInEx que se encarga de cargar los mods
+            - Configuracion que se agrega al BepInEx
+            </summary>
+        </member>
+        <member name="F:FarlandsCoreMod.FarlandsLua.LuaManager.EasyMods">
+            <summary>
+            Lista de mods cargados
+            </summary>
+        </member>
+        <member name="F:FarlandsCoreMod.FarlandsLua.LuaManager.OnEvents">
+            <summary>
+            > TODO: ser menos gilipollas
             </summary>
         </member>
         <member name="P:FarlandsCoreMod.FarlandsLua.LuaManager.MOD">
