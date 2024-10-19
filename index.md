@@ -252,19 +252,19 @@ FarlandsCoreMod.FarlandsLua.Functions
 
 ##### Summary
 
-
+ME CAGO EN MI PUTA VIDA
 
 <a name='M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-AddToLua'></a>
 ### AddToLua() `method`
 
 ##### Summary
 
-Agrega las funciones a LUA que se van ah necesitar
-> TODO: AIUDA
-> Crea un nuevo objeto en LUA con el tag que se le pase, que es una tabla > LUA
-> Guarda el identificador del mod en el diccionario de mods
-> _mod_ = identificador del mod
-> Crea y Agrega las configuraciones
+Agrega las funciones a LUA que se van ah necesitar  
+> TODO: AIUDA  
+> Crea un nuevo objeto en LUA con el tag que se le pase, que es una tabla > LUA  
+> Guarda el identificador del mod en el diccionario de mods  
+> _mod_ = identificador del mod  
+> Crea y Agrega las configuraciones  
 > Agrega a la lista el mod actual
 
 ##### Parameters

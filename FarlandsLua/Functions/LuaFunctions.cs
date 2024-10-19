@@ -26,19 +26,18 @@ using Debug = UnityEngine.Debug;
 namespace FarlandsCoreMod.FarlandsLua.Functions
 {
     /// <summary>
-    /// 
+    /// ME CAGO EN MI PUTA VIDA
     /// </summary>
-    /// <param></param>
     public static class LuaFunctions
     {
         /// <summary>
-        /// Agrega las funciones a LUA que se van ah necesitar
-        /// > TODO: AIUDA
-        /// > Crea un nuevo objeto en LUA con el tag que se le pase, que es una tabla > LUA
-        /// > Guarda el identificador del mod en el diccionario de mods
-        /// > _mod_ = identificador del mod
-        /// > Crea y Agrega las configuraciones
-        /// > Agrega a la lista el mod actual
+        /// Agrega las funciones a LUA que se van ah necesitar  
+        /// > TODO: AIUDA  
+        /// > Crea un nuevo objeto en LUA con el tag que se le pase, que es una tabla > LUA  
+        /// > Guarda el identificador del mod en el diccionario de mods  
+        /// > _mod_ = identificador del mod  
+        /// > Crea y Agrega las configuraciones  
+        /// > Agrega a la lista el mod actual  
         /// </summary>
         public static void AddToLua()
         {
