@@ -92,6 +92,18 @@
             <summary>
             
             </summary>
+            <param></param>
+        </member>
+        <member name="M:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.AddToLua">
+            <summary>
+            Agrega las funciones a LUA que se van ah necesitar
+            > TODO: AIUDA
+            > Crea un nuevo objeto en LUA con el tag que se le pase, que es una tabla > LUA
+            > Guarda el identificador del mod en el diccionario de mods
+            > _mod_ = identificador del mod
+            > Crea y Agrega las configuraciones
+            > Agrega a la lista el mod actual
+            </summary>
         </member>
         <member name="T:FarlandsCoreMod.FarlandsLua.Functions.LuaGameObjectComponent">
             <summary>

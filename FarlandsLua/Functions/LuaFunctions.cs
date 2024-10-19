@@ -28,8 +28,18 @@ namespace FarlandsCoreMod.FarlandsLua.Functions
     /// <summary>
     /// 
     /// </summary>
+    /// <param></param>
     public static class LuaFunctions
     {
+        /// <summary>
+        /// Agrega las funciones a LUA que se van ah necesitar
+        /// > TODO: AIUDA
+        /// > Crea un nuevo objeto en LUA con el tag que se le pase, que es una tabla > LUA
+        /// > Guarda el identificador del mod en el diccionario de mods
+        /// > _mod_ = identificador del mod
+        /// > Crea y Agrega las configuraciones
+        /// > Agrega a la lista el mod actual
+        /// </summary>
         public static void AddToLua()
         {
             mathsFuncions();
@@ -57,6 +67,20 @@ _mod_ = {tag}";
                 LuaManager.EasyMods.Add(tag, LuaManager.CURRENT_MOD);
             };
 
+            /// <summary>
+            /// descrcion basica TODO: hacer luego
+            /// > _mod_.config = guarda las secciones que haya
+            /// > _mod_.config guarda la configuracion del mod
+            /// > if -> si la configuracion es un booleano
+            /// >   agremaos la entra a la configuracion
+            /// >   Cojes el mod en LUA
+            /// >   Cojer la sepcion
+            /// >   Cojer la clave que devulva el valor
+            /// </summary>
+            /// <param name="section">La seccion de la configuracion, puede haber varias</param>
+            /// <param name="key">codigo de la configuracion</param>
+            /// <param name="def">valor de la configuracion</param>
+            /// <param name="description">descripcion de ella</param>
             LuaManager.LUA.Globals["config"] = (string section, string key, DynValue def, string description) =>
             {
                 var code =
@@ -64,7 +88,7 @@ _mod_ = {tag}";
 _mod_.config = _mod_.config or {{}}
 _mod_.config.{section} = _mod_.config.{section} or {{}}
 ";
-                LuaManager.Execute(code, null);
+                LuaManager.Execute(code, null); //TODO: agregar todas las posibilidades de configuracion
                 if (def.Type == DataType.Boolean)
                 {
                     var entry = LuaManager.CURRENT_MOD.ConfigFile.Bind(section, key, def.Boolean, description);
@@ -77,13 +101,30 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
 
             };
 
+
+            /// <summary>
+            /// Consigue si as pulsado el boton de accion
+            /// > Obtiene el player
+            /// > Si el imput del palyer activado es igual al boton de accion
+            /// </summary>
             LuaManager.LUA.Globals["get_input"] = (string action) =>
             {
                 var player = GameObject.FindObjectOfType<PlayerController>();
                 return player.player.GetButtonDown(action) && player.inputEnabled;
             };
 
+
             // ----------------------- COMANDO DE COMANDOS ----------------------- //
+
+            /// <summary>
+            /// 
+            /// > Si no existe el objeto de comandos
+            /// > Obtiene la lista de comandos
+            /// > Divide el comando en palabras
+            /// > Recorre la lista de comandos
+            /// > Si el comando es igual al _comando
+            /// > Codigo Original :)
+            /// </summary>
             LuaManager.LUA.Globals["execute_command"] = (string _comando) =>
             {
                 if (LuaManager._o == null)
@@ -127,7 +168,12 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 //Destroy(_o);
             };
 
+
             // ----------------------- FUNCIONES DE ESCENA ----------------------- //
+            /// <summary>
+            /// Carga la escena especificada por nombre o índice.
+            /// <param name="scene"">puede ser el nombre o indice</param>
+            /// </summary>
             LuaManager.LUA.Globals["load_scene"] = (DynValue scene) =>
             {
                 if (scene.Type == DataType.String)
@@ -136,12 +182,23 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                     SceneManager.LoadScene(scene.Integer());
             };
 
+            /// <summary>
+            /// Printea la escena actual nombre e indice
+            /// </summary>
             LuaManager.LUA.Globals["print_scene"] = () =>
             {
                 Scene currentScene = SceneManager.GetActiveScene();
                 Terminal.Log($"({currentScene.buildIndex}) {currentScene.name}");
             };
 
+
+            /// <summary>
+            /// 
+            /// > Si no existe el objeto de comandos
+            /// > si un parametro, el nombre del archivo es la textura que va ah remplazar (no recomendado)
+            /// > si dos parametros, el primero es el nombre de la textura que va ah remplazar y el segundo es la ruta de la textura
+            /// </summary>
+            /// <param name="args"></param>
             LuaManager.LUA.Globals["texture_override"] = DynValue.NewCallback((ctx, args) =>
             {
                 if (args.Count == 0) throw new Exception("Invalid args for TextureOverride");
@@ -159,6 +216,11 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 return DynValue.Void;
             });
 
+
+            /// <summary>
+            /// Misma función que texture_override pero con un directorio
+            /// Pero ahora funciona con una carpeta entera
+            /// </summary>
             LuaManager.LUA.Globals["texture_override_in"] = DynValue.NewCallback((ctx, args) =>
             {
                 var path = args[0].String;
@@ -170,13 +232,28 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 return DynValue.Void;
             });
 
-            // No funciona
+            // TODO: No funciona, cremo
+            /// <summary>
+            /// En vez de remplaza una region de la textura
+            /// </summary>
+            /// <param name="origin">textura que se va a remplazar</param>
+            /// <param name="position">posicion inicial(abajo -> arriba, izquierda -> derecha)</param>
+            /// <param name="path">direccion del archivo</param>
             LuaManager.LUA.Globals["sprite_override"] = (string origin, int[] position, string path) =>
             {
                 var vec = new Vector2Int(position[0], position[1]);
                 TexturesModifier.ReplaceSprite(origin, vec, LuaManager.GetFromMod(path));
             };
 
+
+            /// <summary>
+            /// Es un **texture_override** pero con un personaje
+            /// > Crea una función en LUA que se ejecuta cuando se llama a la función
+            /// > La función llama a **texture_override** con los parametros que se le pasan
+            /// > **texture_override** remplaza la textura
+            /// </summary>
+            /// <param name="origin"></param>
+            /// <param name="path"></param>
             LuaManager.LUA.Globals["portrait_override"] = (string origin, string path) =>
             {
                 string code =

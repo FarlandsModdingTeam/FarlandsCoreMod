@@ -22,6 +22,7 @@
   - [LoadFolder(path,acumPath)](#M-FarlandsCoreMod-FarlandsLua-FarlandsEasyMod-LoadFolder-System-String,System-String- 'FarlandsCoreMod.FarlandsLua.FarlandsEasyMod.LoadFolder(System.String,System.String)')
   - [LoadZip(zipPath)](#M-FarlandsCoreMod-FarlandsLua-FarlandsEasyMod-LoadZip-System-String- 'FarlandsCoreMod.FarlandsLua.FarlandsEasyMod.LoadZip(System.String)')
 - [LuaFunctions](#T-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions 'FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions')
+  - [AddToLua()](#M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-AddToLua 'FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.AddToLua')
 - [LuaGameObjectComponent](#T-FarlandsCoreMod-FarlandsLua-Functions-LuaGameObjectComponent 'FarlandsCoreMod.FarlandsLua.Functions.LuaGameObjectComponent')
   - [Result](#P-FarlandsCoreMod-FarlandsLua-Functions-LuaGameObjectComponent-Result 'FarlandsCoreMod.FarlandsLua.Functions.LuaGameObjectComponent.Result')
   - [StartFunction](#P-FarlandsCoreMod-FarlandsLua-Functions-LuaGameObjectComponent-StartFunction 'FarlandsCoreMod.FarlandsLua.Functions.LuaGameObjectComponent.StartFunction')
@@ -252,6 +253,23 @@ FarlandsCoreMod.FarlandsLua.Functions
 ##### Summary
 
 
+
+<a name='M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-AddToLua'></a>
+### AddToLua() `method`
+
+##### Summary
+
+Agrega las funciones a LUA que se van ah necesitar
+> TODO: AIUDA
+> Crea un nuevo objeto en LUA con el tag que se le pase, que es una tabla > LUA
+> Guarda el identificador del mod en el diccionario de mods
+> _mod_ = identificador del mod
+> Crea y Agrega las configuraciones
+> Agrega a la lista el mod actual
+
+##### Parameters
+
+This method has no parameters.
 
 <a name='T-FarlandsCoreMod-FarlandsLua-Functions-LuaGameObjectComponent'></a>
 ## LuaGameObjectComponent `type`
