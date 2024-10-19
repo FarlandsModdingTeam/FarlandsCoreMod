@@ -9,7 +9,11 @@
           ]
         }
       ],
-      "dest": "api"
+      "dest": "api",
+      "properties": {
+        "TargetFramework": "netstandard2.1",
+        "DocumentationFile": "./mqm.xml"
+      }
     }
   ],
   "build": {
@@ -36,8 +40,8 @@
       "modern"
     ],
     "globalMetadata": {
-      "_appName": "Documentacion_FCM",
-      "_appTitle": "Documentacion_FCM",
+      "_appName": "DocuementacionFCM",
+      "_appTitle": "DocuementacionFCM",
       "_enableSearch": true,
       "pdf": true
     }

@@ -1,27 +1,27 @@
 {
   "Docs/Lua.html": {
     "href": "Docs/Lua.html",
-    "title": "| Documentacion_FCM",
+    "title": "| DocuementacionFCM",
     "keywords": "Funciones Principales MOD(name) Inicia el mod con el nombre indicado, debe ser ejecutado en la primera l�nea **add_language(path) Agrega un idioma dada la ruta a su archivo .json add_command(name, luaFunc, help) Agrega un comando de consola add_credits(quantity) Agrega una cantidad de cr�ditos add_item(_id, quantity) Agrega un item a tu inventario create_scene(name) Crea una nueva escena create_object(name) Crea y devuelve un nuevo objeto con el nombre indicado config(section, key, default, description) Agrega una configuraci�n create_inventory_item(item) Crea un nuevo item para inventarios Parametros: {name, itemType, spritePath, buyPrice, sellPrice, canBeStacked, canBeDestroyed, matterPercent} item = { name = , -- nombre -- puede tomar los siguientes valores 'RESOURCE', 'TOOL', 'SEED', 'CRAFTING', 'FISH', 'INSECT', 'PLACEABLE' type = , -- tipo sprite = , -- ruta del sprite buy_price = , -- precio de compra sell_price = , -- precio de venta stackable = , -- si puede acumularse en un �nico slot de inventario destroyable = , -- si puede ser destruido matter_percent = , cantidad de combustible que le da a la nave } create_plant Crea un nuevo item para inventarios Parametros: {name, days_for_death, days_for_stage, grow_season, resources, seed, stage_1, stage_2, stage_3, stage_4, stage_5} item = { name = , -- nombre days_for_death = , -- dias que puede sobrevivir sin regar days_for_stage= , -- dias para cambio de estado grow_season = , -- temporada en la que crece (tenemos que comprobar los valores) resources = , -- recursos que puede dar seed = , -- sprite para la semilla stage_n = , -- donde n es un n�mero del 1 al 5, sprite para el estado correspondiente } create_seed(inventoryId, plantsId) Crea una semilla asignando un objeto de inventario a una lista de plantas execute_command(command) Ejecuta un comando find_object(name) Devuelve un objeto de la escena con nuevas funciones get_input(action) Obtiene si un input se est� pulsando get_object(path) Obtiene un objeto especificando la ruta de objetos load_scene(scene) Carga una escena indicada potrait_override(origin, path) Cambia la textura de un portrait por la textura indicada con el path print(text) Muesta por terminal el mensaje indicado print_scene() Muesta por terminal la escena actual texture_override(path) Cambia la textura indicada con el nombre del archivo path texture_override(origin, path) Cambia la textura origin por la textura indicada con el path texture_override_in(path) Cambia todas las texturas de una carpeta indicadas con el nombre de cada archivo toggle_ui() Desactiva la interfaz de usuario OCASIONA ERRORES translate_inventory_item(id, names, descriptions) Agrega traducciones a un inventory items Funciones matem�ticas Funciones que tienen que ver con matem�ticas, estas funciones se encuentran detro de math, por ejemplo math.normalize(vector) normalize(vector) Normaliza un vector Lua GameObject add_component(component) Agrega el componente indicado al objeto add_position(x, y, z) Agrega posici�n al objeto get_language() Devuelve el idioma actual get_position() Devuelve la posici�n del objeto set_position(x, y, z) Cambia la posici�n del objeto toggle_active() Cambia su estado activo"
   },
   "README.html": {
     "href": "README.html",
-    "title": "FarlandsCoreMod | Documentacion_FCM",
+    "title": "FarlandsCoreMod | DocuementacionFCM",
     "keywords": "FarlandsCoreMod Farlands Core Mod es un mod para Farlands que pretende simplificar el desarrollo de mods para dicho juego. Dependencias BepInEx 6 Instalación Estos son los pasos que debes hacer para instalar un mod Buscar la carpeta raíz de Farlands. Extraer BepInEx 6 en la carpeta raíz del juego. Ejecutar la demo de Farlands. Poner los mods en la carpeta BepInEx/plugins dela raíz del juego. Al volver a ejecutar la demo de Farlands el mod ya estará instalado. FarlandsLua Para simplificar varios aspectos a la hora de desarrollar mods simples, se está trabajando en agregar soporte para lua. Documentación Lua Configuraciones Para configurar el mod, debes modificar el archivo BepInEx/config/top.magincian.fcm.cfg. Aquí mostramos el archivo de configuración por defecto ## Settings file was created by plugin FarlandsCoreMod v0.1.3 ## Plugin GUID: top.magincian.fcm [Debug] ## If true the intro will be skipped # Setting type: Boolean # Default value: false SkipIntro = false ## If true the Early Access Screen will be removed # Setting type: Boolean # Default value: false QuitEarlyAccessScreen = false ## If enable Unity logs will be visible in terminal # Setting type: Boolean # Default value: false UnityDebug = false [FarlandsDialogueMod] ## If true, a export file will be created and will save all the dialogues # Setting type: Boolean # Default value: false ExportDialogues = false [FarlandsItems] ## The first id for mod objects # Setting type: Int32 # Default value: 2000 FirstID = 2000"
   },
   "getting-started.html": {
     "href": "getting-started.html",
-    "title": "Getting Started | Documentacion_FCM",
-    "keywords": "Getting Started"
+    "title": "Getting Started | DocuementacionFCM",
+    "keywords": "Getting Started HOLIWI"
   },
   "index.html": {
     "href": "index.html",
-    "title": "This is the HOMEPAGE. | Documentacion_FCM",
+    "title": "This is the HOMEPAGE. | DocuementacionFCM",
     "keywords": "This is the HOMEPAGE. Refer to Markdown for how to write markdown files. Quick Start Notes: Add images to the images folder if the file is referencing an image."
   },
   "introduction.html": {
     "href": "introduction.html",
-    "title": "Introduction | Documentacion_FCM",
+    "title": "Introduction | DocuementacionFCM",
     "keywords": "Introduction"
   }
 }
