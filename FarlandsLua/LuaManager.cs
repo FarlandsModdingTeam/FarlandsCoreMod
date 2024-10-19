@@ -116,7 +116,13 @@ namespace FarlandsCoreMod.FarlandsLua
             return EasyMods[mod].GetFilesInFolder(mod, path.Substring(i + 1, path.Length - i - 1));
         }
 
-        // Método para obtener datos de un mod
+
+        /// <summary>
+        ///     Método para obtener datos de un mod
+        ///     ¿cuales datos? Ni puta idea
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static byte[] GetFromMod(string path)
         {
             var i = path.IndexOf('/');
