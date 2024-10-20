@@ -27,17 +27,39 @@ using Object = UnityEngine.Object;
 namespace FarlandsCoreMod.FarlandsLua
 {
     [Patcher]
+    /// <summary>
+    /// **LuaManager** es el manager que se encarga de cargar y ejecutar los mods en LUA
+    /// 
+    /// </summary>
     public class LuaManager : IManager
     {
         // ----------------------- DECLARACIONES ----------------------- //
+        /// <summary>
+        /// - clase de BepInEx que se encarga de cargar los mods  
+        /// - Configuracion que se agrega al BepInEx  
+        /// </summary>
         public static ConfigEntry<bool> UnityDebug;
+
+        /// <summary>
+        /// Lista de mods cargados  
+        /// </summary>
         public static Dictionary<string, FarlandsEasyMod> EasyMods = new();
+
+        /// <summary>
+        /// > TODO: ser menos gilipollas  
+        /// </summary>
         public static Dictionary<string, List<Action>> OnEvents = new();
         public static FarlandsEasyMod CURRENT_MOD;
+
+        /// <summary>
+        /// LUA es un script que se encarga de ejecutar el codigo LUA
+        /// </summary>
         public static Script LUA = new();
         public static GameObject _o; // public static, Odio mi vida
 
         public int Index => 1;
+        /*--- FIN DECLARACIONES ---*/
+
 
         /// <summary>
         /// name: MOD
@@ -53,7 +75,7 @@ namespace FarlandsCoreMod.FarlandsLua
         ///     name: ExecuteEvent
         ///     Ejecuta un evento en todos los mods cargados
         /// </summary>
-        /// <param name="ev"></param>
+        /// <param name="ev"> No se que es </param>
         public static void ExecuteEvent(params string[] ev)
         {
             Debug.Log(string.Join('.', ev));
@@ -84,7 +106,11 @@ namespace FarlandsCoreMod.FarlandsLua
             
         }
 
-        // Método para inicializar el Manager
+
+        /// <summary>
+        ///     Método para inicializar el Manager
+        ///     Se inicia al iniciar el juego
+        /// </summary>
         public void Init()
         {
             UnityDebug = FarlandsCoreMod.AddConfig("Debug", "UnityDebug", "If enable Unity logs will be visible in terminal", false);
@@ -99,6 +125,11 @@ namespace FarlandsCoreMod.FarlandsLua
             src.ToList().ForEach(FarlandsEasyMod.LoadAndAddZip);
         }
 
+        /// <summary>
+        ///    Método para obtener los archivos de un mod  
+        /// </summary>
+        /// <param name="path">Direccion del archivo</param>
+        /// <returns></returns>
         public static string[] GetFilesInMod(string path)
         {
             var i = path.IndexOf('/');
@@ -107,7 +138,13 @@ namespace FarlandsCoreMod.FarlandsLua
             return EasyMods[mod].GetFilesInFolder(mod, path.Substring(i + 1, path.Length - i - 1));
         }
 
-        // Método para obtener datos de un mod
+
+        /// <summary>
+        /// Método para obtener datos de un mod  
+        /// ¿cuales datos? Ni puta idea  
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static byte[] GetFromMod(string path)
         {
             var i = path.IndexOf('/');
