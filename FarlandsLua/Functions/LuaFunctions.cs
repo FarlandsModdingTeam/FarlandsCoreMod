@@ -5,6 +5,7 @@ using Farlands.Dev;
 using Farlands.Inventory;
 using Farlands.PlantSystem;
 using Farlands.UsableItems;
+using FarlandsCoreMod.Attributes;
 using FarlandsCoreMod.FarlandsLua;
 using FarlandsCoreMod.Utiles;
 using FarlandsCoreMod.Utiles.Loaders;
@@ -13,14 +14,20 @@ using JanduSoft;
 using Language.Lua;
 using MoonSharp.Interpreter;
 using PixelCrushers.DialogueSystem;
+using PixelCrushers.DialogueSystem.Articy.Articy_1_4;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Security.Cryptography;
 using System.Text;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static PixelCrushers.DialogueSystem.UnityGUI.GUIProgressBar;
+using static System.Collections.Specialized.BitVector32;
+using static Unity.VisualScripting.Member;
 using Debug = UnityEngine.Debug;
 
 namespace FarlandsCoreMod.FarlandsLua.Functions
@@ -30,23 +37,19 @@ namespace FarlandsCoreMod.FarlandsLua.Functions
     /// </summary>
     public static class LuaFunctions
     {
-        /// <summary>
-        /// Agrega las funciones a LUA que se van ah necesitar  
-        /// > TODO: AIUDA  
-        /// > Crea un nuevo objeto en LUA con el tag que se le pase, que es una tabla > LUA  
-        /// > Guarda el identificador del mod en el diccionario de mods  
-        /// > _mod_ = identificador del mod  
-        /// > Crea y Agrega las configuraciones  
-        /// > Agrega a la lista el mod actual  
-        /// </summary>
-        public static void AddToLua()
+        [Functions]
+        public static class GlobalFunctions
         {
-            mathsFuncions();
+            #region Define Functions
 
-            LuaManager.LUA.Globals["MOD"] = (string tag) =>
+            /// <summary>
+            /// TODO
+            /// </summary>
+            /// <param name="tag"></param>
+            public static void MOD(string tag)
             {
                 var code =
-@$"
+     @$"
 {tag} = {{}}
 {tag}.tag = '{tag}'
 {tag}.scenes = {{}}
@@ -64,30 +67,33 @@ _mod_ = {tag}";
                 LuaManager.Execute(code, null);
                 LuaManager.CURRENT_MOD.ConfigFile = new(Path.Combine(Paths.Config, $"{tag}.cfg"), true);
                 LuaManager.EasyMods.Add(tag, LuaManager.CURRENT_MOD);
-            };
+            }
 
             /// <summary>
             /// descrcion basica TODO: hacer luego
-            /// > _mod_.config = guarda las secciones que haya
-            /// > _mod_.config guarda la configuracion del mod
-            /// > if -> si la configuracion es un booleano
-            /// >   agremaos la entra a la configuracion
-            /// >   Cojes el mod en LUA
-            /// >   Cojer la sepcion
-            /// >   Cojer la clave que devulva el valor
             /// </summary>
+            /// <example>
+            /// > _mod_.config = guarda las secciones que haya  
+            /// > _mod_.config guarda la configuracion del mod  
+            /// > if -> si la configuracion es un booleano  
+            /// >   agremaos la entra a la configuracion  
+            /// >   Cojes el mod en LUA  
+            /// >   Cojer la sepcion  
+            /// >   Cojer la clave que devulva el valor  
+            /// </example>
             /// <param name="section">La seccion de la configuracion, puede haber varias</param>
             /// <param name="key">codigo de la configuracion</param>
             /// <param name="def">valor de la configuracion</param>
             /// <param name="description">descripcion de ella</param>
-            LuaManager.LUA.Globals["config"] = (string section, string key, DynValue def, string description) =>
+            public static void config(string section, string key, DynValue def, string description)
             {
                 var code =
-@$"
+        @$"
 _mod_.config = _mod_.config or {{}}
 _mod_.config.{section} = _mod_.config.{section} or {{}}
 ";
                 LuaManager.Execute(code, null); //TODO: agregar todas las posibilidades de configuracion
+
                 if (def.Type == DataType.Boolean)
                 {
                     var entry = LuaManager.CURRENT_MOD.ConfigFile.Bind(section, key, def.Boolean, description);
@@ -98,33 +104,36 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                         .Table.Set(key, DynValue.NewCallback((ctx, args) => DynValue.NewBoolean(entry.Value)));
                 }
 
-            };
-
+            }
 
             /// <summary>
-            /// Consigue si as pulsado el boton de accion  
-            /// > Obtiene el player
-            /// > Si el imput del palyer activado es igual al boton de accion
+            /// Devuelve si as pulsado el boton o tecla especificada  
             /// </summary>
-            LuaManager.LUA.Globals["get_input"] = (string action) =>
+            /// <param name="input">Input esperado</param>
+            /// <example>
+            /// > Obtiene el player
+            /// > Si el input especificado está pulsado
+            /// </example>
+            public static bool get_input(string input)
             {
                 var player = GameObject.FindObjectOfType<PlayerController>();
-                return player.player.GetButtonDown(action) && player.inputEnabled;
-            };
+                return player.player.GetButtonDown(input) && player.inputEnabled;
+            }
 
-
-            // ----------------------- COMANDO DE COMANDOS ----------------------- //
 
             /// <summary>
-            /// 
+            /// TODO
+            /// </summary>
+            /// <param name="_comando">Comando a ejecutar</param>
+            /// <example>
             /// > Si no existe el objeto de comandos  
             /// > Obtiene la lista de comandos  
             /// > Divide el comando en palabras  
             /// > Recorre la lista de comandos  
             /// > Si el comando es igual al _comando  
             /// > Codigo Original :)
-            /// </summary>
-            LuaManager.LUA.Globals["execute_command"] = (string _comando) =>
+            /// </example>
+            public static void execute_command(string _comando)
             {
                 if (LuaManager._o == null)
                 {
@@ -163,73 +172,61 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                         }
                     }
                 }
+            }
 
-                //Destroy(_o);
-            };
-
-
-            // ----------------------- FUNCIONES DE ESCENA ----------------------- //
             /// <summary>
             /// Carga la escena especificada por nombre o índice.  
-            /// <param name="scene"">puede ser el nombre o indice</param>
+            /// <param name="scene">puede ser el nombre o indice</param>
             /// </summary>
-            LuaManager.LUA.Globals["load_scene"] = (DynValue scene) =>
+            public static void load_scene(DynValue scene)
             {
                 if (scene.Type == DataType.String)
                     SceneManager.LoadScene(scene.String);
                 else if (scene.Type == DataType.Number)
                     SceneManager.LoadScene(scene.Integer());
-            };
+            }
 
-            /// <summary>
-            /// Printea la escena actual nombre e indice
-            /// </summary>
-            LuaManager.LUA.Globals["print_scene"] = () =>
+            public static void print_scene()
             {
                 Scene currentScene = SceneManager.GetActiveScene();
                 Terminal.Log($"({currentScene.buildIndex}) {currentScene.name}");
-            };
-
+            }
 
             /// <summary>
-            /// 
+            /// TODO
+            /// </summary>
+            /// <example>
             /// > Si no existe el objeto de comandos  
             /// > si un parametro, el nombre del archivo es la textura que va ah remplazar (no recomendado)  
             /// > si dos parametros, el primero es el nombre de la textura que va ah remplazar y el segundo es la ruta de la textura  
-            /// </summary>
-            /// <param name="args"></param>
-            LuaManager.LUA.Globals["texture_override"] = DynValue.NewCallback((ctx, args) =>
+            /// </example>
+            /// <param name="arg0"></param>
+            /// <param name="arg1"></param>
+            public static void texture_override(DynValue arg0, DynValue arg1)
             {
-                if (args.Count == 0) throw new Exception("Invalid args for TextureOverride");
-                else if (args.Count == 1)
+                if (arg0.IsNil()) throw new Exception("Invalid args for TextureOverride");
+                else if (arg1.IsNil())
                 {
-                    var path = args[0].String;
+                    var path = arg0.String;
                     TexturesModifier.ReplaceTexture(Path.GetFileNameWithoutExtension(path), LuaManager.GetFromMod(path));
                 }
-                else if (args.Count == 2)
+                else
                 {
-                    var origin = args[0].String;
-                    var path = args[1].String;
+                    var origin = arg0.String;
+                    var path = arg1.String;
                     TexturesModifier.ReplaceTexture(origin, LuaManager.GetFromMod(path));
                 }
-                return DynValue.Void;
-            });
+            }
 
-
-            /// <summary>
-            /// Misma función que texture_override pero con un directorio  
-            /// Pero ahora funciona con una carpeta entera  
-            /// </summary>
-            LuaManager.LUA.Globals["texture_override_in"] = DynValue.NewCallback((ctx, args) =>
+            // TODO: no se recomienda su uso, a lo mejor se quita
+            public static void texture_override_in(string path)
             {
-                var path = args[0].String;
                 Debug.Log(string.Join('\n', LuaManager.GetFilesInMod(path)));
 
                 foreach (var item in LuaManager.GetFilesInMod(path))
                     TexturesModifier.ReplaceTexture(Path.GetFileNameWithoutExtension(item), LuaManager.GetFromMod(item));
 
-                return DynValue.Void;
-            });
+            }
 
             // TODO: No funciona, cremo
             /// <summary>
@@ -238,86 +235,76 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
             /// <param name="origin">textura que se va a remplazar</param>
             /// <param name="position">posicion inicial(abajo -> arriba, izquierda -> derecha)</param>
             /// <param name="path">direccion del archivo</param>
-            LuaManager.LUA.Globals["sprite_override"] = (string origin, int[] position, string path) =>
+            public static void sprite_override(string origin, int[] position, string path)
             {
                 var vec = new Vector2Int(position[0], position[1]);
                 TexturesModifier.ReplaceSprite(origin, vec, LuaManager.GetFromMod(path));
-            };
-
+            }
 
             /// <summary>
             /// Es un **texture_override** pero con un personaje  
+            /// </summary>
+            /// <example>
             /// > Crea una función en LUA que se ejecuta cuando se llama a la función  
             /// > La función llama a **texture_override** con los parametros que se le pasan  
             /// > **texture_override** remplaza la textura  
-            /// </summary>
-            /// <param name="origin"></param>
-            /// <param name="path"></param>
-            LuaManager.LUA.Globals["portrait_override"] = (string origin, string path) =>
+            /// </example>
+            /// <param name="origin">portrait a reemplazar</param>
+            /// <param name="path">dirección del archivo</param>
+            public static void portrait_override(string origin, string path)
             {
                 string code =
 @$"
-    function _mod_.event.dialogue.portrait:{origin}()
-        texture_override('{origin}', '{path}')
-    end
-    ";
+function _mod_.event.dialogue.portrait:{origin}()
+    texture_override('{origin}', '{path}')
+end
+";
                 LuaManager.LUA.DoString(code);
-            };
+            }
 
             /// <summary>
             /// Se llama add_language, ¿Que cres que va hah hacer?    
             /// </summary>
             /// <param name="path">direccion del json</param>
-            LuaManager.LUA.Globals["add_language"] = (string path) =>
-            {
-                FarlandsDialogue.FarlandsDialogueManager.AddSourcePreStartFromBytes(LuaManager.GetFromMod(path));
-            };
-            /// <summary>
-            /// te da lenguaje actual  
-            /// </summary>
-            LuaManager.LUA.Globals["get_language"] = () =>
-            {
-                return LocalizationManager.CurrentLanguage;
-            };
+            public static void add_language(string path) => FarlandsDialogue.FarlandsDialogueManager.AddSourcePreStartFromBytes(LuaManager.GetFromMod(path));
+
+            public static string get_language() => LocalizationManager.CurrentLanguage;
 
             /// <summary>
             /// printea el texto  
             /// </summary>
             /// <param name="txt">lo que le pases lo dibuja por consola</param>
-            LuaManager.LUA.Globals["print"] = (string txt) =>
+            public static void print(string txt)
             {
                 if (!LuaManager.UnityDebug.Value) Debug.Log(txt);
                 Terminal.Log(txt);
+            }
 
-            };
-
-            // ----------------------- BUSCAR OBJETOS ----------------------- //
             /// <summary>
             /// te da un objeto dada la ruta de los objetos  
             /// </summary>
             /// <param name="args">ruta en gameObject</param>
-            LuaManager.LUA.Globals["get_object"] = DynValue.NewCallback((ctx, args) =>
+            public static DynValue get_object(List<DynValue>  args)
             {
-                if (args.Count < 1) return DynValue.Nil;
-                var nameObjects = args.GetArray().Select(x => x.String);
+                if (args.Count() < 1) return DynValue.Nil;
 
                 var scene = SceneManager.GetActiveScene();
                 GameObject previous = null;
                 var notFound = false;
-                foreach (var go in nameObjects)
+                foreach (var go in args)
                 {
-                    if (previous == null && !scene.GetRootGameObjects().Any(x => x.name == go))
+                    if (previous == null && !scene.GetRootGameObjects().Any(x => x.name == go.String))
                     {
                         notFound = true;
                         break;
                     }
-                    if (previous == null) previous = scene.GetRootGameObjects().First(x => x.name == go);
+                    if (previous == null) previous = scene.GetRootGameObjects().First(x => x.name == go.String);
                     else
                     {
                         for (var i = 0; i < previous.transform.childCount; i++)
                         {
                             var next = previous.transform.GetChild(i).gameObject;
-                            if (next.name == go)
+                            if (next.name == go.String)
                             {
                                 previous = next;
                                 break;
@@ -327,28 +314,25 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 }
                 if (notFound) return DynValue.Nil;
                 return LuaFactory.FromGameObject(previous);
-            });
-
+            }
 
             /// <summary>
             /// Te busca un gameObject en la escena por el nombre (cuidado con objeton con el mismo nombre)  
             /// </summary>
             /// <param name="args">nombre del objeto</param>
-            LuaManager.LUA.Globals["find_object"] = DynValue.NewCallback((ctx, args) =>
+            public static DynValue find_object(string name, string scene)
             {
-                if (args.Count < 1) return DynValue.Nil;
+                if (name == null) return DynValue.Nil;
 
-                if (args.Count == 1)
+                if (scene == null)
                 {
-                    var go = GetAllGameObjectsInScene(SceneManager.GetActiveScene()).First(x => x.name == args[0].String);
+                    var go = GetAllGameObjectsInScene(SceneManager.GetActiveScene()).First(x => x.name == name);
                     return LuaFactory.FromGameObject(go);
                 }
 
-                var gameObject = GetAllGameObjectsInScene(SceneManager.GetSceneByName(args[1].String)).First(x => x.name == args[0].String);
+                var gameObject = GetAllGameObjectsInScene(SceneManager.GetSceneByName(scene)).First(x => x.name == name);
                 return LuaFactory.FromGameObject(gameObject);
-            });
-
-            // NOTA: aprender sobre extensores
+            }
 
             /// <summary>
             ///   
@@ -356,72 +340,63 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
             /// > si ex 0x es un hexadecimal  
             /// > si es un string busca el objeto por el nombre  
             /// </summary>
-            /// <param name="_id"></param>
-            /// <param name="_cantidad"></param>
-            LuaManager.LUA.Globals["add_item"] = (DynValue _id, int _cantidad = 1) =>
+            /// <param name="id"></param>
+            /// <param name="amount"></param>
+            public static void add_item(DynValue id, int amount)
             {
-                if (_id.Type == DataType.Number)
-                    UnityEngine.Object.FindObjectOfType<InventorySystem>().AddItemByID(_id.Integer(), _cantidad);
+                if (id.Type == DataType.Number)
+                    UnityEngine.Object.FindObjectOfType<InventorySystem>().AddItemByID(id.Integer(), amount);
                 else
                 {
-                    if (_id.String.StartsWith("0x"))
+                    if (id.String.StartsWith("0x"))
                     {
                         UnityEngine.Object.FindObjectOfType<InventorySystem>().AddItemByID(
-                            Convert.ToInt32(_id.String.Replace("0x", ""), 16),
-                            _cantidad);
+                            Convert.ToInt32(id.String.Replace("0x", ""), 16),
+                            amount);
                     }
                     else
                     {
                         foreach (var item in FarlandsItems.FarlandsItemsManager.DB.inventoryItems)
                         {
-                            if (item.itemName.ToUpper() == _id.String.ToUpper())
+                            if (item.itemName.ToUpper() == id.String.ToUpper())
                             {
-                                UnityEngine.Object.FindObjectOfType<InventorySystem>().AddItemByID(item.itemID, _cantidad);
+                                UnityEngine.Object.FindObjectOfType<InventorySystem>().AddItemByID(item.itemID, amount);
                                 break;
                             }
                         }
                     }
                 }
-            };
-
+            }
 
             /// <summary>
             /// Añade los creidtos especificados  
             /// </summary>
-            /// <param name="_cantidad">Cantidad añadir</param>
-            LuaManager.LUA.Globals["add_credits"] = (int _cantidad) =>
+            /// <param name="amount">Cantidad añadir</param>
+            public static void add_credits(int amount)
             {
-                Singleton<FarlandsGameManager>.Instance.persistentDataScript.credits += _cantidad;
+                Singleton<FarlandsGameManager>.Instance.persistentDataScript.credits += amount;
                 UnityEngine.Object.FindObjectOfType<HUDMoneyScript>().UpdateCredits();
-            };
+            }
 
-            // TODO: añadir para añadir a los creditos del juego nuevos nombres
-
-
-            // ----------------------- CREAR OBJETOS/COSAS ----------------------- //
             /// <summary>
             /// Crea un nuevo gameObject con el nombre especificado  
             /// </summary>
             /// <param name="name">nombre del gameObject a crear</param>
-            LuaManager.LUA.Globals["create_object"] = (string name) =>
+            public static DynValue create_object(string name)
             {
                 var go = new GameObject(name);
                 go.AddComponent<LuaGameObjectComponent>();
                 return LuaFactory.FromGameObject(go);
-            };
+            }
 
-
-            //TODO agregar múltiple
             /// <summary>
             /// Añade a la lista un objeto de inventario  
             /// > Crea un nuevo objeto de inventario  
             /// > Si  
             /// </summary>
             /// <param name="args">name->string, type->string, sprite->string, buy_price->int, sell_price->int, stackeable->bool, matter_percent->float</param>
-            LuaManager.LUA.Globals["create_inventory_item"] = (DynValue args) =>
+            public static int create_inventory_item(DynValue args)
             {
-                //TODO Este método puede considerarse como un ToCsharp
-
                 string name = args.Table.Get("name").String;
                 string itemType = args.Table.Get("type").String.ToUpper();
                 string spritePath = args.Table.Get("sprite").String;
@@ -455,8 +430,7 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                     itemSellPrice = sellPrice,
                     matterPercent = matterPercent
                 });
-            };
-
+            }
 
             //TODO agregar múltiple
             /// <summary>
@@ -470,14 +444,13 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
             /// <param name="args">
             /// name->string, days_for_death->int, days_for_stage->int, grow_season->int, resources->table->(item->int, algomas->X, algomas->X), seed->string, stage_1->string, stage_2->string, stage_3->string, stage_4->string, stage_5->string
             /// </param> 
-            LuaManager.LUA.Globals["create_plant"] = (DynValue args) =>
+            public static int create_plant(DynValue args)
             {
-                //TODO Este método puede considerarse como un ToCsharp
                 string name = args.Table.Get("name").String;
                 int daysForDeath = args.Table.Get("days_for_death").Integer();
-                int daysForStage = args.Table.Get("days_for_stage").Integer(); 
+                int daysForStage = args.Table.Get("days_for_stage").Integer();
                 int growSeason = args.Table.Get("grow_season").Integer();
-                DynValue resources = args.Table.Get("resources"); 
+                DynValue resources = args.Table.Get("resources");
                 string seedSprite = args.Table.Get("seed").String;
                 string s1Sprite = args.Table.Get("stage_1").String;
                 string s2Sprite = args.Table.Get("stage_2").String;
@@ -550,22 +523,20 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                 plant.stage5Sprite = SpriteLoader.FromRaw(LuaManager.GetFromMod(s5Sprite));
 
                 return FarlandsItems.FarlandsItemsManager.AddPlant(plant);
-            };
+            }
 
-
-            /// <summary>
             /// Crear una semilla
             /// </summary>
             /// <param name="inventoryId">id de la planta</param>
             /// <param name="plantsId">id del inventory Item</param>
-            LuaManager.LUA.Globals["create_seed"] = (int inventoryId, List<int> plantsId) =>
+            public static void create_seed(int inventoryId, List<DynValue> plantsId)
             {
                 FarlandsItems.FarlandsItemsManager.seeds.Add(new FarlandsItems.FarlandsItemsManager.SeedData()
                 {
                     ItemId = inventoryId,
-                    PlantsId = plantsId
+                    PlantsId = plantsId.Select(x => x.Integer()).ToList()
                 });
-            };
+            }
 
             /// <summary>
             /// Traducion del objeto de inventario
@@ -573,22 +544,22 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
             /// <param name="id">id del objeto</param>
             /// <param name="name">nombres</param>
             /// <param name="description">descripciones</param>
-            LuaManager.LUA.Globals["translate_inventory_item"] = (int id, List<string> name, List<string> description) =>
+            public static void translate_inventory_item(int id, List<DynValue> name, List<DynValue> description)
             {
-                FarlandsDialogue.FarlandsDialogueManager.AddInventoryTranslation(id, name, description);
-            };
-
+                FarlandsDialogue.FarlandsDialogueManager.AddInventoryTranslation(
+                    id, 
+                    name.Select(x=>x.String).ToList(),
+                    description.Select(x => x.String).ToList());
+            }
 
             /// <summary>
             /// Crea una escena con el nombre
             /// </summary>
             /// <param name="name">nombre de la escena</param>
-            LuaManager.LUA.Globals["create_scene"] = (string name) =>
+            public static void create_scene(string name)
             {
                 var scene = SceneManager.CreateScene(name);
-                //TODO agergar creación del objeto de la escena para LuaManager.LUA
-            };
-
+            }
 
             /// <summary>
             /// añade un comando a la terminal  
@@ -597,7 +568,7 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
             /// <param name="name">nombre del comando</param>
             /// <param name="LuaFunc">funcion lua</param>
             /// <param name="help">texto del help de help</param>
-            LuaManager.LUA.Globals["add_command"] = (string name, DynValue LuaFunc, string help) =>
+            public static void add_command(string name, DynValue LuaFunc, string help)
             {
                 Action<CommandArg[]> action = (CommandArg[] args) =>
                 {
@@ -633,49 +604,16 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
 
                 Terminal.Shell.AddCommand(name, action, help: help);
                 Terminal.Autocomplete.Register(name);
-            };
+            }
 
             /// <summary>
-            /// 
+            /// TODO agregar los nuevos
             /// </summary>
-            /// <param name="args"></param>
-            LuaManager.LUA.Globals["rayCast"] = DynValue.NewCallback((ctx, args) =>
+            public static DynValue rayCast(Vector3 origen, Vector3 direction, float max, int _mascara, UserData user)
             {
                 Debug.Log("Usted ah ejecutado 'rayCast' sin plomo 95");
-                // for (int i=0; i < args.Count; i++)
-                // {
-                //     var _t = args[i].Table;
-                //     Debug.Log($"Iterador_{i} Tipo: {args[i].Type} Valor: {args[i].ToPrintString()}");
-                // }
 
-                if (args.Count < 2)
-                {
-                    Debug.LogWarning("rayCast: Número insuficiente de argumentos.");
-                    return DynValue.Nil;
-                }
-
-                // Obtener el origen y la dirección del Raycast desde los argumentos de Lua
-                var _OrigenTable = args[0].Table;
-                var _DireccionTable = args[1].Table;
-
-                Vector3 _ori = new Vector3(
-                    (float)_OrigenTable.Get("x").Number,
-                    (float)_OrigenTable.Get("y").Number,
-                    (float)_OrigenTable.Get("z").Number
-                );
-
-                Vector3 direction = new Vector3(
-                    (float)_DireccionTable.Get("x").Number,
-                    (float)_DireccionTable.Get("y").Number,
-                    (float)_DireccionTable.Get("z").Number
-                );
-
-                float _max = args.Count > 2 ? (float)args[2].Number : 100f;
-
-                int _mascara = args.Count > 3 ? (int)args[3].Number : -1;
-
-
-                RaycastHit2D hit = Physics2D.Raycast(_ori, direction, _max); //, _mascara
+                RaycastHit2D hit = Physics2D.Raycast(origen, direction, max); //, _mascara
                 IToolInteraction component = hit.collider.GetComponent<IToolInteraction>();
                 if (hit.collider != null)
                 {
@@ -688,15 +626,16 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                     hitInfo["normal"] = LuaConverter.ToLua(hit.normal);
                     hitInfo["distance"] = DynValue.NewNumber(hit.distance);
 
-                    component.ToolHit(5, PlayerTool.PICKAXE, 5, (PlayerController)args[4].UserData.Object);
+                    component.ToolHit(5, PlayerTool.PICKAXE, 5, GameObject.FindObjectOfType<PlayerController>());
 
                     return DynValue.NewTable(hitInfo);
                 }
 
                 Debug.Log("rayCast: No se detectó ninguna colisión.");
                 return DynValue.Nil;
-            });
-            LuaManager.LUA.Globals["get_layer_number"] = (string layerName) =>
+            }
+
+            public static int get_layer_number(string layerName) 
             {
                 int layerNumber = LayerMask.NameToLayer(layerName);
                 if (layerNumber == -1)
@@ -704,7 +643,108 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                     Debug.LogWarning($"Layer '{layerName}' no encontrado.");
                 }
                 return layerNumber;
-            };
+            }
+
+            #endregion
+        }
+
+
+
+
+        [AttributeUsage(AttributeTargets.Class)]
+        public class Functions : Attribute
+        {
+            public string path;
+            public Functions()
+            {
+                path = "";
+            }
+            public Functions(string path)
+            {
+                this.path = path;
+            }
+        }
+        public static void AddToLua()
+        {
+            mathsFuncions();
+
+            var metadata = new LuaMetadata();
+            metadata.Add(new() { type = LuaMetadata.Type.META, values = "farlands" });
+
+            typeof(LuaFunctions)
+                .GetNestedTypes(BindingFlags.Public | BindingFlags.Static)
+                .Where(x => x.GetCustomAttributes<Functions>().Count() >= 1)
+                .ToList()
+                .ForEach(x => {
+                    Table t = LuaManager.LUA.Globals;
+                    var stroke = x.GetCustomAttribute<Functions>().path.Split('.').Skip(1);
+
+                    string parent = "";
+                    foreach (var str in stroke)
+                    {
+                        var name = str.Trim().ToLower();
+                        t = t.Get(name).Table;
+
+                        metadata.AddClass(name);
+                        metadata.AddCode($"{name} = {{}}");
+
+                        if (parent != "")
+                        {
+                            metadata.AddCode($"{parent}.{name} = {{}}");
+                        }
+
+                        parent = name;
+                    }
+
+                    x.GetMethods(BindingFlags.Public | BindingFlags.Static)
+                    .ToList().ForEach(m =>
+                    {
+                        List<string> parameters = new();
+                        var types = m.GetParameters().Select(p =>
+                        {
+                            metadata.AddParam(p.Name, p.ParameterType);
+                            parameters.Add(p.Name);
+                            return p.ParameterType;
+                        }).ToList();
+
+                        if (!typeof(void).IsAssignableFrom(m.ReturnType))
+                            metadata.AddReturn(m.ReturnType);
+                        
+                        if (parent == "")
+                        {
+                            metadata.AddFunction(m.Name, string.Join(',', parameters));
+                        }
+                        else
+                        {
+                            metadata.AddFunction(parent + "." + m.Name, string.Join(',', parameters));
+                        }
+
+                        t[m.Name] = DynValue.NewCallback((ctx, args) =>
+                        {
+                            Debug.Log(m.Name);
+                            var array = LuaConverter.CallbackArgumentToObjectArray(args, types).ToList();
+
+                            while (array.Count() > parameters.Count())
+                            {
+                                array.RemoveAt(array.Count() - 1);
+                            }
+
+                            while (array.Count() < parameters.Count())
+                            { 
+                                array.Add(null);
+                            }
+
+                            var res = m.Invoke(null, array.ToArray());
+                            return LuaConverter.ToLua(res);
+                        });
+                    });
+                });
+
+            File.WriteAllText(
+                    Path.Combine(Paths.Plugin, "metadata.lua"),
+                    metadata.ToString()
+                );
+            // ----------------------- BUSCAR OBJETOS ----------------------- //
         }
 
         /// <summary>
@@ -764,4 +804,6 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
             }
         }
     }
+
+    
 }

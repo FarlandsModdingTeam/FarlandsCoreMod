@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# CS8974: Convirtiendo grupo de métodos a tipo no delegado
+dotnet_diagnostic.CS8974.severity = silent
