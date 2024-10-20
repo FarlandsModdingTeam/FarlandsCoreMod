@@ -93,15 +93,186 @@
             ME CAGO EN MI PUTA VIDA
             </summary>
         </member>
-        <member name="M:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.AddToLua">
+        <member name="M:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.MOD(System.String)">
             <summary>
-            Agrega las funciones a LUA que se van ah necesitar  
-            > TODO: AIUDA  
-            > Crea un nuevo objeto en LUA con el tag que se le pase, que es una tabla > LUA  
-            > Guarda el identificador del mod en el diccionario de mods  
-            > _mod_ = identificador del mod  
-            > Crea y Agrega las configuraciones  
-            > Agrega a la lista el mod actual  
+            TODO
+            </summary>
+            <param name="tag"></param>
+        </member>
+        <member name="M:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.config(System.String,System.String,MoonSharp.Interpreter.DynValue,System.String)">
+            <summary>
+            descrcion basica TODO: hacer luego
+            </summary>
+            <example>
+            > _mod_.config = guarda las secciones que haya  
+            > _mod_.config guarda la configuracion del mod  
+            > if -> si la configuracion es un booleano  
+            >   agremaos la entra a la configuracion  
+            >   Cojes el mod en LUA  
+            >   Cojer la sepcion  
+            >   Cojer la clave que devulva el valor  
+            </example>
+            <param name="section">La seccion de la configuracion, puede haber varias</param>
+            <param name="key">codigo de la configuracion</param>
+            <param name="def">valor de la configuracion</param>
+            <param name="description">descripcion de ella</param>
+        </member>
+        <member name="M:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.get_input(System.String)">
+            <summary>
+            Devuelve si as pulsado el boton o tecla especificada  
+            </summary>
+            <param name="input">Input esperado</param>
+            <example>
+            > Obtiene el player
+            > Si el input especificado está pulsado
+            </example>
+        </member>
+        <member name="M:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.execute_command(System.String)">
+            <summary>
+            TODO
+            </summary>
+            <param name="_comando">Comando a ejecutar</param>
+            <example>
+            > Si no existe el objeto de comandos  
+            > Obtiene la lista de comandos  
+            > Divide el comando en palabras  
+            > Recorre la lista de comandos  
+            > Si el comando es igual al _comando  
+            > Codigo Original :)
+            </example>
+        </member>
+        <member name="M:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.load_scene(MoonSharp.Interpreter.DynValue)">
+            <summary>
+            Carga la escena especificada por nombre o índice.  
+            <param name="scene">puede ser el nombre o indice</param>
+            </summary>
+        </member>
+        <member name="M:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.texture_override(MoonSharp.Interpreter.DynValue,MoonSharp.Interpreter.DynValue)">
+            <summary>
+            TODO
+            </summary>
+            <example>
+            > Si no existe el objeto de comandos  
+            > si un parametro, el nombre del archivo es la textura que va ah remplazar (no recomendado)  
+            > si dos parametros, el primero es el nombre de la textura que va ah remplazar y el segundo es la ruta de la textura  
+            </example>
+            <param name="arg0"></param>
+            <param name="arg1"></param>
+        </member>
+        <member name="M:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.sprite_override(System.String,System.Int32[],System.String)">
+            <summary>
+            En vez de remplaza una region de la textura  
+            </summary>
+            <param name="origin">textura que se va a remplazar</param>
+            <param name="position">posicion inicial(abajo -> arriba, izquierda -> derecha)</param>
+            <param name="path">direccion del archivo</param>
+        </member>
+        <member name="M:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.portrait_override(System.String,System.String)">
+            <summary>
+            Es un **texture_override** pero con un personaje  
+            </summary>
+            <example>
+            > Crea una función en LUA que se ejecuta cuando se llama a la función  
+            > La función llama a **texture_override** con los parametros que se le pasan  
+            > **texture_override** remplaza la textura  
+            </example>
+            <param name="origin">portrait a reemplazar</param>
+            <param name="path">dirección del archivo</param>
+        </member>
+        <member name="M:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.add_language(System.String)">
+            <summary>
+            Se llama add_language, ¿Que cres que va hah hacer?    
+            </summary>
+            <param name="path">direccion del json</param>
+        </member>
+        <member name="M:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.print(System.String)">
+            <summary>
+            printea el texto  
+            </summary>
+            <param name="txt">lo que le pases lo dibuja por consola</param>
+        </member>
+        <member name="M:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.get_object(System.Collections.Generic.List{MoonSharp.Interpreter.DynValue})">
+            <summary>
+            te da un objeto dada la ruta de los objetos  
+            </summary>
+            <param name="args">ruta en gameObject</param>
+        </member>
+        <member name="M:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.find_object(System.String,System.String)">
+            <summary>
+            Te busca un gameObject en la escena por el nombre (cuidado con objeton con el mismo nombre)  
+            </summary>
+            <param name="args">nombre del objeto</param>
+        </member>
+        <member name="M:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.add_item(MoonSharp.Interpreter.DynValue,System.Int32)">
+            <summary>
+              
+            > si el id es un numero da el objeto por el id  
+            > si ex 0x es un hexadecimal  
+            > si es un string busca el objeto por el nombre  
+            </summary>
+            <param name="id"></param>
+            <param name="amount"></param>
+        </member>
+        <member name="M:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.add_credits(System.Int32)">
+            <summary>
+            Añade los creidtos especificados  
+            </summary>
+            <param name="amount">Cantidad añadir</param>
+        </member>
+        <member name="M:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.create_object(System.String)">
+            <summary>
+            Crea un nuevo gameObject con el nombre especificado  
+            </summary>
+            <param name="name">nombre del gameObject a crear</param>
+        </member>
+        <member name="M:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.create_inventory_item(MoonSharp.Interpreter.DynValue)">
+            <summary>
+            Añade a la lista un objeto de inventario  
+            > Crea un nuevo objeto de inventario  
+            > Si  
+            </summary>
+            <param name="args">name->string, type->string, sprite->string, buy_price->int, sell_price->int, stackeable->bool, matter_percent->float</param>
+        </member>
+        <member name="M:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.create_plant(MoonSharp.Interpreter.DynValue)">
+            <summary>
+            agrega a una tabla un objeto de planta  
+            > algomas  
+            > genera la planta  
+            >   
+            > agrega la planta  
+            > devuelve el id  
+            </summary>
+            <param name="args">
+            name->string, days_for_death->int, days_for_stage->int, grow_season->int, resources->table->(item->int, algomas->X, algomas->X), seed->string, stage_1->string, stage_2->string, stage_3->string, stage_4->string, stage_5->string
+            </param> 
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.create_seed(System.Int32,System.Collections.Generic.List{MoonSharp.Interpreter.DynValue})" -->
+        <member name="M:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.translate_inventory_item(System.Int32,System.Collections.Generic.List{MoonSharp.Interpreter.DynValue},System.Collections.Generic.List{MoonSharp.Interpreter.DynValue})">
+            <summary>
+            Traducion del objeto de inventario
+            </summary>
+            <param name="id">id del objeto</param>
+            <param name="name">nombres</param>
+            <param name="description">descripciones</param>
+        </member>
+        <member name="M:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.create_scene(System.String)">
+            <summary>
+            Crea una escena con el nombre
+            </summary>
+            <param name="name">nombre de la escena</param>
+        </member>
+        <member name="M:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.add_command(System.String,MoonSharp.Interpreter.DynValue,System.String)">
+            <summary>
+            añade un comando a la terminal  
+            > sufrimiento TODO  
+            </summary>
+            <param name="name">nombre del comando</param>
+            <param name="LuaFunc">funcion lua</param>
+            <param name="help">texto del help de help</param>
+        </member>
+        <member name="M:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.rayCast(UnityEngine.Vector3,UnityEngine.Vector3,System.Single,System.Int32,MoonSharp.Interpreter.UserData)">
+            <summary>
+            TODO agregar los nuevos
             </summary>
         </member>
         <member name="M:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.mathsFuncions">
@@ -113,8 +284,8 @@
             <summary>
              MATENME
             </summary>
-            <param name="scene"></param>
-            <returns></returns>
+            <param name="scene">la escena necesaria</param>
+            <returns>allObjects</returns>
         </member>
         <member name="M:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.AddChildObjects(UnityEngine.Transform,System.Collections.Generic.List{UnityEngine.GameObject})">
             <summary>
@@ -150,18 +321,23 @@
         </member>
         <member name="F:FarlandsCoreMod.FarlandsLua.LuaManager.UnityDebug">
             <summary>
-            - clase de BepInEx que se encarga de cargar los mods
-            - Configuracion que se agrega al BepInEx
+            - clase de BepInEx que se encarga de cargar los mods  
+            - Configuracion que se agrega al BepInEx  
             </summary>
         </member>
         <member name="F:FarlandsCoreMod.FarlandsLua.LuaManager.EasyMods">
             <summary>
-            Lista de mods cargados
+            Lista de mods cargados  
             </summary>
         </member>
         <member name="F:FarlandsCoreMod.FarlandsLua.LuaManager.OnEvents">
             <summary>
-            > TODO: ser menos gilipollas
+            > TODO: ser menos gilipollas  
+            </summary>
+        </member>
+        <member name="F:FarlandsCoreMod.FarlandsLua.LuaManager.LUA">
+            <summary>
+            LUA es un script que se encarga de ejecutar el codigo LUA
             </summary>
         </member>
         <member name="P:FarlandsCoreMod.FarlandsLua.LuaManager.MOD">
