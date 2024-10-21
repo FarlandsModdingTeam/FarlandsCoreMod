@@ -21,9 +21,30 @@
   - [LoadAndAddZip(zipPath)](#M-FarlandsCoreMod-FarlandsLua-FarlandsEasyMod-LoadAndAddZip-System-String- 'FarlandsCoreMod.FarlandsLua.FarlandsEasyMod.LoadAndAddZip(System.String)')
   - [LoadFolder(path,acumPath)](#M-FarlandsCoreMod-FarlandsLua-FarlandsEasyMod-LoadFolder-System-String,System-String- 'FarlandsCoreMod.FarlandsLua.FarlandsEasyMod.LoadFolder(System.String,System.String)')
   - [LoadZip(zipPath)](#M-FarlandsCoreMod-FarlandsLua-FarlandsEasyMod-LoadZip-System-String- 'FarlandsCoreMod.FarlandsLua.FarlandsEasyMod.LoadZip(System.String)')
+- [GlobalFunctions](#T-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions 'FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions')
+  - [MOD(tag)](#M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-MOD-System-String- 'FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.MOD(System.String)')
+  - [add_command(name,LuaFunc,help)](#M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-add_command-System-String,MoonSharp-Interpreter-DynValue,System-String- 'FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.add_command(System.String,MoonSharp.Interpreter.DynValue,System.String)')
+  - [add_credits(amount)](#M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-add_credits-System-Int32- 'FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.add_credits(System.Int32)')
+  - [add_item(id,amount)](#M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-add_item-MoonSharp-Interpreter-DynValue,System-Int32- 'FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.add_item(MoonSharp.Interpreter.DynValue,System.Int32)')
+  - [add_language(path)](#M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-add_language-System-String- 'FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.add_language(System.String)')
+  - [config(section,key,def,description)](#M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-config-System-String,System-String,MoonSharp-Interpreter-DynValue,System-String- 'FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.config(System.String,System.String,MoonSharp.Interpreter.DynValue,System.String)')
+  - [create_inventory_item(args)](#M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-create_inventory_item-MoonSharp-Interpreter-DynValue- 'FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.create_inventory_item(MoonSharp.Interpreter.DynValue)')
+  - [create_object(name)](#M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-create_object-System-String- 'FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.create_object(System.String)')
+  - [create_plant(args)](#M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-create_plant-MoonSharp-Interpreter-DynValue- 'FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.create_plant(MoonSharp.Interpreter.DynValue)')
+  - [create_scene(name)](#M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-create_scene-System-String- 'FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.create_scene(System.String)')
+  - [execute_command(_comando)](#M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-execute_command-System-String- 'FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.execute_command(System.String)')
+  - [find_object(args)](#M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-find_object-System-String,System-String- 'FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.find_object(System.String,System.String)')
+  - [get_input(input)](#M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-get_input-System-String- 'FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.get_input(System.String)')
+  - [get_object(args)](#M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-get_object-System-Collections-Generic-List{MoonSharp-Interpreter-DynValue}- 'FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.get_object(System.Collections.Generic.List{MoonSharp.Interpreter.DynValue})')
+  - [load_scene()](#M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-load_scene-MoonSharp-Interpreter-DynValue- 'FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.load_scene(MoonSharp.Interpreter.DynValue)')
+  - [portrait_override(origin,path)](#M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-portrait_override-System-String,System-String- 'FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.portrait_override(System.String,System.String)')
+  - [print(txt)](#M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-print-System-String- 'FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.print(System.String)')
+  - [rayCast()](#M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-rayCast-UnityEngine-Vector3,UnityEngine-Vector3,System-Single,System-Int32,MoonSharp-Interpreter-UserData- 'FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.rayCast(UnityEngine.Vector3,UnityEngine.Vector3,System.Single,System.Int32,MoonSharp.Interpreter.UserData)')
+  - [sprite_override(origin,position,path)](#M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-sprite_override-System-String,System-Int32[],System-String- 'FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.sprite_override(System.String,System.Int32[],System.String)')
+  - [texture_override(arg0,arg1)](#M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-texture_override-MoonSharp-Interpreter-DynValue,MoonSharp-Interpreter-DynValue- 'FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.texture_override(MoonSharp.Interpreter.DynValue,MoonSharp.Interpreter.DynValue)')
+  - [translate_inventory_item(id,name,description)](#M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-translate_inventory_item-System-Int32,System-Collections-Generic-List{MoonSharp-Interpreter-DynValue},System-Collections-Generic-List{MoonSharp-Interpreter-DynValue}- 'FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.translate_inventory_item(System.Int32,System.Collections.Generic.List{MoonSharp.Interpreter.DynValue},System.Collections.Generic.List{MoonSharp.Interpreter.DynValue})')
 - [LuaFunctions](#T-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions 'FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions')
   - [AddChildObjects(parent,allObjects)](#M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-AddChildObjects-UnityEngine-Transform,System-Collections-Generic-List{UnityEngine-GameObject}- 'FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.AddChildObjects(UnityEngine.Transform,System.Collections.Generic.List{UnityEngine.GameObject})')
-  - [AddToLua()](#M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-AddToLua 'FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.AddToLua')
   - [GetAllGameObjectsInScene(scene)](#M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GetAllGameObjectsInScene-UnityEngine-SceneManagement-Scene- 'FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GetAllGameObjectsInScene(UnityEngine.SceneManagement.Scene)')
   - [mathsFuncions()](#M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-mathsFuncions 'FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.mathsFuncions')
 - [LuaGameObjectComponent](#T-FarlandsCoreMod-FarlandsLua-Functions-LuaGameObjectComponent 'FarlandsCoreMod.FarlandsLua.Functions.LuaGameObjectComponent')
@@ -33,6 +54,7 @@
   - [Start()](#M-FarlandsCoreMod-FarlandsLua-Functions-LuaGameObjectComponent-Start 'FarlandsCoreMod.FarlandsLua.Functions.LuaGameObjectComponent.Start')
 - [LuaManager](#T-FarlandsCoreMod-FarlandsLua-LuaManager 'FarlandsCoreMod.FarlandsLua.LuaManager')
   - [EasyMods](#F-FarlandsCoreMod-FarlandsLua-LuaManager-EasyMods 'FarlandsCoreMod.FarlandsLua.LuaManager.EasyMods')
+  - [LUA](#F-FarlandsCoreMod-FarlandsLua-LuaManager-LUA 'FarlandsCoreMod.FarlandsLua.LuaManager.LUA')
   - [OnEvents](#F-FarlandsCoreMod-FarlandsLua-LuaManager-OnEvents 'FarlandsCoreMod.FarlandsLua.LuaManager.OnEvents')
   - [UnityDebug](#F-FarlandsCoreMod-FarlandsLua-LuaManager-UnityDebug 'FarlandsCoreMod.FarlandsLua.LuaManager.UnityDebug')
   - [MOD](#P-FarlandsCoreMod-FarlandsLua-LuaManager-MOD 'FarlandsCoreMod.FarlandsLua.LuaManager.MOD')
@@ -246,6 +268,340 @@ carga un archivo zip y lo guarda en el diccionario
 | ---- | ---- | ----------- |
 | zipPath | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | La direccion del zip |
 
+<a name='T-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions'></a>
+## GlobalFunctions `type`
+
+##### Namespace
+
+FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions
+
+<a name='M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-MOD-System-String-'></a>
+### MOD(tag) `method`
+
+##### Summary
+
+TODO
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| tag | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') |  |
+
+<a name='M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-add_command-System-String,MoonSharp-Interpreter-DynValue,System-String-'></a>
+### add_command(name,LuaFunc,help) `method`
+
+##### Summary
+
+añade un comando a la terminal  
+> sufrimiento TODO
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| name | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | nombre del comando |
+| LuaFunc | [MoonSharp.Interpreter.DynValue](#T-MoonSharp-Interpreter-DynValue 'MoonSharp.Interpreter.DynValue') | funcion lua |
+| help | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | texto del help de help |
+
+<a name='M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-add_credits-System-Int32-'></a>
+### add_credits(amount) `method`
+
+##### Summary
+
+Añade los creidtos especificados
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| amount | [System.Int32](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Int32 'System.Int32') | Cantidad añadir |
+
+<a name='M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-add_item-MoonSharp-Interpreter-DynValue,System-Int32-'></a>
+### add_item(id,amount) `method`
+
+##### Summary
+
+> si el id es un numero da el objeto por el id  
+> si ex 0x es un hexadecimal  
+> si es un string busca el objeto por el nombre
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| id | [MoonSharp.Interpreter.DynValue](#T-MoonSharp-Interpreter-DynValue 'MoonSharp.Interpreter.DynValue') |  |
+| amount | [System.Int32](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Int32 'System.Int32') |  |
+
+<a name='M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-add_language-System-String-'></a>
+### add_language(path) `method`
+
+##### Summary
+
+Se llama add_language, ¿Que cres que va hah hacer?
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| path | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | direccion del json |
+
+<a name='M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-config-System-String,System-String,MoonSharp-Interpreter-DynValue,System-String-'></a>
+### config(section,key,def,description) `method`
+
+##### Summary
+
+descrcion basica TODO: hacer luego
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| section | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | La seccion de la configuracion, puede haber varias |
+| key | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | codigo de la configuracion |
+| def | [MoonSharp.Interpreter.DynValue](#T-MoonSharp-Interpreter-DynValue 'MoonSharp.Interpreter.DynValue') | valor de la configuracion |
+| description | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | descripcion de ella |
+
+##### Example
+
+> _mod_.config = guarda las secciones que haya  
+> _mod_.config guarda la configuracion del mod  
+> if -> si la configuracion es un booleano  
+>   agremaos la entra a la configuracion  
+>   Cojes el mod en LUA  
+>   Cojer la sepcion  
+>   Cojer la clave que devulva el valor
+
+<a name='M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-create_inventory_item-MoonSharp-Interpreter-DynValue-'></a>
+### create_inventory_item(args) `method`
+
+##### Summary
+
+Añade a la lista un objeto de inventario  
+> Crea un nuevo objeto de inventario  
+> Si
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| args | [MoonSharp.Interpreter.DynValue](#T-MoonSharp-Interpreter-DynValue 'MoonSharp.Interpreter.DynValue') | name->string, type->string, sprite->string, buy_price->int, sell_price->int, stackeable->bool, matter_percent->float |
+
+<a name='M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-create_object-System-String-'></a>
+### create_object(name) `method`
+
+##### Summary
+
+Crea un nuevo gameObject con el nombre especificado
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| name | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | nombre del gameObject a crear |
+
+<a name='M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-create_plant-MoonSharp-Interpreter-DynValue-'></a>
+### create_plant(args) `method`
+
+##### Summary
+
+agrega a una tabla un objeto de planta  
+> algomas  
+> genera la planta  
+>   
+> agrega la planta  
+> devuelve el id
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| args | [MoonSharp.Interpreter.DynValue](#T-MoonSharp-Interpreter-DynValue 'MoonSharp.Interpreter.DynValue') | name->string, days_for_death->int, days_for_stage->int, grow_season->int, resources->table->(item->int, algomas->X, algomas->X), seed->string, stage_1->string, stage_2->string, stage_3->string, stage_4->string, stage_5->string |
+
+<a name='M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-create_scene-System-String-'></a>
+### create_scene(name) `method`
+
+##### Summary
+
+Crea una escena con el nombre
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| name | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | nombre de la escena |
+
+<a name='M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-execute_command-System-String-'></a>
+### execute_command(_comando) `method`
+
+##### Summary
+
+TODO
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| _comando | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | Comando a ejecutar |
+
+##### Example
+
+> Si no existe el objeto de comandos  
+> Obtiene la lista de comandos  
+> Divide el comando en palabras  
+> Recorre la lista de comandos  
+> Si el comando es igual al _comando  
+> Codigo Original :)
+
+<a name='M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-find_object-System-String,System-String-'></a>
+### find_object(args) `method`
+
+##### Summary
+
+Te busca un gameObject en la escena por el nombre (cuidado con objeton con el mismo nombre)
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| args | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | nombre del objeto |
+
+<a name='M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-get_input-System-String-'></a>
+### get_input(input) `method`
+
+##### Summary
+
+Devuelve si as pulsado el boton o tecla especificada
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| input | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | Input esperado |
+
+##### Example
+
+> Obtiene el player
+> Si el input especificado está pulsado
+
+<a name='M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-get_object-System-Collections-Generic-List{MoonSharp-Interpreter-DynValue}-'></a>
+### get_object(args) `method`
+
+##### Summary
+
+te da un objeto dada la ruta de los objetos
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| args | [System.Collections.Generic.List{MoonSharp.Interpreter.DynValue}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Collections.Generic.List 'System.Collections.Generic.List{MoonSharp.Interpreter.DynValue}') | ruta en gameObject |
+
+<a name='M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-load_scene-MoonSharp-Interpreter-DynValue-'></a>
+### load_scene() `method`
+
+##### Summary
+
+Carga la escena especificada por nombre o índice.
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-portrait_override-System-String,System-String-'></a>
+### portrait_override(origin,path) `method`
+
+##### Summary
+
+Es un **texture_override** pero con un personaje
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| origin | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | portrait a reemplazar |
+| path | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | dirección del archivo |
+
+##### Example
+
+> Crea una función en LUA que se ejecuta cuando se llama a la función  
+> La función llama a **texture_override** con los parametros que se le pasan  
+> **texture_override** remplaza la textura
+
+<a name='M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-print-System-String-'></a>
+### print(txt) `method`
+
+##### Summary
+
+printea el texto
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| txt | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | lo que le pases lo dibuja por consola |
+
+<a name='M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-rayCast-UnityEngine-Vector3,UnityEngine-Vector3,System-Single,System-Int32,MoonSharp-Interpreter-UserData-'></a>
+### rayCast() `method`
+
+##### Summary
+
+TODO agregar los nuevos
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-sprite_override-System-String,System-Int32[],System-String-'></a>
+### sprite_override(origin,position,path) `method`
+
+##### Summary
+
+En vez de remplaza una region de la textura
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| origin | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | textura que se va a remplazar |
+| position | [System.Int32[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Int32[] 'System.Int32[]') | posicion inicial(abajo -> arriba, izquierda -> derecha) |
+| path | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | direccion del archivo |
+
+<a name='M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-texture_override-MoonSharp-Interpreter-DynValue,MoonSharp-Interpreter-DynValue-'></a>
+### texture_override(arg0,arg1) `method`
+
+##### Summary
+
+TODO
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| arg0 | [MoonSharp.Interpreter.DynValue](#T-MoonSharp-Interpreter-DynValue 'MoonSharp.Interpreter.DynValue') |  |
+| arg1 | [MoonSharp.Interpreter.DynValue](#T-MoonSharp-Interpreter-DynValue 'MoonSharp.Interpreter.DynValue') |  |
+
+##### Example
+
+> Si no existe el objeto de comandos  
+> si un parametro, el nombre del archivo es la textura que va ah remplazar (no recomendado)  
+> si dos parametros, el primero es el nombre de la textura que va ah remplazar y el segundo es la ruta de la textura
+
+<a name='M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-translate_inventory_item-System-Int32,System-Collections-Generic-List{MoonSharp-Interpreter-DynValue},System-Collections-Generic-List{MoonSharp-Interpreter-DynValue}-'></a>
+### translate_inventory_item(id,name,description) `method`
+
+##### Summary
+
+Traducion del objeto de inventario
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| id | [System.Int32](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Int32 'System.Int32') | id del objeto |
+| name | [System.Collections.Generic.List{MoonSharp.Interpreter.DynValue}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Collections.Generic.List 'System.Collections.Generic.List{MoonSharp.Interpreter.DynValue}') | nombres |
+| description | [System.Collections.Generic.List{MoonSharp.Interpreter.DynValue}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Collections.Generic.List 'System.Collections.Generic.List{MoonSharp.Interpreter.DynValue}') | descripciones |
+
 <a name='T-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions'></a>
 ## LuaFunctions `type`
 
@@ -271,23 +627,6 @@ MATENME
 | parent | [UnityEngine.Transform](#T-UnityEngine-Transform 'UnityEngine.Transform') |  |
 | allObjects | [System.Collections.Generic.List{UnityEngine.GameObject}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Collections.Generic.List 'System.Collections.Generic.List{UnityEngine.GameObject}') |  |
 
-<a name='M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-AddToLua'></a>
-### AddToLua() `method`
-
-##### Summary
-
-Agrega las funciones a LUA que se van ah necesitar  
-> TODO: AIUDA  
-> Crea un nuevo objeto en LUA con el tag que se le pase, que es una tabla > LUA  
-> Guarda el identificador del mod en el diccionario de mods  
-> _mod_ = identificador del mod  
-> Crea y Agrega las configuraciones  
-> Agrega a la lista el mod actual
-
-##### Parameters
-
-This method has no parameters.
-
 <a name='M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GetAllGameObjectsInScene-UnityEngine-SceneManagement-Scene-'></a>
 ### GetAllGameObjectsInScene(scene) `method`
 
@@ -297,13 +636,13 @@ MATENME
 
 ##### Returns
 
-
+allObjects
 
 ##### Parameters
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| scene | [UnityEngine.SceneManagement.Scene](#T-UnityEngine-SceneManagement-Scene 'UnityEngine.SceneManagement.Scene') |  |
+| scene | [UnityEngine.SceneManagement.Scene](#T-UnityEngine-SceneManagement-Scene 'UnityEngine.SceneManagement.Scene') | la escena necesaria |
 
 <a name='M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-mathsFuncions'></a>
 ### mathsFuncions() `method`
@@ -373,6 +712,13 @@ FarlandsCoreMod.FarlandsLua
 
 Lista de mods cargados
 
+<a name='F-FarlandsCoreMod-FarlandsLua-LuaManager-LUA'></a>
+### LUA `constants`
+
+##### Summary
+
+LUA es un script que se encarga de ejecutar el codigo LUA
+
 <a name='F-FarlandsCoreMod-FarlandsLua-LuaManager-OnEvents'></a>
 ### OnEvents `constants`
 
@@ -385,7 +731,7 @@ Lista de mods cargados
 
 ##### Summary
 
-- clase de BepInEx que se encarga de cargar los mods
+- clase de BepInEx que se encarga de cargar los mods  
 - Configuracion que se agrega al BepInEx
 
 <a name='P-FarlandsCoreMod-FarlandsLua-LuaManager-MOD'></a>

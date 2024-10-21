@@ -569,6 +569,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="del &quot;$(FARLANDS_PATH)BepInEx\plugins\FarlandsCoreMod.dll&quot;&#xD;&#xA;copy &quot;$(TargetDir)FarlandsCoreMod.dll&quot; &quot;$(FARLANDS_PATH)BepInEx\plugins\FarlandsCoreMod.dll&quot;&#xD;&#xA;del &quot;$(TargetDir)..\FCM_$(Version).zip&quot;&#xD;&#xA;powershell -Command &quot;Compress-Archive -Path '$(TargetDir)FarlandsCoreMod.dll','$(TargetDir)MoonSharp.Interpreter.dll' -DestinationPath '$(TargetDir)..\FCM_$(Version).zip'&quot;" />
+    <Exec Command="del &quot;$(FARLANDS_PATH)BepInEx\plugins\FarlandsCoreMod.dll&quot;&#xD;&#xA;echo $(FARLANDS_PATH)&#xD;&#xA;copy &quot;$(TargetDir)FarlandsCoreMod.dll&quot; &quot;$(FARLANDS_PATH)BepInEx\plugins\FarlandsCoreMod.dll&quot;&#xD;&#xA;del &quot;$(TargetDir)..\FCM_$(Version).zip&quot;&#xD;&#xA;powershell -Command &quot;Compress-Archive -Path '$(TargetDir)FarlandsCoreMod.dll','$(TargetDir)MoonSharp.Interpreter.dll' -DestinationPath '$(TargetDir)..\FCM_$(Version).zip'&quot;" />
   </Target>
 </Project>

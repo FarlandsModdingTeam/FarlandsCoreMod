@@ -1,6 +1,9 @@
-﻿using MoonSharp.Interpreter;
+﻿using Language.Lua;
+using MoonSharp.Interpreter;
+using Rewired.Libraries.SharpDX.RawInput;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using UnityEngine;
 
@@ -8,6 +11,15 @@ namespace FarlandsCoreMod.FarlandsLua.Functions
 {
     public static class LuaConverter
     {
+        public static object[] CallbackArgumentToObjectArray(CallbackArguments args, List<Type> types)
+        { 
+            var res = new List<object>();
+            for (int i = 0; i < args.Count; i++)
+            { 
+                res.Add(ToCS(args[i], types[i]));
+            }
+            return res.ToArray();
+        }
         private static Type LuaTypeToCSharpType(DataType type)
         {
             switch (type)
@@ -19,6 +31,7 @@ namespace FarlandsCoreMod.FarlandsLua.Functions
             }
         }
 
+        public static T ToCS<T>(DynValue luaArg) => (T) ToCS(luaArg, typeof(T));
         public static object ToCS(DynValue luaArg)
         {
             Type type = LuaTypeToCSharpType(luaArg.Type);
@@ -28,17 +41,20 @@ namespace FarlandsCoreMod.FarlandsLua.Functions
         // ConvertLuaArgumentToCSharp
         public static object ToCS(DynValue luaArg, Type targetType)
         {
+            if (typeof(DynValue).IsAssignableFrom(targetType))
+                return luaArg;
+
             if (targetType == typeof(int))
-                return (int)luaArg.Number;
+                return luaArg.Integer();
 
             else if (targetType == typeof(float))
-                return (float)luaArg.Number;
+                return luaArg.Float();
 
             else if (targetType == typeof(bool))
                 return luaArg.Boolean;
 
             else if (targetType == typeof(string))
-                return luaArg.String;
+                return luaArg.String ?? luaArg.Number.ToString() ?? luaArg.Boolean.ToString();
 
             else if (targetType == typeof(Vector2))
             {
@@ -47,6 +63,22 @@ namespace FarlandsCoreMod.FarlandsLua.Functions
                 float y = table.Get("y").Type == DataType.Number ? (float)table.Get("y").Number : 0f;
 
                 return new Vector2(x, y);
+            }
+
+            else if (targetType == typeof(Vector3))
+            {
+                var table = luaArg.Table;
+                float x = table.Get("x").Type == DataType.Number ? (float)table.Get("x").Number : 0f;
+                float y = table.Get("y").Type == DataType.Number ? (float)table.Get("y").Number : 0f;
+                float z = table.Get("z").Type == DataType.Number ? (float)table.Get("z").Number : 0f;
+
+                return new Vector3(x, y, z);
+            }
+
+            else if (targetType == typeof(List<DynValue>))
+            {
+                List<DynValue> dyn = [.. luaArg.Table.Values.ToList()];
+                return dyn;
             }
 
             else
@@ -74,21 +106,11 @@ namespace FarlandsCoreMod.FarlandsLua.Functions
             else if (csharpArg is Vector2 @Vector2)
             {
                 Table table = LuaFactory.FromObject(csharpArg).Table;
-
-                table.Set("x", DynValue.NewNumber(@Vector2.x));
-                table.Set("y", DynValue.NewNumber(@Vector2.y));
-
                 return DynValue.NewTable(table);
             }
             else if (csharpArg is Vector3 @Vector3)
             {
-
                 Table table = LuaFactory.FromObject(csharpArg).Table;
-
-                table.Set("x", DynValue.NewNumber(@Vector3.x));
-                table.Set("y", DynValue.NewNumber(@Vector3.y));
-                table.Set("z", DynValue.NewNumber(@Vector3.z));
-
                 return DynValue.NewTable(table);
             }
             else if (csharpArg is GameObject gameObject)
