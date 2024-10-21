@@ -35,7 +35,7 @@ namespace FarlandsCoreMod.FarlandsLua.Functions
     /// <summary>
     /// **Clase** donde guardamos las funciones LUA   
     /// > ME CAGO EN MI PUTA VIDA  
-    /// \n    
+    /// \n<br>
     /// </summary>
     public static class LuaFunctions
     {

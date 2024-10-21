@@ -609,12 +609,6 @@ Traducion del objeto de inventario
 
 FarlandsCoreMod.FarlandsLua.Functions
 
-##### Summary
-
-**Clase** donde guardamos las funciones LUA   
-> ME CAGO EN MI PUTA VIDA  
-\n
-
 <a name='M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-AddChildObjects-UnityEngine-Transform,System-Collections-Generic-List{UnityEngine-GameObject}-'></a>
 ### AddChildObjects(parent,allObjects) `method`
 

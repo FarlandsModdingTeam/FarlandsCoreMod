@@ -88,13 +88,7 @@
                y guarda la informacion del mod
             </summary>
         </member>
-        <member name="T:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions">
-            <summary>
-            **Clase** donde guardamos las funciones LUA   
-            > ME CAGO EN MI PUTA VIDA  
-            \n    
-            </summary>
-        </member>
+        <!-- Badly formed XML comment ignored for member "T:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions" -->
         <member name="M:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.MOD(System.String)">
             <summary>
             TODO: hacer
