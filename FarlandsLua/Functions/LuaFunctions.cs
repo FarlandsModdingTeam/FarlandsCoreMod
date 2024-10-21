@@ -20,6 +20,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using UnityEngine.Profiling.Memory.Experimental;
 using UnityEngine.SceneManagement;
 using Debug = UnityEngine.Debug;
 
@@ -30,20 +31,14 @@ namespace FarlandsCoreMod.FarlandsLua.Functions
     /// </summary>
     public static class LuaFunctions
     {
-        /// <summary>
-        /// Agrega las funciones a LUA que se van ah necesitar  
-        /// > TODO: AIUDA  
-        /// > Crea un nuevo objeto en LUA con el tag que se le pase, que es una tabla > LUA  
-        /// > Guarda el identificador del mod en el diccionario de mods  
-        /// > _mod_ = identificador del mod  
-        /// > Crea y Agrega las configuraciones  
-        /// > Agrega a la lista el mod actual  
-        /// </summary>
-        public static void AddToLua()
+        [Functions]
+        public static class LuaFunctionsGlobal
         {
-            mathsFuncions();
-
-            LuaManager.LUA.Globals["MOD"] = (string tag) =>
+            /// <summary>
+            /// TODO
+            /// </summary>
+            /// <param name="tag"></param>
+            public static void MOD(string tag)
             {
                 var code =
 @$"
@@ -163,32 +158,6 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                         }
                     }
                 }
-
-                //Destroy(_o);
-            };
-
-
-            // ----------------------- FUNCIONES DE ESCENA ----------------------- //
-            /// <summary>
-            /// Carga la escena especificada por nombre o índice.  
-            /// <param name="scene"">puede ser el nombre o indice</param>
-            /// </summary>
-            LuaManager.LUA.Globals["load_scene"] = (DynValue scene) =>
-            {
-                if (scene.Type == DataType.String)
-                    SceneManager.LoadScene(scene.String);
-                else if (scene.Type == DataType.Number)
-                    SceneManager.LoadScene(scene.Integer());
-            };
-
-            /// <summary>
-            /// Printea la escena actual nombre e indice
-            /// </summary>
-            LuaManager.LUA.Globals["print_scene"] = () =>
-            {
-                Scene currentScene = SceneManager.GetActiveScene();
-                Terminal.Log($"({currentScene.buildIndex}) {currentScene.name}");
-            };
 
 
             /// <summary>
@@ -580,17 +549,6 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
 
 
             /// <summary>
-            /// Crea una escena con el nombre
-            /// </summary>
-            /// <param name="name">nombre de la escena</param>
-            LuaManager.LUA.Globals["create_scene"] = (string name) =>
-            {
-                var scene = SceneManager.CreateScene(name);
-                //TODO agergar creación del objeto de la escena para LuaManager.LUA
-            };
-
-
-            /// <summary>
             /// añade un comando a la terminal  
             /// > sufrimiento TODO  
             /// </summary>
@@ -704,7 +662,142 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                     Debug.LogWarning($"Layer '{layerName}' no encontrado.");
                 }
                 return layerNumber;
-            };
+            }
+
+        }
+
+        [Functions("scenes")]
+        public static class LuaFunctionsScenes
+        {
+
+            /// <summary>
+            /// Carga la escena especificada por nombre o índice.  
+            /// <param name="scene">puede ser el nombre o indice</param>
+            /// </summary>
+            public static void load_scene(DynValue scene)
+            {
+                if (scene.Type == DataType.String)
+                    SceneManager.LoadScene(scene.String);
+                else if (scene.Type == DataType.Number)
+                    SceneManager.LoadScene(scene.Integer());
+            }
+
+            public static void print_scene()
+            {
+                Scene currentScene = SceneManager.GetActiveScene();
+                Terminal.Log($"({currentScene.buildIndex}) {currentScene.name}");
+            }
+
+            /// <summary>
+            /// Crea una escena con el nombre
+            /// </summary>
+            /// <param name="name">nombre de la escena</param>
+            public static void create_scene(string name)
+            {
+                var scene = SceneManager.CreateScene(name);
+            }
+        }
+
+
+
+        [AttributeUsage(AttributeTargets.Class)]
+        public class Functions : Attribute
+        {
+            public string path;
+            public Functions()
+            {
+                path = "";
+            }
+            public Functions(string path)
+            {
+                this.path = path;
+            }
+        }
+        public static void AddToLua()
+        {
+            mathsFuncions();
+
+            typeof(LuaFunctions)
+                .GetNestedTypes(BindingFlags.Public | BindingFlags.Static)
+                .Where(x => x.GetCustomAttributes<Functions>().Count() >= 1)
+                .ToList()
+                .ForEach(x => {
+                    Table t = LuaManager.LUA.Globals;
+                    var stroke = x.GetCustomAttribute<Functions>().path.Split('.');
+
+                    string parent = "";
+                    foreach (var str in stroke)
+                    {
+                        var name = str.Trim().ToLower();
+
+                        if(name == "") break;
+
+                        if (t.Get(name).Type == DataType.Nil)
+                            t.Set(name, DynValue.NewTable(new Table(LuaManager.LUA)));
+
+                        t = t.Get(name).Table;
+
+                        LuaManager.metadata.AddClass(name);
+
+                        parent = name;
+                    }
+
+                    x.GetMethods(BindingFlags.Public | BindingFlags.Static)
+                    .ToList().ForEach(m =>
+                    {
+                        List<string> parameters = new();
+                        var types = m.GetParameters().Select(p =>
+                        {
+                            if (parent == "")
+                                LuaManager.metadata.AddParam(p.Name, p.ParameterType);
+                   
+                            parameters.Add(p.Name);
+                            return p.ParameterType;
+                        }).ToList();
+
+                        if (parent == "")
+                        {
+                            if (!typeof(void).IsAssignableFrom(m.ReturnType))
+                                LuaManager.metadata.AddReturn(m.ReturnType);
+
+                            LuaManager.metadata.AddFunction(m.Name, string.Join(',', parameters));
+                        }
+                        else
+                        {
+                            LuaManager.metadata.AddFieldFun(m.Name, string.Join(',', parameters), m.ReturnType);
+                        }
+
+                        t[m.Name] = DynValue.NewCallback((ctx, args) =>
+                        {
+                            Debug.Log(m.Name);
+                            var array = LuaConverter.CallbackArgumentToObjectArray(args, types).ToList();
+
+                            while (array.Count() > parameters.Count())
+                            {
+                                array.RemoveAt(array.Count() - 1);
+                            }
+
+                            while (array.Count() < parameters.Count())
+                            { 
+                                array.Add(null);
+                            }
+
+                            var res = m.Invoke(null, array.ToArray());
+                            return LuaConverter.ToLua(res);
+                        });
+                    });
+
+                    if (parent != "")
+                    {
+                        LuaManager.metadata.AddCode($"{parent} = {{}}");
+                    }
+                });
+
+            File.WriteAllText(
+                    Path.Combine(Paths.Plugin, "metadata.lua"),
+                    LuaManager.metadata.ToString()
+                );
+            // ----------------------- BUSCAR OBJETOS ----------------------- //
         }
 
         /// <summary>

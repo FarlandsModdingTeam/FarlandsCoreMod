@@ -58,6 +58,9 @@ namespace FarlandsCoreMod.FarlandsLua
         public static GameObject _o; // public static, Odio mi vida
 
         public int Index => 1;
+
+        public static LuaMetadata metadata = new();
+
         /*--- FIN DECLARACIONES ---*/
 
 
