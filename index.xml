@@ -90,12 +90,13 @@
         </member>
         <member name="T:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions">
             <summary>
-            ME CAGO EN MI PUTA VIDA
+            ILLO AQUI> **LuaFunctions** LuaFunctions  
+            > ME CAGO EN MI PUTA VIDA
             </summary>
         </member>
         <member name="M:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.MOD(System.String)">
             <summary>
-            TODO
+            TODO: hacer
             </summary>
             <param name="tag"></param>
         </member>

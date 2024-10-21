@@ -33,7 +33,8 @@ using Debug = UnityEngine.Debug;
 namespace FarlandsCoreMod.FarlandsLua.Functions
 {
     /// <summary>
-    /// ME CAGO EN MI PUTA VIDA
+    /// ILLO AQUI> **LuaFunctions** LuaFunctions  
+    /// > ME CAGO EN MI PUTA VIDA
     /// </summary>
     public static class LuaFunctions
     {
@@ -43,7 +44,7 @@ namespace FarlandsCoreMod.FarlandsLua.Functions
             #region Define Functions
 
             /// <summary>
-            /// TODO
+            /// TODO: hacer
             /// </summary>
             /// <param name="tag"></param>
             public static void MOD(string tag)

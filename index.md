@@ -280,7 +280,7 @@ FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions
 
 ##### Summary
 
-TODO
+TODO: hacer
 
 ##### Parameters
 
@@ -611,7 +611,8 @@ FarlandsCoreMod.FarlandsLua.Functions
 
 ##### Summary
 
-ME CAGO EN MI PUTA VIDA
+ILLO AQUI> **LuaFunctions** LuaFunctions  
+> ME CAGO EN MI PUTA VIDA
 
 <a name='M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-AddChildObjects-UnityEngine-Transform,System-Collections-Generic-List{UnityEngine-GameObject}-'></a>
 ### AddChildObjects(parent,allObjects) `method`
