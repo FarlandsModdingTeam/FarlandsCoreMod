@@ -90,9 +90,9 @@
         </member>
         <member name="T:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions">
             <summary>
-            ILLO AQUI> **LuaFunctions** LuaFunctions  
+            **Clase** donde guardamos las funciones LUA   
             > ME CAGO EN MI PUTA VIDA  
-            \n
+            \n    
             </summary>
         </member>
         <member name="M:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.MOD(System.String)">

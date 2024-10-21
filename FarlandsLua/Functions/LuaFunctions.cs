@@ -33,9 +33,9 @@ using Debug = UnityEngine.Debug;
 namespace FarlandsCoreMod.FarlandsLua.Functions
 {
     /// <summary>
-    /// ILLO AQUI> **LuaFunctions** LuaFunctions  
+    /// **Clase** donde guardamos las funciones LUA   
     /// > ME CAGO EN MI PUTA VIDA  
-    /// \n
+    /// \n    
     /// </summary>
     public static class LuaFunctions
     {

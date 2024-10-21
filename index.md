@@ -611,7 +611,7 @@ FarlandsCoreMod.FarlandsLua.Functions
 
 ##### Summary
 
-ILLO AQUI> **LuaFunctions** LuaFunctions  
+**Clase** donde guardamos las funciones LUA   
 > ME CAGO EN MI PUTA VIDA  
 \n
 
