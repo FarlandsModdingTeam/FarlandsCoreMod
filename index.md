@@ -330,8 +330,8 @@ Añade los creidtos especificados
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| id | [MoonSharp.Interpreter.DynValue](#T-MoonSharp-Interpreter-DynValue 'MoonSharp.Interpreter.DynValue') |  |
-| amount | [System.Int32](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Int32 'System.Int32') |  |
+| id | [MoonSharp.Interpreter.DynValue](#T-MoonSharp-Interpreter-DynValue 'MoonSharp.Interpreter.DynValue') | Id del objeto, sirve (nombre (creo), id, id en exadecimal) |
+| amount | [System.Int32](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Int32 'System.Int32') | Cantidad a añadir (no opcional) |
 
 <a name='M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-add_language-System-String-'></a>
 ### add_language(path) `method`

@@ -342,8 +342,8 @@ end
             /// > si ex 0x es un hexadecimal  
             /// > si es un string busca el objeto por el nombre  
             /// </summary>
-            /// <param name="id"></param>
-            /// <param name="amount"></param>
+            /// <param name="id">Id del objeto, sirve (nombre (creo), id, id en exadecimal)</param>
+            /// <param name="amount">Cantidad a añadir (no opcional)</param>
             public static void add_item(DynValue id, int amount)
             {
                 if (id.Type == DataType.Number)
