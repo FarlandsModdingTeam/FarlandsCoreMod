@@ -3,6 +3,7 @@ using JetBrains.Annotations;
 using MoonSharp.Interpreter;
 using Rewired.Libraries.SharpDX.RawInput;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -68,6 +69,17 @@ namespace FarlandsCoreMod.FarlandsLua.Functions
             if (typeof(int).IsAssignableFrom(type)) return "integer";
             if (typeof(float).IsAssignableFrom(type)) return "number";
             if (typeof(string).IsAssignableFrom(type)) return "string";
+            if (type.IsArray)
+            {
+                var elementType = CSharpTypeToLuaMetadata(type.GetElementType());
+                return elementType + "[]";
+            }
+            if (typeof(IEnumerable).IsAssignableFrom(type))
+            {
+                var genericType = type.IsGenericType ? type.GetGenericArguments()[0] : typeof(DynValue);
+                var elementType = CSharpTypeToLuaMetadata(genericType);
+                return elementType + "[]";
+            }
             if (typeof(object).IsAssignableFrom(type)) return "object";
             return "object";
         }
