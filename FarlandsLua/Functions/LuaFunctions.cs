@@ -34,7 +34,8 @@ namespace FarlandsCoreMod.FarlandsLua.Functions
 {
     /// <summary>
     /// ILLO AQUI> **LuaFunctions** LuaFunctions  
-    /// > ME CAGO EN MI PUTA VIDA
+    /// > ME CAGO EN MI PUTA VIDA  
+    /// \n
     /// </summary>
     public static class LuaFunctions
     {

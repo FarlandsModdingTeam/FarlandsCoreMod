@@ -91,7 +91,8 @@
         <member name="T:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions">
             <summary>
             ILLO AQUI> **LuaFunctions** LuaFunctions  
-            > ME CAGO EN MI PUTA VIDA
+            > ME CAGO EN MI PUTA VIDA  
+            \n
             </summary>
         </member>
         <member name="M:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.MOD(System.String)">
