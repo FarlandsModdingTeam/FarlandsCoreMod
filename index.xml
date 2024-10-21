@@ -90,16 +90,15 @@
         </member>
         <member name="T:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions">
             <summary>
-            **Clase** donde guardamos las funciones LUA   
-            > ME CAGO EN MI PUTA VIDA  
-            
+                **Clase** donde guardamos las funciones LUA   
+                > ME CAGO EN MI PUTA VIDA
             </summary>
         </member>
         <member name="M:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.MOD(System.String)">
             <summary>
             TODO: hacer
             </summary>
-            <param name="tag"></param>
+            <param name="tag">Nombre/Identificador del MOD</param>
         </member>
         <member name="M:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.config(System.String,System.String,MoonSharp.Interpreter.DynValue,System.String)">
             <summary>

@@ -286,7 +286,7 @@ TODO: hacer
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| tag | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') |  |
+| tag | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | Nombre/Identificador del MOD |
 
 <a name='M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-add_command-System-String,MoonSharp-Interpreter-DynValue,System-String-'></a>
 ### add_command(name,LuaFunc,help) `method`
@@ -612,7 +612,7 @@ FarlandsCoreMod.FarlandsLua.Functions
 ##### Summary
 
 **Clase** donde guardamos las funciones LUA   
-> ME CAGO EN MI PUTA VIDA
+    > ME CAGO EN MI PUTA VIDA
 
 <a name='M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-AddChildObjects-UnityEngine-Transform,System-Collections-Generic-List{UnityEngine-GameObject}-'></a>
 ### AddChildObjects(parent,allObjects) `method`
