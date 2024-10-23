@@ -33,7 +33,7 @@ using Debug = UnityEngine.Debug;
 namespace FarlandsCoreMod.FarlandsLua.Functions
 {
     /// <summary>
-    /// **Clase** donde guardamos las funciones LUA   
+    /// **public static class LuaFunctions** donde guardamos las funciones LUA   
     /// > ME CAGO EN MI PUTA VIDA 
     /// </summary>
     public static class LuaFunctions
@@ -665,6 +665,13 @@ end
                 this.path = path;
             }
         }
+
+
+        /// <summary>
+        /// UNA DE LOS METODOS MAS IMPORTANTES:  
+        /// Se encarga de meter todas las funciones en LUA  
+        /// > TODO: explicar el preceso  
+        /// </summary>
         public static void AddToLua()
         {
             mathsFuncions();
