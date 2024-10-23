@@ -139,7 +139,7 @@ namespace FarlandsCoreMod.FarlandsItems
                 });
             }
 
-            FarlandsLua.LuaManager.ExecuteEvent("inventory", "start");
+            FarlandsEvents.EventsManager.ExecuteEvent("inventory.start");
         }
     }
 }

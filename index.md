@@ -58,7 +58,7 @@
   - [OnEvents](#F-FarlandsCoreMod-FarlandsLua-LuaManager-OnEvents 'FarlandsCoreMod.FarlandsLua.LuaManager.OnEvents')
   - [UnityDebug](#F-FarlandsCoreMod-FarlandsLua-LuaManager-UnityDebug 'FarlandsCoreMod.FarlandsLua.LuaManager.UnityDebug')
   - [MOD](#P-FarlandsCoreMod-FarlandsLua-LuaManager-MOD 'FarlandsCoreMod.FarlandsLua.LuaManager.MOD')
-  - [ExecuteEvent(ev)](#M-FarlandsCoreMod-FarlandsLua-LuaManager-ExecuteEvent-System-String[]- 'FarlandsCoreMod.FarlandsLua.LuaManager.ExecuteEvent(System.String[])')
+  - [ExecuteEvent(ev)](#M-FarlandsCoreMod-FarlandsLua-LuaManager-ExecuteEvent-System-String- 'FarlandsCoreMod.FarlandsLua.LuaManager.ExecuteEvent(System.String)')
   - [GetFilesInMod(path)](#M-FarlandsCoreMod-FarlandsLua-LuaManager-GetFilesInMod-System-String- 'FarlandsCoreMod.FarlandsLua.LuaManager.GetFilesInMod(System.String)')
   - [GetFromMod(path)](#M-FarlandsCoreMod-FarlandsLua-LuaManager-GetFromMod-System-String- 'FarlandsCoreMod.FarlandsLua.LuaManager.GetFromMod(System.String)')
   - [Init()](#M-FarlandsCoreMod-FarlandsLua-LuaManager-Init 'FarlandsCoreMod.FarlandsLua.LuaManager.Init')
@@ -612,7 +612,7 @@ FarlandsCoreMod.FarlandsLua.Functions
 ##### Summary
 
 **Clase** donde guardamos las funciones LUA   
-    > ME CAGO EN MI PUTA VIDA
+> ME CAGO EN MI PUTA VIDA
 
 <a name='M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-AddChildObjects-UnityEngine-Transform,System-Collections-Generic-List{UnityEngine-GameObject}-'></a>
 ### AddChildObjects(parent,allObjects) `method`
@@ -743,7 +743,7 @@ LUA es un script que se encarga de ejecutar el codigo LUA
 name: MOD
 especie de getter y setter para la variable global _mod_
 
-<a name='M-FarlandsCoreMod-FarlandsLua-LuaManager-ExecuteEvent-System-String[]-'></a>
+<a name='M-FarlandsCoreMod-FarlandsLua-LuaManager-ExecuteEvent-System-String-'></a>
 ### ExecuteEvent(ev) `method`
 
 ##### Summary
@@ -755,7 +755,7 @@ name: ExecuteEvent
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| ev | [System.String[]](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String[] 'System.String[]') | No se que es |
+| ev | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | No se que es |
 
 <a name='M-FarlandsCoreMod-FarlandsLua-LuaManager-GetFilesInMod-System-String-'></a>
 ### GetFilesInMod(path) `method`

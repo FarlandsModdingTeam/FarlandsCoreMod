@@ -33,6 +33,7 @@ namespace FarlandsCoreMod
         public static bool Debug_quitEarlyAccessScreen => debug_quitEarlyAccessScreen.Value;
         public static FarlandsCoreMod instance;
 
+        public static List<FarlandsMod> ModList = new();
         public string SHORT_NAME => "FCM";
 
         private void Awake()
@@ -65,7 +66,12 @@ namespace FarlandsCoreMod
 
             IComparer<IManager> comparer = Comparer<IManager>.Create((x,y)=>x.Index.CompareTo(y.Index));
             managers.Sort(comparer);
-            managers.ForEach(m => m.Init());
+            managers.ForEach(m =>
+            {
+                Debug.Log("MANAGER " + m.GetType().Name + " LOADDING");
+                if (m is IManagerASM imasm) imasm.SetASM(ModList.Select(m => m.ASM));
+                m.Init();
+            });
         }
 
         private static bool isLoaded = false;

@@ -79,10 +79,9 @@ namespace FarlandsCoreMod.FarlandsLua
         ///     Ejecuta un evento en todos los mods cargados
         /// </summary>
         /// <param name="ev"> No se que es </param>
-        public static void ExecuteEvent(params string[] ev)
+        public static void ExecuteEvent(string @event)
         {
-            Debug.Log(string.Join('.', ev));
-
+            string[] ev = @event.Split('.');
             try
             {
                 foreach (var mod in EasyMods.Values)

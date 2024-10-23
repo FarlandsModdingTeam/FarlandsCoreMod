@@ -24,6 +24,7 @@ namespace FarlandsCoreMod
 
         private void Awake()
         {
+            FarlandsCoreMod.ModList.Add(this);
             ConfigureAll();
 
             Debug.Log("asm: " + ASM);

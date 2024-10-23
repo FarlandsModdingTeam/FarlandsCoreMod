@@ -75,8 +75,6 @@ namespace FarlandsCoreMod.Attributes
                             }
                         }
                     });
-
-                    
                 }
                 );
         }

@@ -90,8 +90,8 @@
         </member>
         <member name="T:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions">
             <summary>
-                **Clase** donde guardamos las funciones LUA   
-                > ME CAGO EN MI PUTA VIDA
+            **Clase** donde guardamos las funciones LUA   
+            > ME CAGO EN MI PUTA VIDA 
             </summary>
         </member>
         <member name="M:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.MOD(System.String)">
@@ -347,7 +347,7 @@
             especie de getter y setter para la variable global _mod_
             </summary>
         </member>
-        <member name="M:FarlandsCoreMod.FarlandsLua.LuaManager.ExecuteEvent(System.String[])">
+        <member name="M:FarlandsCoreMod.FarlandsLua.LuaManager.ExecuteEvent(System.String)">
             <summary>
                 name: ExecuteEvent
                 Ejecuta un evento en todos los mods cargados
