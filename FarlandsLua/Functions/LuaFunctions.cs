@@ -34,7 +34,8 @@ using Debug = UnityEngine.Debug;
 namespace FarlandsCoreMod.FarlandsLua.Functions
 {
     /// <summary>
-    /// ME CAGO EN MI PUTA VIDA
+    /// **Clase** donde guardamos las funciones LUA   
+    /// > ME CAGO EN MI PUTA VIDA 
     /// </summary>
     public static class LuaFunctions
     {
@@ -44,9 +45,9 @@ namespace FarlandsCoreMod.FarlandsLua.Functions
             #region Define Functions
 
             /// <summary>
-            /// TODO
+            /// TODO: hacer
             /// </summary>
-            /// <param name="tag"></param>
+            /// <param name="tag">Nombre/Identificador del MOD</param>
             public static void MOD(string tag)
             {
                 var code =
@@ -341,8 +342,8 @@ end
             /// > si ex 0x es un hexadecimal  
             /// > si es un string busca el objeto por el nombre  
             /// </summary>
-            /// <param name="id"></param>
-            /// <param name="amount"></param>
+            /// <param name="id">Id del objeto, sirve (nombre (creo), id, id en exadecimal)</param>
+            /// <param name="amount">Cantidad a añadir (no opcional)</param>
             public static void add_item(DynValue id, int amount)
             {
                 if (id.Type == DataType.Number)

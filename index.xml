@@ -90,14 +90,15 @@
         </member>
         <member name="T:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions">
             <summary>
-            ME CAGO EN MI PUTA VIDA
+                **Clase** donde guardamos las funciones LUA   
+                > ME CAGO EN MI PUTA VIDA
             </summary>
         </member>
         <member name="M:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.MOD(System.String)">
             <summary>
-            TODO
+            TODO: hacer
             </summary>
-            <param name="tag"></param>
+            <param name="tag">Nombre/Identificador del MOD</param>
         </member>
         <member name="M:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.config(System.String,System.String,MoonSharp.Interpreter.DynValue,System.String)">
             <summary>
@@ -210,8 +211,8 @@
             > si ex 0x es un hexadecimal  
             > si es un string busca el objeto por el nombre  
             </summary>
-            <param name="id"></param>
-            <param name="amount"></param>
+            <param name="id">Id del objeto, sirve (nombre (creo), id, id en exadecimal)</param>
+            <param name="amount">Cantidad a añadir (no opcional)</param>
         </member>
         <member name="M:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.add_credits(System.Int32)">
             <summary>
