@@ -6,6 +6,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using Unity.VisualScripting;
 
@@ -62,6 +63,17 @@ namespace FarlandsCoreMod.FarlandsLua.Functions
         {
             type = Type.RETURN,
             values = $"{CSharpTypeToLuaMetadata(type)}",
+        });
+
+        public void AddField(string name, System.Type type) => metadata.Add(new Meta()
+        {
+            type = Type.FIELD,
+            values = $"{name} {CSharpTypeToLuaMetadata(type)}",
+        });
+        public void AddFieldFunc(string name, ParameterInfo[] param, System.Type ret) => metadata.Add(new Meta()
+        {
+            type = Type.FIELD,
+            values = $"{name} fun({string.Join(',', param.Select( p => $"{p.Name}:{CSharpTypeToLuaMetadata(p.ParameterType)}"))}):{CSharpTypeToLuaMetadata(ret)}",
         });
         private static string CSharpTypeToLuaMetadata(System.Type type)
         {

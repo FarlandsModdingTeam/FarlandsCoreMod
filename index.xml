@@ -94,6 +94,12 @@
             > ME CAGO EN MI PUTA VIDA 
             </summary>
         </member>
+        <member name="M:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.FunctionsScenes.load_scene(MoonSharp.Interpreter.DynValue)">
+            <summary>
+            Carga la escena especificada por nombre o índice.  
+            <param name="scene">puede ser el nombre o indice</param>
+            </summary>
+        </member>
         <member name="M:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.MOD(System.String)">
             <summary>
             TODO: hacer
@@ -141,12 +147,6 @@
             > Si el comando es igual al _comando  
             > Codigo Original :)
             </example>
-        </member>
-        <member name="M:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.load_scene(MoonSharp.Interpreter.DynValue)">
-            <summary>
-            Carga la escena especificada por nombre o índice.  
-            <param name="scene">puede ser el nombre o indice</param>
-            </summary>
         </member>
         <member name="M:FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.texture_override(MoonSharp.Interpreter.DynValue,MoonSharp.Interpreter.DynValue)">
             <summary>

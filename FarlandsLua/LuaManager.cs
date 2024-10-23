@@ -163,7 +163,7 @@ namespace FarlandsCoreMod.FarlandsLua
             Execute(Encoding.UTF8.GetString(codes), fem);
 
         public static DynValue Execute(string codes, FarlandsEasyMod fem)
-        {
+        {            
 
             try
             {

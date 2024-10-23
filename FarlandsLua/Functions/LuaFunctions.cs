@@ -28,7 +28,6 @@ using UnityEngine.Profiling.Memory.Experimental;
 using UnityEngine.SceneManagement;
 using static PixelCrushers.DialogueSystem.UnityGUI.GUIProgressBar;
 using static System.Collections.Specialized.BitVector32;
-using static Unity.VisualScripting.Member;
 using Debug = UnityEngine.Debug;
 
 namespace FarlandsCoreMod.FarlandsLua.Functions
@@ -39,11 +38,33 @@ namespace FarlandsCoreMod.FarlandsLua.Functions
     /// </summary>
     public static class LuaFunctions
     {
+        [Functions("scenes")]
+        public static class FunctionsScenes
+        {
+
+            /// <summary>
+            /// Carga la escena especificada por nombre o índice.  
+            /// <param name="scene">puede ser el nombre o indice</param>
+            /// </summary>
+            public static void load_scene(DynValue scene)
+            {
+                if (scene.Type == DataType.String)
+                    SceneManager.LoadScene(scene.String);
+                else if (scene.Type == DataType.Number)
+                    SceneManager.LoadScene(scene.Integer());
+            }
+
+            public static void print_scene()
+            {
+                Scene currentScene = SceneManager.GetActiveScene();
+                Terminal.Log($"({currentScene.buildIndex}) {currentScene.name}");
+            }
+
+        }
+
         [Functions]
         public static class GlobalFunctions
         {
-            #region Define Functions
-
             /// <summary>
             /// TODO: hacer
             /// </summary>
@@ -174,24 +195,6 @@ _mod_.config.{section} = _mod_.config.{section} or {{}}
                         }
                     }
                 }
-            }
-
-            /// <summary>
-            /// Carga la escena especificada por nombre o índice.  
-            /// <param name="scene">puede ser el nombre o indice</param>
-            /// </summary>
-            public static void load_scene(DynValue scene)
-            {
-                if (scene.Type == DataType.String)
-                    SceneManager.LoadScene(scene.String);
-                else if (scene.Type == DataType.Number)
-                    SceneManager.LoadScene(scene.Integer());
-            }
-
-            public static void print_scene()
-            {
-                Scene currentScene = SceneManager.GetActiveScene();
-                Terminal.Log($"({currentScene.buildIndex}) {currentScene.name}");
             }
 
             /// <summary>
@@ -637,7 +640,7 @@ end
                 return DynValue.Nil;
             }
 
-            public static int get_layer_number(string layerName) 
+            public static int get_layer_number(string layerName)
             {
                 int layerNumber = LayerMask.NameToLayer(layerName);
                 if (layerNumber == -1)
@@ -647,7 +650,30 @@ end
                 return layerNumber;
             }
 
-            #endregion
+            public static DynValue CSF(string assembly, string className, string method)
+            {
+                List<Assembly> asm = [];
+
+                foreach (var x in asm)
+                {
+                    var t = x.GetType(className);
+                    if (t != null)
+                    {
+                        var m = t.GetMethod(method);
+                        if (m != null)
+                        {
+                            return DynValue.NewCallback((ctx, args) =>
+                                LuaConverter.ToLua(
+                                    m.Invoke(null, LuaConverter.CallbackArgumentToObjectArray(args, 
+                                        m.GetParameters().Select(p=>p.ParameterType).ToList()))));
+                        }
+                    }
+                }
+
+                return DynValue.Nil;
+
+            }
+
         }
 
 
@@ -679,47 +705,40 @@ end
                 .ToList()
                 .ForEach(x => {
                     Table t = LuaManager.LUA.Globals;
-                    var stroke = x.GetCustomAttribute<Functions>().path.Split('.').Skip(1);
-
+                    var stroke = x.GetCustomAttribute<Functions>().path.Split('.');
                     string parent = "";
                     foreach (var str in stroke)
                     {
+                        if (str == "") break;
+
                         var name = str.Trim().ToLower();
+
+                        if (t.Get(name).Table == null) t[name] = new Table(LuaManager.LUA);
                         t = t.Get(name).Table;
 
                         metadata.AddClass(name);
-                        metadata.AddCode($"{name} = {{}}");
-
-                        if (parent != "")
-                        {
-                            metadata.AddCode($"{parent}.{name} = {{}}");
-                        }
 
                         parent = name;
                     }
-
                     x.GetMethods(BindingFlags.Public | BindingFlags.Static)
                     .ToList().ForEach(m =>
                     {
-                        List<string> parameters = new();
+                        List<Type> parameters = new();
                         var types = m.GetParameters().Select(p =>
                         {
-                            metadata.AddParam(p.Name, p.ParameterType);
-                            parameters.Add(p.Name);
+                            if(parent == "") metadata.AddParam(p.Name, p.ParameterType);
                             return p.ParameterType;
                         }).ToList();
-
-                        if (!typeof(void).IsAssignableFrom(m.ReturnType))
-                            metadata.AddReturn(m.ReturnType);
-                        
                         if (parent == "")
                         {
-                            metadata.AddFunction(m.Name, string.Join(',', parameters));
+                            if(typeof(void).IsAssignableFrom(m.ReturnType)) metadata.AddReturn(m.ReturnType);
+                            metadata.AddFunction(m.Name, string.Join(',', m.GetParameters().Select(p=>p.Name)));
                         }
                         else
                         {
-                            metadata.AddFunction(parent + "." + m.Name, string.Join(',', parameters));
+                            metadata.AddFieldFunc(m.Name, m.GetParameters(), m.ReturnType);
                         }
+                        Debug.Log(m.Name);
 
                         t[m.Name] = DynValue.NewCallback((ctx, args) =>
                         {
@@ -740,6 +759,8 @@ end
                             return LuaConverter.ToLua(res);
                         });
                     });
+
+                    metadata.AddCode($"{parent} = {{}}");
                 });
 
             File.WriteAllText(

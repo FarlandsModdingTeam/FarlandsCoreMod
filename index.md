@@ -21,6 +21,8 @@
   - [LoadAndAddZip(zipPath)](#M-FarlandsCoreMod-FarlandsLua-FarlandsEasyMod-LoadAndAddZip-System-String- 'FarlandsCoreMod.FarlandsLua.FarlandsEasyMod.LoadAndAddZip(System.String)')
   - [LoadFolder(path,acumPath)](#M-FarlandsCoreMod-FarlandsLua-FarlandsEasyMod-LoadFolder-System-String,System-String- 'FarlandsCoreMod.FarlandsLua.FarlandsEasyMod.LoadFolder(System.String,System.String)')
   - [LoadZip(zipPath)](#M-FarlandsCoreMod-FarlandsLua-FarlandsEasyMod-LoadZip-System-String- 'FarlandsCoreMod.FarlandsLua.FarlandsEasyMod.LoadZip(System.String)')
+- [FunctionsScenes](#T-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-FunctionsScenes 'FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.FunctionsScenes')
+  - [load_scene()](#M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-FunctionsScenes-load_scene-MoonSharp-Interpreter-DynValue- 'FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.FunctionsScenes.load_scene(MoonSharp.Interpreter.DynValue)')
 - [GlobalFunctions](#T-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions 'FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions')
   - [MOD(tag)](#M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-MOD-System-String- 'FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.MOD(System.String)')
   - [add_command(name,LuaFunc,help)](#M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-add_command-System-String,MoonSharp-Interpreter-DynValue,System-String- 'FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.add_command(System.String,MoonSharp.Interpreter.DynValue,System.String)')
@@ -36,7 +38,6 @@
   - [find_object(args)](#M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-find_object-System-String,System-String- 'FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.find_object(System.String,System.String)')
   - [get_input(input)](#M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-get_input-System-String- 'FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.get_input(System.String)')
   - [get_object(args)](#M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-get_object-System-Collections-Generic-List{MoonSharp-Interpreter-DynValue}- 'FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.get_object(System.Collections.Generic.List{MoonSharp.Interpreter.DynValue})')
-  - [load_scene()](#M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-load_scene-MoonSharp-Interpreter-DynValue- 'FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.load_scene(MoonSharp.Interpreter.DynValue)')
   - [portrait_override(origin,path)](#M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-portrait_override-System-String,System-String- 'FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.portrait_override(System.String,System.String)')
   - [print(txt)](#M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-print-System-String- 'FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.print(System.String)')
   - [rayCast()](#M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-rayCast-UnityEngine-Vector3,UnityEngine-Vector3,System-Single,System-Int32,MoonSharp-Interpreter-UserData- 'FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions.GlobalFunctions.rayCast(UnityEngine.Vector3,UnityEngine.Vector3,System.Single,System.Int32,MoonSharp.Interpreter.UserData)')
@@ -268,6 +269,24 @@ carga un archivo zip y lo guarda en el diccionario
 | ---- | ---- | ----------- |
 | zipPath | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | La direccion del zip |
 
+<a name='T-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-FunctionsScenes'></a>
+## FunctionsScenes `type`
+
+##### Namespace
+
+FarlandsCoreMod.FarlandsLua.Functions.LuaFunctions
+
+<a name='M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-FunctionsScenes-load_scene-MoonSharp-Interpreter-DynValue-'></a>
+### load_scene() `method`
+
+##### Summary
+
+Carga la escena especificada por nombre o índice.
+
+##### Parameters
+
+This method has no parameters.
+
 <a name='T-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions'></a>
 ## GlobalFunctions `type`
 
@@ -496,17 +515,6 @@ te da un objeto dada la ruta de los objetos
 | Name | Type | Description |
 | ---- | ---- | ----------- |
 | args | [System.Collections.Generic.List{MoonSharp.Interpreter.DynValue}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Collections.Generic.List 'System.Collections.Generic.List{MoonSharp.Interpreter.DynValue}') | ruta en gameObject |
-
-<a name='M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-load_scene-MoonSharp-Interpreter-DynValue-'></a>
-### load_scene() `method`
-
-##### Summary
-
-Carga la escena especificada por nombre o índice.
-
-##### Parameters
-
-This method has no parameters.
 
 <a name='M-FarlandsCoreMod-FarlandsLua-Functions-LuaFunctions-GlobalFunctions-portrait_override-System-String,System-String-'></a>
 ### portrait_override(origin,path) `method`
