@@ -11,13 +11,19 @@
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <DocumentationFile>.\index.xml</DocumentationFile>
   </PropertyGroup>
-  
+
   <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all" />
+    <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" />
   </ItemGroup>
 
 
   <ItemGroup>
+    <None Include="fcminfo.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>fcminfo.tt</DependentUpon>
+    </None>
     <None Include="lib\0Harmony.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
     <None Include="lib\Assembly-CSharp.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
     <None Include="lib\Assembly-CSharp-firstpass.dll" Pack="true" PackagePath="lib\netstandard2.1\" />
@@ -546,6 +552,16 @@
   </ItemGroup>
   
   <ItemGroup>
+    <Compile Update="fcminfo.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>fcminfo.tt</DependentUpon>
+    </Compile>
+    <Compile Update="PluginInfo.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PluginInfo.tt</DependentUpon>
+    </Compile>
     <Compile Update="Resources\Farlands.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -567,6 +583,17 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <None Update="fcminfo.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>fcminfo.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="del &quot;$(FARLANDS_PATH)BepInEx\plugins\FarlandsCoreMod.dll&quot;&#xD;&#xA;echo $(FARLANDS_PATH)&#xD;&#xA;copy &quot;$(TargetDir)FarlandsCoreMod.dll&quot; &quot;$(FARLANDS_PATH)BepInEx\plugins\FarlandsCoreMod.dll&quot;&#xD;&#xA;del &quot;$(TargetDir)..\FCM_$(Version).zip&quot;&#xD;&#xA;powershell -Command &quot;Compress-Archive -Path '$(TargetDir)FarlandsCoreMod.dll','$(TargetDir)MoonSharp.Interpreter.dll' -DestinationPath '$(TargetDir)..\FCM_$(Version).zip'&quot;" />

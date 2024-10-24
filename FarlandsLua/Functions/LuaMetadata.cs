@@ -15,6 +15,14 @@ namespace FarlandsCoreMod.FarlandsLua.Functions
     public class LuaMetadata
     {
         private List<Meta> metadata = new();
+
+        public LuaMetadata()
+        {
+            metadata = new();
+            Add(new() { type = LuaMetadata.Type.META, values = "farlands" });
+            ClassObjectMetadata();
+        }
+
         public enum Type
         {
             META,
@@ -70,10 +78,10 @@ namespace FarlandsCoreMod.FarlandsLua.Functions
             type = Type.FIELD,
             values = $"{name} {CSharpTypeToLuaMetadata(type)}",
         });
-        public void AddFieldFunc(string name, ParameterInfo[] param, System.Type ret) => metadata.Add(new Meta()
+        public void AddFieldFun(string name, string param, System.Type retType) => metadata.Add(new Meta()
         {
             type = Type.FIELD,
-            values = $"{name} fun({string.Join(',', param.Select( p => $"{p.Name}:{CSharpTypeToLuaMetadata(p.ParameterType)}"))}):{CSharpTypeToLuaMetadata(ret)}",
+            values = $"{name} fun({param}):{CSharpTypeToLuaMetadata(retType)}"
         });
         private static string CSharpTypeToLuaMetadata(System.Type type)
         {
@@ -95,7 +103,12 @@ namespace FarlandsCoreMod.FarlandsLua.Functions
             if (typeof(object).IsAssignableFrom(type)) return "object";
             return "object";
         }
-
+        private void ClassObjectMetadata()
+        {
+            AddClass("object");
+            AddFieldFun("get", "key:string", typeof(DynValue));
+            AddFieldFun("set", "key:string, value:any", typeof(DynValue));
+        }
         public override string ToString()
         {
             return string.Join("\n", metadata.Select(x => x.ToString()));

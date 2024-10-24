@@ -676,9 +676,6 @@ end
 
         }
 
-
-
-
         [AttributeUsage(AttributeTargets.Class)]
         public class Functions : Attribute
         {
@@ -723,7 +720,6 @@ end
                     x.GetMethods(BindingFlags.Public | BindingFlags.Static)
                     .ToList().ForEach(m =>
                     {
-                        List<Type> parameters = new();
                         var types = m.GetParameters().Select(p =>
                         {
                             if(parent == "") metadata.AddParam(p.Name, p.ParameterType);
@@ -736,21 +732,21 @@ end
                         }
                         else
                         {
-                            metadata.AddFieldFunc(m.Name, m.GetParameters(), m.ReturnType);
+                            metadata.AddFieldFun(m.Name, string.Join(',',m.GetParameters().Select(p=>$"{p.Name}:{p.ParameterType}")), m.ReturnType);
                         }
                         Debug.Log(m.Name);
 
                         t[m.Name] = DynValue.NewCallback((ctx, args) =>
                         {
-                            Debug.Log(m.Name);
+                            Debug.Log($"Calling Lua: {m.Name}");
                             var array = LuaConverter.CallbackArgumentToObjectArray(args, types).ToList();
 
-                            while (array.Count() > parameters.Count())
+                            while (array.Count() > m.GetParameters().Count())
                             {
                                 array.RemoveAt(array.Count() - 1);
                             }
 
-                            while (array.Count() < parameters.Count())
+                            while (array.Count() < m.GetParameters().Count())
                             { 
                                 array.Add(null);
                             }

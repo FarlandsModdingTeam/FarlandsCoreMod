@@ -8,6 +8,7 @@ using FarlandsCoreMod.Attributes;
 using FarlandsCoreMod.Patchers;
 using FarlandsCoreMod.Utiles;
 using FarlandsCoreMod.Utiles.Loaders;
+using FMOD.Studio;
 using HarmonyLib;
 using PixelCrushers.DialogueSystem;
 using System;
@@ -17,6 +18,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Bindings;
 using UnityEngine.SceneManagement;
@@ -24,7 +26,7 @@ using UnityEngine.TextCore.Text;
 
 namespace FarlandsCoreMod
 {
-    [BepInPlugin("top.magincian.fcm", "FarlandsCoreMod", "0.1.3")]
+    [BepInPlugin("top.magincian.fcm", "FarlandsCoreMod", FCMInfo.Version)]
     public class FarlandsCoreMod : BaseUnityPlugin
     {
         private static ConfigEntry<bool> debug_skipIntro;
@@ -38,6 +40,7 @@ namespace FarlandsCoreMod
 
         private void Awake()
         {
+
             instance = this;
 
             this.gameObject.AddComponent<Terminal>();
