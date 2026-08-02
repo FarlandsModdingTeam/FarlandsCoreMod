@@ -3,31 +3,39 @@ using System.Linq;
 using BepInEx;
 using BepInEx.Logging;
 using FarlandsCoreMod.Managers;
+using HarmonyLib;
 
 namespace FarlandsCoreMod;
 
-[BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
+[BepInPlugin(FCMInfo.PLUGIN_GUID, FCMInfo.PLUGIN_NAME, FCMInfo.PLUGIN_VERSION)]
 public class FCMPlugin : BaseUnityPlugin
 {
     internal static new ManualLogSource Logger;
     private List<AbstractManager> managers;
 
+    private Harmony harmony;
+
     private void Awake()
     {
         // Plugin startup logic
         Logger = base.Logger;
-        Logger.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
+        Logger.LogInfo($"Plugin {FCMInfo.PLUGIN_GUID} is loaded!");
         managers = new();
+
+        harmony = new Harmony(FCMInfo.PLUGIN_GUID);
+        harmony.PatchAll();
+        Logger.LogInfo("All Harmony patches applied successfully");
 
         LoadManager<SaveManager>();
     }
 
     private void LoadManager<T>() where T : AbstractManager
     {
-        Logger.LogDebug($"Creating Manager «{typeof(T).Name}»");
+        var managerName = typeof(T).Name;
+        Logger.LogDebug($"Creating Manager «{managerName}»");
         var component = gameObject.AddComponent<T>();
         component.FCM = this;
-        component.Logger = BepInEx.Logging.Logger.CreateLogSource($"FCM.{typeof(T).Name}");
+        component.Logger = BepInEx.Logging.Logger.CreateLogSource($"FCM.{managerName}");
         managers.Add(component);
         component.OnLoad();
     }
