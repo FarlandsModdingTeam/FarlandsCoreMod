@@ -1,10 +1,10 @@
 # SaveManager
 
-Este documento explica como funciona el sistema de guardado de **Farlands** y como lo modifica **FarlandsCoreMod**
+This document explains how **Farlands**' save system works and how **FarlandsCoreMod** modifies it.
 
-## Analisis
+## Analysis
 
-Primero vamos a estudiar el funcionamiento de **Farlands** y para ello primero vamos a mostrar un diagrama con las principales clases implicadas
+First, we will analyze the inner workings of **Farlands** by examining a class diagram of the main involved components:
 
 ```mermaid
 classDiagram
@@ -97,5 +97,4 @@ classDiagram
     DataManager o-- IData
 ```
 
-`DataManager` es quien controla la carga de datos en **Farlands** y podemos observar que tiene dos interfaces principales `ISave` y `IData`.
-`ISave` es la encargada de guardar los datos, mientras que `IData` parece ser la estructura de los datos en sí.
+`DataManager` controls data loading and storing in **Farlands**, featuring two primary interfaces: `ISave` and `IData`. `ISave` is responsible for saving the data, whereas `IData` represents the data structure itself.
