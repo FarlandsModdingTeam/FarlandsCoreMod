@@ -3,17 +3,7 @@ using Farlands;
 using UnityEngine.UI;
 using UnityEngine;
 
-namespace FarlandsCoreMod.Managers;
-
-public class VersionManager : AbstractManager
-{
-    public override string ConfigSection => throw new System.NotImplementedException();
-
-    public override void OnLoad()
-    {
-    }
-
-}
+namespace FarlandsCoreMod.Core.Version;
 
 [HarmonyPatch(typeof(VersionText))]
 public static class VersionTextPatch

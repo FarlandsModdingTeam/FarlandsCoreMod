@@ -2,7 +2,7 @@ using UnityEngine;
 using BepInEx.Logging;
 using BepInEx.Configuration;
 
-namespace FarlandsCoreMod.Managers;
+namespace FarlandsCoreMod.Core;
 
 public abstract class AbstractManager : MonoBehaviour
 {
@@ -13,6 +13,11 @@ public abstract class AbstractManager : MonoBehaviour
     public abstract string ConfigSection { get; }
 
     public ConfigEntry<T> AddConfig<T>(string key, T value, string description) => FCM.Config.Bind(ConfigSection, key, value, description);
+
+    public virtual void Start()
+    {
+
+    }
 
     protected virtual void OnDestroy()
     {

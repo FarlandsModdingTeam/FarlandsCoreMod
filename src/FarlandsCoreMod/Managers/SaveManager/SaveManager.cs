@@ -1,12 +1,10 @@
 using BepInEx.Configuration;
 using JanduSoft;
-using UnityEngine;
 
-namespace FarlandsCoreMod.Managers;
+namespace FarlandsCoreMod.Core.Save;
 
 public class SaveManager : AbstractManager
 {
-
     public SaveManagerConfig Config;
 
     public override string ConfigSection => "SaveManager";

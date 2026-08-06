@@ -2,10 +2,17 @@
 using System.Linq;
 using BepInEx;
 using BepInEx.Logging;
-using FarlandsCoreMod.Managers;
-using HarmonyLib;
+using Farlands.Inventory;
 
-namespace FarlandsCoreMod;
+using FarlandsCoreMod.Core.Items;
+using FarlandsCoreMod.Core.Save;
+using FarlandsCoreMod.Core.Language;
+
+using HarmonyLib;
+using UnityEngine;
+using FarlandsCoreMod.Core.Debug;
+
+namespace FarlandsCoreMod.Core;
 
 [BepInPlugin(FCMInfo.PLUGIN_GUID, FCMInfo.PLUGIN_NAME, FCMInfo.PLUGIN_VERSION)]
 public class FCMPlugin : BaseUnityPlugin
@@ -14,6 +21,11 @@ public class FCMPlugin : BaseUnityPlugin
     private List<AbstractManager> managers;
 
     private Harmony harmony;
+
+    public SaveManager Save;
+    public ItemsManager Item;
+    public LanguageManager Language;
+    public DebugManager Debug;
 
     private void Awake()
     {
@@ -26,19 +38,40 @@ public class FCMPlugin : BaseUnityPlugin
         harmony.PatchAll();
         Logger.LogInfo("All Harmony patches applied successfully");
 
-        LoadManager<SaveManager>();
+        #region Managers
+
+        LoadManager(out Debug);
+
+        LoadManager(out Save);
+        LoadManager(out Item);
+        LoadManager(out Language);
+
+        #endregion
+
+        var testItem = Item.RegisterItem(FCMInfo.PLUGIN_GUID,
+            new Item("Test", InventoryItem.ItemType.Seed, 10, 100, true, true, 1),
+            new string[] { "prueba", "test" }
+        );
     }
 
-    private void LoadManager<T>() where T : AbstractManager
+    private void Start()
+    {
+        managers.ForEach(m => m.Start());
+    }
+
+    private void LoadManager<T>(out T manager) where T : AbstractManager
     {
         var managerName = typeof(T).Name;
         Logger.LogDebug($"Creating Manager «{managerName}»");
-        var component = gameObject.AddComponent<T>();
-        component.FCM = this;
-        component.Logger = BepInEx.Logging.Logger.CreateLogSource($"FCM.{managerName}");
-        managers.Add(component);
-        component.OnLoad();
+
+        manager = gameObject.AddComponent<T>();
+        manager.FCM = this;
+        manager.Logger = BepInEx.Logging.Logger.CreateLogSource($"FCM.{managerName}");
+        managers.Add(manager);
+        manager.OnLoad();
     }
 
     public T GetManager<T>() where T : AbstractManager => (T)managers.FirstOrDefault(m => m is T);
+
+    public static FCMPlugin GetFCM() => GameObject.FindAnyObjectByType<FCMPlugin>();
 }
